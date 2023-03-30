@@ -15,8 +15,12 @@ public class Meeting extends Request{
     private Room room;
     @Enumerated(EnumType.STRING)
     private SoloOrGroup soloOrGroup;
-    @Builder
-    protected Meeting(Long id, String name, RequestStatus requestStatus, Room room, SoloOrGroup soloOrGroup) {
+
+    @Builder // 이거 때문에 값이 안들어오는 거였네
+    public Meeting(Long id, String name, RequestStatus requestStatus, Room room, SoloOrGroup soloOrGroup) {
+        super(id, name, requestStatus);
+        this.room = room;
+        this.soloOrGroup=soloOrGroup;
     }
 
     //== 생성자 메서드 ==//

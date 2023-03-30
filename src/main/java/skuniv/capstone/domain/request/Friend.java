@@ -9,10 +9,11 @@ import skuniv.capstone.domain.group.Group;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Friend extends Request{
 
-
     @Builder
-    protected Friend(Long id, String name, RequestStatus requestStatus) {
+    public Friend(Long id, String name, RequestStatus requestStatus) {
+        super(id, name, requestStatus);
     }
+
     //== 생성자 메서드 ==//
     public static Friend createFriend(String name, RequestStatus requestStatus) {
         return Friend.builder()

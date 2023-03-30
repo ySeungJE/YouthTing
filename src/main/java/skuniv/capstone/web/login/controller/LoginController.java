@@ -6,15 +6,13 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import skuniv.capstone.domain.login.service.LoginService;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.web.login.dto.LoginForm;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 @Slf4j
 @RestController
@@ -24,7 +22,7 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute LoginForm form,
+    public String login(@Valid @RequestBody LoginForm form,
                         HttpServletRequest request) throws IOException {
 
         User loginUser = loginService.login(form.getEmail(), form.getPassword());
@@ -37,6 +35,14 @@ public class LoginController {
 
         session.setAttribute(LOGIN_USER, loginUser);
         return "["+loginUser.getName()+"]님 환영합니다";
+    }
+    @GetMapping("/sessionTest")
+    public void sessionTest(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Enumeration<String> attributeNames = session.getAttributeNames();
+        while (attributeNames.hasMoreElements()) {
+            System.out.println(session.getAttribute(attributeNames.nextElement()));
+        }
     }
 
     @PostMapping("/logout")

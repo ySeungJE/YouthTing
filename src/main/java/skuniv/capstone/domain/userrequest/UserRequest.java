@@ -1,10 +1,12 @@
 package skuniv.capstone.domain.userrequest;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import skuniv.capstone.domain.request.Request;
 import skuniv.capstone.domain.user.User;
 
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.*;
 
 @Getter
@@ -22,7 +24,7 @@ public class UserRequest {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "receive_user_id")
     private User receiveUser;
-    @OneToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY,cascade = ALL)
     @JoinColumn(name = "request_id")
     private Request request;
 
@@ -36,8 +38,9 @@ public class UserRequest {
     }
 
     //== 비즈니스 로직 ==//
-    public void inviteProcess() {
+    public void requestProcess() {
         this.sendUser.getSendRequestList().add(this);
         this.receiveUser.getReceiveRequestList().add(this);
     }
+
 }

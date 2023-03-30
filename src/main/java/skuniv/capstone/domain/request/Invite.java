@@ -15,11 +15,11 @@ public class Invite extends Request{
     @OneToOne
     @JoinColumn(name = "group_id")
     private Group group;
-
     @Builder
-    protected Invite(Long id, String name, RequestStatus requestStatus, Group group) {
+    public Invite(Long id, String name, RequestStatus requestStatus, Group group) {
+        super(id, name, requestStatus);
+        this.group = group;
     }
-
     //== 생성자 메서드 ==//
     public static Invite createInvite(String name, RequestStatus requestStatus, Group group) {
         return Invite.builder()
