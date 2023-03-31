@@ -17,7 +17,7 @@ public class Friend extends Request{
     //== 생성자 메서드 ==//
     public static Friend createFriend(String name, RequestStatus requestStatus) {
         return Friend.builder()
-                .name(name)
+                .name(name+"님의 친구요청")
                 .requestStatus(requestStatus)
                 .build();
     }

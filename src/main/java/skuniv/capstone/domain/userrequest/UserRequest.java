@@ -3,7 +3,9 @@ package skuniv.capstone.domain.userrequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import skuniv.capstone.domain.friendship.Friendship;
 import skuniv.capstone.domain.request.Request;
+import skuniv.capstone.domain.request.RequestStatus;
 import skuniv.capstone.domain.user.User;
 
 import static jakarta.persistence.CascadeType.*;
@@ -29,8 +31,8 @@ public class UserRequest {
     private Request request;
 
     //== 생성 메서드 ==//
-    public static void createUserRequest(User sendUser, User receiveUser, Request request) {
-        UserRequest.builder()
+    public static UserRequest createUserRequest(User sendUser, User receiveUser, Request request) {
+        return UserRequest.builder()
                 .sendUser(sendUser)
                 .receiveUser(receiveUser)
                 .request(request)
@@ -38,9 +40,22 @@ public class UserRequest {
     }
 
     //== 비즈니스 로직 ==//
+
+    /**
+     * 송신자와 수신자의 requestList 에 각각 추가
+     */
     public void requestProcess() {
         this.sendUser.getSendRequestList().add(this);
         this.receiveUser.getReceiveRequestList().add(this);
+    }
+
+    /**
+     * 상대가 친구요청을 받았을 때의 로직
+     */
+    public String friendSuccess() {
+        String s = this.request.changeStatus(RequestStatus.SUCCESS);
+        String s2 = Friendship.createFriendship(this.receiveUser, this.sendUser);// 생성과 연결을 동시에
+        return s+"\n"+s2;
     }
 
 }

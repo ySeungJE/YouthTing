@@ -19,4 +19,10 @@ public class Request {
     @Enumerated(EnumType.STRING)
     private RequestStatus requestStatus;
 
+    //== 비즈니스 로직 ==//
+    public String changeStatus(RequestStatus status) {
+        this.requestStatus = status;
+        return "Request 의 상태가 SUCCESS 로 변경되었습니다";
+    }
+
 }

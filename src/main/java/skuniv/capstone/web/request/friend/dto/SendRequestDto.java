@@ -6,15 +6,13 @@ import skuniv.capstone.domain.userrequest.UserRequest;
 
 @Data
 public class SendRequestDto {
-    private Long send;
-    private Long receive;
+    private Long requestId;
     private String title;
     private String storeProFileName;
     private RequestStatus status;
 
     public SendRequestDto(UserRequest userRequest) {
-        send = userRequest.getReceiveUser().getId();
-        receive = userRequest.getSendUser().getId();
+        requestId = userRequest.getId();
         title = userRequest.getReceiveUser().getName();
         storeProFileName = userRequest.getSendUser().getStoreProfileName();
         status = userRequest.getRequest().getRequestStatus();

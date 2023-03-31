@@ -83,20 +83,24 @@ public class User {
     }
 
     //== 비즈니스 로직 ==//
-    public void setFriendShip(User me, User friend) { // friendship 은 사실상 생성되면 변하지 않으니.. 생성 메서드에 로직을 넣을까
-        Friendship.createFriendship(me, friend);
-    }
-    public void requestFriend(UserRequest userRequest) { // UserRequest 객체를 만들어서 내 sendList 상대 receiveList 에 넣는게 목적
-        userRequest.requestProcess();
+//    public void setFriendShip(User me, User friend) { // friendship 은 사실상 생성되면 변하지 않으니.. 생성 메서드에 로직을 넣을까
+//        Friendship.createFriendship(me, friend);
+//    } // 수행 주체가 UserRequest 이니 그 쪽에 추가하는 게 좋겠음
+
+    /**
+     * 그룹 매핑 초기화 및 초대 요청
+     * @param group
+     * @param userRequest
+     */
+    public void inviteGroup(Group group, UserRequest userRequest) { // createRequest 한 객체를 service 계층에서 사용해야지, 여기에 해버리면 안될듯
+        group.connect(this); // 매핑 초기화
+        userRequest.requestProcess(); // UserRequest 를 양방향 매핑해줌
     }
 
-    public void connectGroup(User user, Group group) {
-        group.connect(user);
-    }
-    public void inviteGroup(Group group, UserRequest userRequest) { // createRequest 한 객체를 service 계층에서 사용해야지, 여기에 해버리면 안될듯
-        this.setGroup(group);
-        userRequest.requestProcess();
-    }
+    /**
+     * 내 그룹에 게스트를 참여시킴
+     * @param guest
+     */
     public void joinGroup(User guest) {
         guest.setGroup(this.getGroup());
     }

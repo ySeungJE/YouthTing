@@ -21,7 +21,7 @@ public class Friendship {
     private User friend;
 
     //== 생성 메서드 ==//
-    public static void createFriendship(User me, User friend) { // 생성과 연관관계 매핑을 동시에
+    public static String createFriendship(User me, User friend) { // 생성과 연관관계 매핑을 동시에
         Friendship myFriendship = Friendship.builder()
                 .me(me)
                 .friend(friend)
@@ -30,7 +30,8 @@ public class Friendship {
                 .me(friend)
                 .friend(me)
                 .build();
-        myFriendship.me.getFriendShipList().add(myFriendship);
-        friendFriendship.me.getFriendShipList().add(friendFriendship);
+        friend.getFriendShipList().add(friendFriendship);
+        me.getFriendShipList().add(myFriendship);
+        return "친구관계가 성립되었습니다";
     }
 }

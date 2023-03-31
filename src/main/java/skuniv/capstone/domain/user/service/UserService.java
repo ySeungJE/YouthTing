@@ -1,5 +1,6 @@
 package skuniv.capstone.domain.user.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,8 @@ import skuniv.capstone.domain.userrequest.UserRequest;
 import java.util.List;
 import java.util.Optional;
 
+import static skuniv.capstone.web.login.controller.LoginController.LOGIN_USER;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -29,22 +32,12 @@ public class UserService {
         return queryRepository.findAll(userSearch);
     }
     @Transactional
-    public String requestFriend(Long myId, Long friendID) {
-        User me = userRepository.findById(myId).orElse(null); // 영속성 컨텍스트
-        User friend = userRepository.findById(friendID).orElse(null); // 영속성 컨텍스트
+    public String requestFriend(User me, User friend) {
 
-        Friend build  = Friend.builder()
-                .name(me.getName() + "님의 친구요청")
-                .requestStatus(RequestStatus.WAIT)
-                .build();
-        UserRequest userRequest = UserRequest.builder()
-                .sendUser(me)
-                .receiveUser(friend)
-                .request(build)
-                .build();
+        Friend build  = Friend.createFriend(me.getName(), RequestStatus.WAIT);
 
-//        me.addSendRequestList(userRequest);
-//        friend.addReceiveRequestList(userRequest);
+        UserRequest userRequest = UserRequest.createUserRequest(me, friend, build);
+
         userRequest.requestProcess();
 
         return me.getName()+"님이 "+friend.getName()+"님에게 친구 요청을 보냈습니다";
@@ -54,4 +47,12 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
+    public User getSessionUser(HttpServletRequest request) {
+        User session = (User) request.getSession().getAttribute(LOGIN_USER);
+        User user = findById(session.getId());
+        return user;
+    }
 }

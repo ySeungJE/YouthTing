@@ -11,6 +11,7 @@ public class SoloUserDto {
     private String intro;
     private MBTI mbti;
     private String univName;
+    private String email;
     private String storeProfileName;
 
     public SoloUserDto(User user) {
@@ -19,6 +20,7 @@ public class SoloUserDto {
         intro = user.getIntro();
         mbti = user.getMbti();
         univName = user.getUniv().getUnivName();
+        email = user.getEmail();
         storeProfileName = user.getStoreProfileName();
     }
 }
