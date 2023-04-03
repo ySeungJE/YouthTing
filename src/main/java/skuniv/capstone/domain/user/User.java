@@ -2,10 +2,12 @@ package skuniv.capstone.domain.user;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 import skuniv.capstone.domain.friendship.Friendship;
 import skuniv.capstone.domain.userrequest.UserRequest;
 import skuniv.capstone.domain.group.Group;
 import skuniv.capstone.domain.room.Room;
+import skuniv.capstone.web.user.dto.MyPageDto;
 import skuniv.capstone.web.user.dto.UserJoinDto;
 
 import java.util.ArrayList;
@@ -66,9 +68,8 @@ public class User {
     public void addReceiveRequestList(UserRequest userRequest) {
         this.receiveRequestList.add(userRequest);
     }
-
     //== 생성 메서드 ==//
-    public static User createUser(UserJoinDto userJoinDto, String storeProfileName) {
+    public static User createUser(UserJoinDto userJoinDto) {
         return User.builder()
                 .email(userJoinDto.getEmail())
                 .password(userJoinDto.getPassword())
@@ -78,9 +79,10 @@ public class User {
                 .height(userJoinDto.getHeight())
                 .mbti(userJoinDto.getMbti())
                 .intro(userJoinDto.getIntro())
-                .storeProfileName(storeProfileName)
+                .idle(true)
                 .build();
     }
+
 
     //== 비즈니스 로직 ==//
 //    public void setFriendShip(User me, User friend) { // friendship 은 사실상 생성되면 변하지 않으니.. 생성 메서드에 로직을 넣을까
@@ -103,5 +105,25 @@ public class User {
      */
     public void joinGroup(User guest) {
         guest.setGroup(this.getGroup());
+    }
+
+    /**
+     * User 정보 업데이트 ( password,height,mbti,intro )
+     */
+    public void update(MyPageDto myPageDto,String storeProfileName) {
+        this.password = myPageDto.getPassword();
+        this.height = myPageDto.getHeight();
+        this.mbti = myPageDto.getMbti();
+        this.intro = myPageDto.getIntro();
+        if (storeProfileName != null) {
+            this.storeProfileName = storeProfileName;
+        }
+    }
+    /**
+     * 프로필 사진 설정
+     */
+    @Transactional
+    public void profileUpdate(String storeProfileName) {
+        this.storeProfileName = storeProfileName;
     }
 }

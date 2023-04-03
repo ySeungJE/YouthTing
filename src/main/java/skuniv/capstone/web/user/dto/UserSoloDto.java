@@ -5,7 +5,7 @@ import skuniv.capstone.domain.user.MBTI;
 import skuniv.capstone.domain.user.User;
 
 @Data
-public class SoloUserDto {
+public class UserSoloDto {
     private String name;
     private Integer height;
     private String intro;
@@ -14,7 +14,7 @@ public class SoloUserDto {
     private String email;
     private String storeProfileName;
 
-    public SoloUserDto(User user) {
+    public UserSoloDto(User user) {
         name = user.getName();
         height = user.getHeight();
         intro = user.getIntro();

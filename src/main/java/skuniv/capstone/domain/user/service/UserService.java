@@ -5,16 +5,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import skuniv.capstone.domain.request.Friend;
-import skuniv.capstone.domain.request.Request;
 import skuniv.capstone.domain.request.RequestStatus;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.repository.UserQueryRepository;
 import skuniv.capstone.domain.user.repository.UserRepository;
 import skuniv.capstone.domain.user.repository.UserSearch;
 import skuniv.capstone.domain.userrequest.UserRequest;
+import skuniv.capstone.web.user.dto.MyPageDto;
 
 import java.util.List;
-import java.util.Optional;
 
 import static skuniv.capstone.web.login.controller.LoginController.LOGIN_USER;
 
@@ -42,11 +41,9 @@ public class UserService {
 
         return me.getName()+"님이 "+friend.getName()+"님에게 친구 요청을 보냈습니다";
     }
-
     public User findById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
-
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }
@@ -54,5 +51,16 @@ public class UserService {
         User session = (User) request.getSession().getAttribute(LOGIN_USER);
         User user = findById(session.getId());
         return user;
+    }
+
+    @Transactional
+    public String updateUser(MyPageDto myPageDto, String storeProfileName) {
+        User user = findByEmail(myPageDto.getEmail());
+        user.update(myPageDto,storeProfileName);
+        return user.getName();
+    }
+    @Transactional
+    public void profileUpdate(User created, String sample) {
+        created.profileUpdate(sample);
     }
 }

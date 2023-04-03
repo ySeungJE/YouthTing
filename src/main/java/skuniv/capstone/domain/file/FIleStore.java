@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
@@ -29,25 +30,28 @@ public class FIleStore {
 //    }
 
     // 실제 파일을 경로에 저장하고 UploadFile 객체를 반환
-    public String storeFile(MultipartFile profilePicture) throws IOException {
+    public String storeFile(MultipartFile profilePicture,String userName) throws IOException {
         if (profilePicture.isEmpty()) {
             return null;
         }
-        String storeFileName = createStoreFileName(profilePicture.getOriginalFilename());
+        String storeFileName = userName+createStoreFileName(profilePicture.getOriginalFilename());
         profilePicture.transferTo(new File(getFullPath(storeFileName)));
         return storeFileName;
     }
 
     private String createStoreFileName(String originalFilename) {
         // 서버에 저장하는 파일명이기 때문에 유일한 고유이름을 생성
-        String uuid = UUID.randomUUID().toString(); // "asd-qwed-vx-qwe-123f-asd"
         String ext = extractExt(originalFilename);
-        return uuid + "." + ext; // "asd-qwed-vx-qwe-123f-asd.png"
+        return System.currentTimeMillis() + "." + ext;
     }
 
     private String extractExt(String originalFilename) {
         int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
+    }
+    private String extractOrgName(String originalFilename) {
+        int pos = originalFilename.lastIndexOf(".");
+        return originalFilename.substring(0,pos);
     }
 
 }
