@@ -29,5 +29,4 @@ public class UserJoinDto {
     private MBTI mbti;
     @NotEmpty
     private String intro;
-    private MultipartFile attachFile;
 }

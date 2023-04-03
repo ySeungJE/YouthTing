@@ -1,8 +1,10 @@
 package skuniv.capstone.web.user.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import skuniv.capstone.domain.file.FIleStore;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.repository.UserSearch;
@@ -25,9 +27,10 @@ public class UserController {
     private final UserService userService;
     private final FIleStore fileStore;
     @PostMapping("/add")
-    public String join(@Valid @RequestBody UserJoinDto userJoinDto) throws IOException {
-//        String storeProfileName = fileStore.storeFile(userJoinDto.getAttachFile());
-        User created = User.createUser(userJoinDto, "exemple.png"); // 임시로 아무 이름이나 보냄
+    public String join(@RequestPart MultipartFile proFilePicture,
+                       @Valid @RequestPart UserJoinDto userJoinDto) throws IOException {
+        String storeProfileName = fileStore.storeFile(proFilePicture);
+        User created = User.createUser(userJoinDto, storeProfileName); // 임시로 아무 이름이나 보냄
         userService.join(created);
         return created.getName() + "님 가입하셨습니다";
     }
@@ -37,5 +40,15 @@ public class UserController {
         return aLl.stream()
                 .map(SoloUserDto::new)
                 .collect(toList());
+    }
+    @GetMapping("/{email}")
+    public SoloUserDto findOne(@PathVariable String email) {
+        User user = userService.findByEmail(email);
+        return new SoloUserDto(user);
+    }
+    @GetMapping("/myPage")
+    public SoloUserDto myData(HttpServletRequest request) {
+        User sessionUser = userService.getSessionUser(request);
+        return new SoloUserDto(sessionUser);
     }
 }
