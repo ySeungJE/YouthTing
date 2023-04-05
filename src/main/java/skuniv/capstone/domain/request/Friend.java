@@ -10,15 +10,16 @@ import skuniv.capstone.domain.group.Group;
 public class Friend extends Request{
 
     @Builder
-    public Friend(Long id, String name, RequestStatus requestStatus) {
-        super(id, name, requestStatus);
+    public Friend(Long id, String name, RequestStatus requestStatus,RequestType requestType) {
+        super(id, name, requestStatus,requestType);
     }
 
     //== 생성자 메서드 ==//
-    public static Friend createFriend(String name, RequestStatus requestStatus) {
+    public static Friend createFriend(String name, RequestStatus requestStatus, RequestType requestType) {
         return Friend.builder()
                 .name(name+"님의 친구요청")
                 .requestStatus(requestStatus)
+                .requestType(requestType)
                 .build();
     }
 }

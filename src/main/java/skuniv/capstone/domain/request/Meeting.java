@@ -17,8 +17,8 @@ public class Meeting extends Request{
     private SoloOrGroup soloOrGroup;
 
     @Builder // 이거 때문에 값이 안들어오는 거였네
-    public Meeting(Long id, String name, RequestStatus requestStatus, Room room, SoloOrGroup soloOrGroup) {
-        super(id, name, requestStatus);
+    public Meeting(Long id, String name, RequestStatus requestStatus,RequestType requestType, Room room, SoloOrGroup soloOrGroup) {
+        super(id, name, requestStatus,requestType);
         this.room = room;
         this.soloOrGroup=soloOrGroup;
     }

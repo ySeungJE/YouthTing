@@ -35,8 +35,10 @@ public class UserController {
             return created.getName() + "님이 가입하셨습니다";
     }
     @GetMapping("/soloList")
-    public List<UserSoloDto> soloList(@Valid @RequestBody UserSearch userSearch) {
-        List<User> aLl = userService.findALl(userSearch);
+    public List<UserSoloDto> soloList(@Valid @RequestBody UserSearch userSearch,
+                                      HttpServletRequest request) {
+        User sessionUser = userService.getSessionUser(request);
+        List<User> aLl = userService.findALl(sessionUser.getGender(),userSearch);
         return aLl.stream()
                 .map(UserSoloDto::new)
                 .collect(toList());
@@ -59,4 +61,12 @@ public class UserController {
             storeProfileName = fileStore.storeFile(proFilePicture,myPageDto.getName());
         return userService.updateUser(myPageDto,storeProfileName) + "님의 정보가 업데이트 되었습니다";
     }
+    @PostMapping("/soloting")
+    public String joinSoloTing(HttpServletRequest request) {
+        User sessionUser = userService.getSessionUser(request);
+        userService.joinSoloTing(sessionUser);
+        return sessionUser.getName() + "님이 미팅에 참여하셨습니다";
+    }
+
+
 }

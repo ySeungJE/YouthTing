@@ -25,7 +25,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
-    @Column
+    @Column(unique = true)
     private String email;
     private String password;
     private String name;
@@ -42,7 +42,7 @@ public class User {
     @ManyToOne(fetch = LAZY, cascade = ALL) // 양방향 매핑
     @JoinColumn(name = "room_id")
     private Room room;
-    @ManyToOne(fetch = LAZY, cascade = ALL) // 양방향 매핑
+    @ManyToOne(fetch = LAZY) // 양방향 매핑
     @JoinColumn(name = "group_id")
     private Group group;
     private Boolean idle;
@@ -79,7 +79,7 @@ public class User {
                 .height(userJoinDto.getHeight())
                 .mbti(userJoinDto.getMbti())
                 .intro(userJoinDto.getIntro())
-                .idle(true)
+                .idle(false)
                 .build();
     }
 
@@ -122,8 +122,14 @@ public class User {
     /**
      * 프로필 사진 설정
      */
-    @Transactional
     public void profileUpdate(String storeProfileName) {
         this.storeProfileName = storeProfileName;
+    }
+
+    /**
+     * idle 상태 변경
+     */
+    public void idleUpdate(Boolean idle) {
+        this.idle = idle;
     }
 }

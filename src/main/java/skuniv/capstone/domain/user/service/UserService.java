@@ -4,8 +4,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import skuniv.capstone.domain.group.Group;
 import skuniv.capstone.domain.request.Friend;
+import skuniv.capstone.domain.request.Invite;
 import skuniv.capstone.domain.request.RequestStatus;
+import skuniv.capstone.domain.request.RequestType;
+import skuniv.capstone.domain.user.Gender;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.repository.UserQueryRepository;
 import skuniv.capstone.domain.user.repository.UserRepository;
@@ -27,13 +31,13 @@ public class UserService {
     public User join(User user) {
         return userRepository.save(user);
     }
-    public List<User> findALl(UserSearch userSearch) { // mbti, 키를 설정하여 동적 검색
-        return queryRepository.findAll(userSearch);
+    public List<User> findALl(Gender gender, UserSearch userSearch) { // mbti, 키를 설정하여 동적 검색
+        return queryRepository.findAll(gender,userSearch);
     }
     @Transactional
     public String requestFriend(User me, User friend) {
 
-        Friend build  = Friend.createFriend(me.getName(), RequestStatus.WAIT);
+        Friend build  = Friend.createFriend(me.getName(), RequestStatus.WAIT, RequestType.FRIEND);
 
         UserRequest userRequest = UserRequest.createUserRequest(me, friend, build);
 
@@ -41,6 +45,18 @@ public class UserService {
 
         return me.getName()+"님이 "+friend.getName()+"님에게 친구 요청을 보냈습니다";
     }
+    @Transactional
+    public String requestGroup(User me, User friend, Group group) {
+
+        Invite build  = Invite.createInvite(me.getName(), RequestStatus.WAIT, RequestType.INVITE, group);
+
+        UserRequest userRequest = UserRequest.createUserRequest(me, friend, build);
+
+        userRequest.requestProcess();
+
+        return me.getName()+"님이 "+friend.getName()+"님을 그룹에 초대했습니다";
+    }
+
     public User findById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
@@ -62,5 +78,9 @@ public class UserService {
     @Transactional
     public void profileUpdate(User created, String sample) {
         created.profileUpdate(sample);
+    }
+    @Transactional
+    public void joinSoloTing(User sessionUser) {
+        sessionUser.idleUpdate(true);
     }
 }

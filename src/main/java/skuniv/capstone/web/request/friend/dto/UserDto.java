@@ -4,12 +4,12 @@ import lombok.Data;
 import skuniv.capstone.domain.user.User;
 
 @Data
-public class FriendDto {
+public class UserDto {
     private String storeProfileName;
     private String name;
     private String univName;
     private String email;
-    public FriendDto(User friend) {
+    public UserDto(User friend) {
         this.email = friend.getEmail();
         this.name = friend.getName();
         this.storeProfileName = friend.getStoreProfileName();

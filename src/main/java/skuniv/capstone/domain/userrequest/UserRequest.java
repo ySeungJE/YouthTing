@@ -1,6 +1,5 @@
 package skuniv.capstone.domain.userrequest;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import skuniv.capstone.domain.friendship.Friendship;
@@ -52,10 +51,18 @@ public class UserRequest {
     /**
      * 상대가 친구요청을 받았을 때의 로직
      */
-    public String friendSuccess() {
+    public String successFriend() {
         String s = this.request.changeStatus(RequestStatus.SUCCESS);
         String s2 = Friendship.createFriendship(this.receiveUser, this.sendUser);// 생성과 연결을 동시에
         return s+"\n"+s2;
     }
 
+    /**
+     * 상대가 그룹 초대를 받았을 때의 로직
+     * @return
+     */
+    public String successInvite() {
+        this.receiveUser.setGroup(this.sendUser.getGroup());
+        return sendUser.getName() + "님의 그룹에 " + receiveUser.getName() + "님이 초대되었습니다";
+    }
 }

@@ -20,7 +20,6 @@ import java.util.Enumeration;
 public class LoginController {
     public static final String LOGIN_USER = "loginUser";
     private final LoginService loginService;
-
     @PostMapping("/login")
     public String login(@Valid @RequestBody LoginForm form,
                         HttpServletRequest request) throws IOException {

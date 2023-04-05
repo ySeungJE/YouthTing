@@ -7,6 +7,8 @@ import skuniv.capstone.domain.user.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.ALL;
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,14 +23,17 @@ public class Group {
     @OneToOne
     @JoinColumn(name = "master_id")
     private User master;
-    @OneToMany(mappedBy = "group") // 얘는 user 가 양방향 매핑해줌
+    @OneToMany(mappedBy = "group", cascade = ALL) // 얘는 user 가 양방향 매핑해줌
+    @Builder.Default // 뭐야 시발 이래야 되네? 그럼 야 시발 User 에 그 수많은 List 들은 왜 그냥 만들어주고 얘는 안만들어주고 쥐랄임?
     private List<User> userList = new ArrayList<>();
+    private Boolean idle;
 
     //== 생성 메서드 ==//
-    public static Group createGroup(String name, User master) {
+    public static Group createGroup(User master) {
         return Group.builder()
-                .name(name)
+                .name(master.getName())
                 .master(master)
+                .idle(false)
                 .build();
     }
 
