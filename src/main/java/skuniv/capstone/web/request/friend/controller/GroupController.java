@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import skuniv.capstone.domain.group.Group;
 import skuniv.capstone.domain.group.service.GroupService;
@@ -20,6 +21,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static skuniv.capstone.domain.request.RequestType.*;
 
+@Slf4j
 @RestController
 @RequestMapping("group")
 @RequiredArgsConstructor
@@ -36,8 +38,13 @@ public class GroupController {
     }
     @PostMapping("/request/{email}")
     public String requestGroup(@PathVariable String email, HttpServletRequest request) {
-        User me = userService.getSessionUser(request);
+        User me = userService.getSessionUser(request); // user 에 friendEmailList 를 추가해. 이메일이 있냐? 이것만 보면 됨
         User friend = userService.findByEmail(email);
+
+        if (me.getFriendsEmail().contains(email)==false) {
+            log.info("친구추가가 된 회원만 초대할 수 있습니다.");
+            throw new IllegalStateException();
+        }
 
         return userService.requestGroup(me, friend, me.getGroup());
     }

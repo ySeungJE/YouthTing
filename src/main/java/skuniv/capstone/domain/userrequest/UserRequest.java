@@ -54,6 +54,8 @@ public class UserRequest {
     public String successFriend() {
         String s = this.request.changeStatus(RequestStatus.SUCCESS);
         String s2 = Friendship.createFriendship(this.receiveUser, this.sendUser);// 생성과 연결을 동시에
+        sendUser.getFriendsEmail().add(receiveUser.getEmail());
+        receiveUser.getFriendsEmail().add(sendUser.getEmail());
         return s+"\n"+s2;
     }
 

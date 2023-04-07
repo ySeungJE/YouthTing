@@ -46,6 +46,9 @@ public class User {
     @JoinColumn(name = "group_id")
     private Group group;
     private Boolean idle;
+    
+    @ElementCollection
+    private List<String> friendsEmail;
     @OneToMany(mappedBy = "friend", cascade = ALL) // 복함 매핑
     private List<Friendship> friendShipList = new ArrayList<>();
     @OneToMany(mappedBy = "sendUser", cascade = ALL) // 복합 매핑

@@ -2,6 +2,7 @@ package skuniv.capstone.web.request.friend.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.service.UserService;
@@ -16,17 +17,22 @@ import java.util.List;
 import static java.util.stream.Collectors.*;
 import static skuniv.capstone.domain.request.RequestType.FRIEND;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/friend")
 public class FriendController {
     private final UserService userService;
     private final RequestService requestService;
-    @PostMapping("/request/{email}")
+    @PostMapping("/request/{email}") // 이건 뭐냐.. 왜 /request/{email} 로 하면 primary key 겹친다는 오류가 뜸?ㅋㅋㅋㄹㅇㅋㅋ
     public String requestFriend(@PathVariable String email, HttpServletRequest request) {
         User me = userService.getSessionUser(request);
         User friend = userService.findByEmail(email);
 
+        if (me.getFriendsEmail().contains(email)==true) {
+            log.info("이미 친구가 되어있는 회원입니다.");
+            throw new IllegalStateException();
+        }
         return userService.requestFriend(me, friend);
     }
 

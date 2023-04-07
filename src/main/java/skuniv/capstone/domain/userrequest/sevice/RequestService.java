@@ -14,6 +14,7 @@ public class RequestService {
     @Transactional
     public String successFriend(Long requestId) {
         UserRequest userRequest = userRequestRepository.findById(requestId).orElse(null);
+
         return userRequest.successFriend();
     }
 
