@@ -20,6 +20,7 @@ public class Group {
     @Column(name = "group_id")
     private Long id;
     private String name;
+    private Integer groupAge; // null 이었다가 미팅을 참여하면 그때 부여하자
     @OneToOne
     @JoinColumn(name = "master_id")
     private User master;
@@ -34,16 +35,41 @@ public class Group {
                 .name(master.getName())
                 .master(master)
                 .idle(false)
+                .groupAge(0)
                 .build();
     }
 
     //== 비즈니스 로직 ==//
-
     /**
      * master 유저를 등록하고 상호 매핑
      */
     public void connect(User user) {
         this.master = user;
         user.setGroup(this);
+    }
+
+    /**
+     * idle 상태 변경, 미팅 참여
+     */
+    public void startGroupting() {
+        this.idle=true;
+        groupAge(); // 이 때 나이 설정
+    }
+
+    /**
+     * idle 상태 변경, 미팅 퇴장
+     */
+    public void stopGroupting() {
+        this.idle=false;
+    }
+
+    /**
+     * 그룹원들 나이 평균
+     */
+    public void groupAge() {
+        for (User user : userList) {
+            groupAge+=user.getAge();
+        }
+        this.groupAge/=this.userList.size();
     }
 }

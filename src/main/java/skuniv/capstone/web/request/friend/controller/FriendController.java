@@ -8,9 +8,9 @@ import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.service.UserService;
 import skuniv.capstone.domain.userrequest.UserRequest;
 import skuniv.capstone.domain.userrequest.sevice.RequestService;
-import skuniv.capstone.web.request.friend.dto.UserDto;
-import skuniv.capstone.web.request.friend.dto.ReceiveRequestDto;
-import skuniv.capstone.web.request.friend.dto.SendRequestDto;
+import skuniv.capstone.web.request.UserDto;
+import skuniv.capstone.web.request.ReceiveRequestDto;
+import skuniv.capstone.web.request.SendRequestDto;
 
 import java.util.List;
 

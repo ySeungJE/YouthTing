@@ -4,14 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import skuniv.capstone.domain.group.Group;
+import skuniv.capstone.domain.group.repository.GroupQueryRepository;
 import skuniv.capstone.domain.group.repository.GroupRepository;
 import skuniv.capstone.domain.user.User;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class GroupService {
     private final GroupRepository groupRepository;
+    private final GroupQueryRepository queryRepository;
     @Transactional
     public Group saveGroup(Group group) {
         return groupRepository.save(group);
@@ -24,5 +28,19 @@ public class GroupService {
     public void connectMaster(User user, Group group) {
         group.connect(user);
     }
+    @Transactional
+    public void startGroupting(User sessionUser) {
+        sessionUser.getGroup().startGroupting();
+    }
+    @Transactional
+    public void stopGroupting(User sessionUser) {
+        sessionUser.getGroup().stopGroupting();
+    }
 
+    @Transactional
+    public List<Group> findALl(User user) {
+        return queryRepository.findAll(user.getGender(),
+                user.getGroup().getUserList().size(),
+                user.getUniv().getUnivAddress());
+    }
 }

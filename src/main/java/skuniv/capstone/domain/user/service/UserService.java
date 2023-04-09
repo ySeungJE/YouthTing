@@ -70,17 +70,21 @@ public class UserService {
     }
 
     @Transactional
-    public String updateUser(MyPageDto myPageDto, String storeProfileName) {
+    public void updateUser(MyPageDto myPageDto, String storeProfileName) {
         User user = findByEmail(myPageDto.getEmail());
         user.update(myPageDto,storeProfileName);
-        return user.getName();
     }
     @Transactional
     public void profileUpdate(User created, String sample) {
         created.profileUpdate(sample);
     }
     @Transactional
-    public void joinSoloTing(User sessionUser) {
-        sessionUser.idleUpdate(true);
+    public void startSoloting(User sessionUser) {
+        sessionUser.startSoloting();
     }
+    @Transactional
+    public void stopSoloting(User sessionUser) {
+        sessionUser.stopSoloting();
+    }
+
 }

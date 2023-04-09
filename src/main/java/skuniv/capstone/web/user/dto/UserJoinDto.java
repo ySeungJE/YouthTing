@@ -3,8 +3,6 @@ package skuniv.capstone.web.user.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
-import org.hibernate.validator.constraints.UniqueElements;
-import org.springframework.web.multipart.MultipartFile;
 import skuniv.capstone.domain.user.Gender;
 import skuniv.capstone.domain.user.MBTI;
 import skuniv.capstone.domain.user.Univ;
@@ -22,6 +20,8 @@ public class UserJoinDto {
     private String name;
     @NonNull
     private Gender gender;
+    @NonNull
+    private Integer age;
     @NonNull
     private Univ univ;
     @NonNull

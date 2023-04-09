@@ -24,12 +24,19 @@ public class Meeting extends Request{
     }
 
     //== 생성자 메서드 ==//
-    public static Meeting createMeeting(String name, RequestStatus requestStatus, Room room, SoloOrGroup soloOrGroup) {
+    public static Meeting createMeeting(String name, RequestStatus requestStatus,RequestType requestType,SoloOrGroup soloOrGroup) {
         return Meeting.builder()
-                .name(name)
+                .name(name+"님의 미팅 신청")
                 .requestStatus(requestStatus)
-                .room(room)
+                .requestType(requestType)
                 .soloOrGroup(soloOrGroup)
                 .build();
+    }
+    //== 비즈니스 로직 ==//
+    /**
+     * room 초기화
+     */
+    public void updateRoom(Room room) {
+        this.room = room;
     }
 }

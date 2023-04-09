@@ -2,7 +2,6 @@ package skuniv.capstone.domain.user;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.transaction.annotation.Transactional;
 import skuniv.capstone.domain.friendship.Friendship;
 import skuniv.capstone.domain.userrequest.UserRequest;
 import skuniv.capstone.domain.group.Group;
@@ -31,7 +30,8 @@ public class User {
     private String name;
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    private int height;
+    private Integer height;
+    private Integer age;
     @Column(columnDefinition = "TEXT")
     private String intro;
     @Embedded
@@ -42,7 +42,7 @@ public class User {
     @ManyToOne(fetch = LAZY, cascade = ALL) // 양방향 매핑
     @JoinColumn(name = "room_id")
     private Room room;
-    @ManyToOne(fetch = LAZY) // 양방향 매핑
+    @ManyToOne(fetch = LAZY, cascade = ALL) // 양방향 매핑
     @JoinColumn(name = "group_id")
     private Group group;
     private Boolean idle;
@@ -78,6 +78,7 @@ public class User {
                 .password(userJoinDto.getPassword())
                 .name(userJoinDto.getName())
                 .gender(userJoinDto.getGender())
+                .age(userJoinDto.getAge())
                 .univ(userJoinDto.getUniv())
                 .height(userJoinDto.getHeight())
                 .mbti(userJoinDto.getMbti())
@@ -130,9 +131,16 @@ public class User {
     }
 
     /**
-     * idle 상태 변경
+     * idle 상태 변경, 개인 미팅 참여
      */
-    public void idleUpdate(Boolean idle) {
-        this.idle = idle;
+    public void startSoloting() {
+        this.idle = true;
     }
+    /**
+     * idle 상태 변경, 개인 미팅 퇴장
+     */
+    public void stopSoloting() {
+        this.idle = false;
+    }
+
 }

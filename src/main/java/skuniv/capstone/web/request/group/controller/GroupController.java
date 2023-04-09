@@ -1,4 +1,4 @@
-package skuniv.capstone.web.request.friend.controller;
+package skuniv.capstone.web.request.group.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -12,18 +12,20 @@ import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.service.UserService;
 import skuniv.capstone.domain.userrequest.UserRequest;
 import skuniv.capstone.domain.userrequest.sevice.RequestService;
-import skuniv.capstone.web.request.friend.dto.ReceiveRequestDto;
-import skuniv.capstone.web.request.friend.dto.SendRequestDto;
-import skuniv.capstone.web.request.friend.dto.UserDto;
+import skuniv.capstone.web.request.ReceiveRequestDto;
+import skuniv.capstone.web.request.SendRequestDto;
+import skuniv.capstone.web.request.UserDto;
+import skuniv.capstone.web.request.group.dto.GroupDto;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static skuniv.capstone.domain.request.RequestType.*;
 
 @Slf4j
 @RestController
-@RequestMapping("group")
+@RequestMapping("/group")
 @RequiredArgsConstructor
 public class GroupController {
     private final UserService userService;
@@ -40,6 +42,11 @@ public class GroupController {
     public String requestGroup(@PathVariable String email, HttpServletRequest request) {
         User me = userService.getSessionUser(request); // user 에 friendEmailList 를 추가해. 이메일이 있냐? 이것만 보면 됨
         User friend = userService.findByEmail(email);
+
+        if (me.getGroup() == null) {
+            log.info("그룹을 생성해야 합니다");
+            throw new IllegalStateException();
+        }
 
         if (me.getFriendsEmail().contains(email)==false) {
             log.info("친구추가가 된 회원만 초대할 수 있습니다.");
@@ -79,10 +86,46 @@ public class GroupController {
 
         List<UserDto> guest = groupUser.stream()
                 .filter(u -> u.getGroup().getMaster()!=u)
-                .map(u -> new UserDto(u))// 이거 진짜 왜이랰ㅋㅋㅋㅋㅋㅋㅋㅋㅋ getMe 를 해야 정상적으로 출력되는 현상... 어떻게 해도 고쳐지지가 않음
+                .map(u -> new UserDto(u))
                 .collect(toList());
         return new GroupMember(new UserDto(user.getGroup().getMaster()), guest);
     }
+    @GetMapping("/member/{email}")
+    public GroupMember otherGroupMember(@PathVariable String email) {
+        User user = userService.findByEmail(email);
+        List<User> groupUser = user.getGroup().getUserList();
+
+        List<UserDto> guest = groupUser.stream()
+                .filter(u -> u.getGroup().getMaster()!=u)
+                .map(u -> new UserDto(u))
+                .collect(toList());
+        return new GroupMember(new UserDto(user.getGroup().getMaster()), guest);
+    }
+    @PostMapping("/start")
+    public void joinGroupting(HttpServletRequest request) {
+        User sessionUser = userService.getSessionUser(request);
+        if (sessionUser.getIdle() == true) {
+            log.info("이미 개인 미팅에 참여중입니다. 퇴장 후 다시 시도하십시오");
+            throw new IllegalStateException();
+        }
+        groupService.startGroupting(sessionUser);
+        log.info("{}님의 그룹이 미팅에 참여했습니다", sessionUser.getName());
+    }
+    @PostMapping("/stop")
+    public void exitGroup(HttpServletRequest request) {
+        User sessionUser = userService.getSessionUser(request);
+        groupService.stopGroupting(sessionUser);
+        log.info("{}님의 그룹이 미팅에서 퇴장하였습니다", sessionUser.getName());
+    }
+    @GetMapping("/list")
+    public List<GroupDto> groupList(HttpServletRequest request) {
+        User sessionUser = userService.getSessionUser(request);
+        List<Group> aLl = groupService.findALl(sessionUser);// 인원수 맞춰야 하고, 성별 달라야 하고 근처 학교여야 해. 그리고 그룹을 누르면 멤버 정보도 확인 가능해야함
+        return aLl.stream()
+                .map(g -> new GroupDto(g))
+                .collect(Collectors.toList());
+    }
+
 
     //== Controller 내부 정의 DTO ==//
     @Data // 컬렉션으로 바로 내보내면 json 배열 타입으로 나가버리기 때문에(유연성이 확 떨어짐) 한번 감싸줘야 함

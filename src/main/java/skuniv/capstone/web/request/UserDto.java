@@ -1,4 +1,4 @@
-package skuniv.capstone.web.request.friend.dto;
+package skuniv.capstone.web.request;
 
 import lombok.Data;
 import skuniv.capstone.domain.user.User;

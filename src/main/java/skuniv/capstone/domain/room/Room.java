@@ -23,4 +23,19 @@ public class Room {
     private List<User> userList = new ArrayList<>();
     @OneToMany(mappedBy = "room")
     private List<Chatting> chattingList = new ArrayList<>();
+
+    //== 생성 메소드 ==//
+    public static Room createRoom(String myName, String friendName) {
+        return Room.builder()
+                .name(myName + "님의 그룹," + friendName + "님의 그룹의 채팅룸").build();
+    }
+
+    //== 비즈니스 로직 ==//
+    /**
+     * 그룹원들을 룸에 입장
+     * @param userList
+     */
+    public void enterUsers(List<User> userList) {
+        this.userList.addAll(userList);
+    }
 }
