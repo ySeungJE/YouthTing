@@ -20,8 +20,10 @@ public class Room {
     private Long id;
     private String name;
     @OneToMany(mappedBy = "room")
+    @Builder.Default
     private List<User> userList = new ArrayList<>();
     @OneToMany(mappedBy = "room")
+    @Builder.Default
     private List<Chatting> chattingList = new ArrayList<>();
 
     //== 생성 메소드 ==//
@@ -36,6 +38,6 @@ public class Room {
      * @param userList
      */
     public void enterUsers(List<User> userList) {
-        this.userList.addAll(userList);
+        userList.forEach(u->u.setRoom(this));
     }
 }

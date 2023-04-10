@@ -67,19 +67,17 @@ public class RoomController {
                 .map(u -> new SendRequestDto(u))
                 .collect(toList());
     }
-    @PostMapping("/success/{requestId}") // request 상태가 SUCCESS 로 변경되고 마스터의 그룹에 게스트가 추가됨
+    @PostMapping("/success/{requestId}") // 룸 객체가 만들어지고 유저와 양방향 매핑됨
     public void successMeeting(@PathVariable Long requestId) {
         roomService.successMeeting(requestId);
     }
-//    @GetMapping("/member")
-//    public GroupController.GroupMember groupMember(HttpServletRequest request) {
-//        User user = userService.getSessionUser(request);
-//        List<User> groupUser = user.getGroup().getUserList();
-//
-//        List<UserDto> guest = groupUser.stream()
-//                .filter(u -> u.getGroup().getMaster()!=u)
-//                .map(u -> new UserDto(u))
-//                .collect(toList());
-//        return new GroupController.GroupMember(new UserDto(user.getGroup().getMaster()), guest);
-//    }
+    @GetMapping("/member")
+    public List<UserDto> groupMember(HttpServletRequest request) {
+        User user = userService.getSessionUser(request);
+        List<User> groupUser = user.getRoom().getUserList();
+
+        return groupUser.stream()
+                .map(u -> new UserDto(u))
+                .collect(toList());
+    }
 }

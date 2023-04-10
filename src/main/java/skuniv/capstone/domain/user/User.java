@@ -52,6 +52,7 @@ public class User {
     @OneToMany(mappedBy = "friend", cascade = ALL) // 복함 매핑
     private List<Friendship> friendShipList = new ArrayList<>();
     @OneToMany(mappedBy = "sendUser", cascade = ALL) // 복합 매핑
+    @Builder.Default
     private List<UserRequest> sendRequestList = new ArrayList<>();
     @OneToMany(mappedBy = "receiveUser", cascade = ALL) // 복합 매핑
     private List<UserRequest> receiveRequestList = new ArrayList<>();
@@ -141,6 +142,12 @@ public class User {
      */
     public void stopSoloting() {
         this.idle = false;
+    }
+    /**
+     * 채팅룸 업데이트
+     */
+    public void updateRoom(Room room) {
+        this.room = room;
     }
 
 }

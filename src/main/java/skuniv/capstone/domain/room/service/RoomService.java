@@ -3,13 +3,13 @@ package skuniv.capstone.domain.room.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import skuniv.capstone.domain.group.Group;
 import skuniv.capstone.domain.request.*;
 import skuniv.capstone.domain.room.Room;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.userrequest.UserRequest;
 import skuniv.capstone.domain.userrequest.repository.UserRequestRepository;
 
+import static skuniv.capstone.domain.request.RequestStatus.SUCCESS;
 import static skuniv.capstone.domain.request.RequestStatus.WAIT;
 import static skuniv.capstone.domain.request.RequestType.*;
 import static skuniv.capstone.domain.request.SoloOrGroup.*;
@@ -31,14 +31,10 @@ public class RoomService {
     }
     public void successMeeting(Long requestId) {
         UserRequest userRequest = userRequestRepository.findById(requestId).orElse(null);
+        userRequest.getRequest().changeStatus(SUCCESS);
         Room room = Room.createRoom(userRequest.getSendUser().getName(), userRequest.getReceiveUser().getName());
-        ((Meeting) userRequest.getRequest()).updateRoom(room);
+//        ((Meeting) userRequest.getRequest()).updateRoom(room); // JPA 에서 형 변환은 안되는걸로.
         room.enterUsers(userRequest.getSendUser().getGroup().getUserList());
         room.enterUsers(userRequest.getReceiveUser().getGroup().getUserList());
-    }
-    @Transactional // 이거 동작하는지 확인
-    public String successInvite(Long requestId) {
-        UserRequest userRequest = userRequestRepository.findById(requestId).orElse(null);
-        return userRequest.successInvite();
     }
 }

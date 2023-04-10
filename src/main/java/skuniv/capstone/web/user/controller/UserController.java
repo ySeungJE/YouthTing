@@ -33,6 +33,8 @@ public class UserController {
             userService.join(created);
             String storeProfileName = fileStore.storeFile(proFilePicture,created.getName());
             userService.profileUpdate(created, storeProfileName); // service 밖으로 나와버렸기 때문에 변경 감지는 안되고, 다만 lazy 초기화는 된다? "확인"
+//            created.getSendRequestList().add(null); // 객체를 save함과 동시에 배열이 생성될 순 없는지를 확인하기 위한 문장, 일단 유저가 만들어지긴 할 거.
+                                                    // 지렸닼ㅋㅋㅋㅋㅋ 이게 안되는 거였네... 나름대로 해석하자면 같은 트랜잭션 내에서 바로 list 속성을 사용하려면, @Builder.default 가 필수라는 거
             return created.getName() + "님이 가입하셨습니다";
     }
     @GetMapping("/list")
