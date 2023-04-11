@@ -9,6 +9,8 @@ import skuniv.capstone.domain.user.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,28 +18,40 @@ import java.util.List;
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "room_id") // 이거를 바꾸면...ㅋㅋㅋㅋㅋㅋ ㅅㅂ 데이터베이스에 반영을 해줬어야지
     private Long id;
     private String name;
     @OneToMany(mappedBy = "room")
     @Builder.Default
     private List<User> userList = new ArrayList<>();
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", cascade = ALL) // 이걸 안하니까 안됐던거 같은데?
     @Builder.Default
     private List<Chatting> chattingList = new ArrayList<>();
 
     //== 생성 메소드 ==//
-    public static Room createRoom(String myName, String friendName) {
+    public static Room createGroupRoom(String myName, String friendName) {
         return Room.builder()
-                .name(myName + "님의 그룹," + friendName + "님의 그룹의 채팅룸").build();
+                .name(myName + "님의 그룹," + friendName + "님의 그룹의 미팅룸").build();
+    }
+    public static Room createSoloRoom(String myName, String friendName) {
+        return Room.builder()
+                .name(myName + "님," + friendName + "님의 미팅룸").build();
     }
 
     //== 비즈니스 로직 ==//
     /**
      * 그룹원들을 룸에 입장
-     * @param userList
      */
-    public void enterUsers(List<User> userList) {
-        userList.forEach(u->u.setRoom(this));
+    public void enterGroup(List<User> group1,List<User> group2) {
+        group1.forEach(u->u.setRoom(this));
+        group2.forEach(u->u.setRoom(this));
+    }
+
+    /**
+     * 개인 미팅 룸에 입장
+     */
+    public void enterUser(User user1, User user2) {
+        user1.setRoom(this);
+        user2.setRoom(this);
     }
 }

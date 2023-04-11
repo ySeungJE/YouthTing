@@ -8,6 +8,7 @@ import skuniv.capstone.domain.userrequest.UserRequest;
 public class SendRequestDto {
     private Long requestId;
     private String title;
+    private String email;
     private String storeProFileName;
     private RequestStatus status;
 
@@ -16,5 +17,6 @@ public class SendRequestDto {
         title = userRequest.getReceiveUser().getName();
         storeProFileName = userRequest.getReceiveUser().getStoreProfileName();
         status = userRequest.getRequest().getRequestStatus();
+        email = userRequest.getReceiveUser().getEmail();;
     }
 }

@@ -2,6 +2,7 @@ package skuniv.capstone.domain.chatting;
 
 import jakarta.persistence.*;
 import lombok.*;
+import skuniv.capstone.domain.friendship.Friendship;
 import skuniv.capstone.domain.room.Room;
 import skuniv.capstone.domain.user.User;
 
@@ -22,6 +23,18 @@ public class Chatting {
     @JoinColumn(name = "user_id")
     private User user;
     @ManyToOne
-    @JoinColumn(name = "room_id")
+    @JoinColumn(name = "room_id") // 그냥 이거는.. 음 room 에서 chatting 배열이 꼭 필요하므로 좀 불편하지만 해야 하는..? 느낌으로 인식해야 할듯
     private Room room;
+
+    //== 생성 메서드 ==//
+    public static Chatting createChatting(String content, User user, Room room) { // 얘도 생성과 매핑을 동시에
+        Chatting chatting = Chatting.builder()
+                .content(content)
+                .time(LocalDateTime.now())
+                .build();
+        chatting.user = user;
+        chatting.room = room;
+        room.getChattingList().add(chatting);
+        return chatting;
+    }
 }

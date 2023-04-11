@@ -6,9 +6,10 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "dtype")
+@NoArgsConstructor
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // 다음부터는 이 구조 말고 join 전략을 써야겠다, 다음부턴 이렇게 절대 안한다...
+                                                        // 이유 1. abstract로 해놓으면 Builder를 쓸 수가 없음, 아마 AllArgsConstructor 를 못 썼던거 같다
+@DiscriminatorColumn(name = "dtype")                        // 이유 2. 이게 제일 ㅈ같은데 도통 써먹지를 못하겠음 DB에서 Request 형으로 꺼내는데, 그 후 형변환을 못하겠으니까 자식 클래스에 정의해놓은 기능들을 쓸 수가 없어
 @AllArgsConstructor
 public class Request {
     @Id

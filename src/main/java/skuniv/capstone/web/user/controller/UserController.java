@@ -69,7 +69,8 @@ public class UserController {
     @PostMapping("/start")
     public void joinSoloTing(HttpServletRequest request) {
         User sessionUser = userService.getSessionUser(request);
-        if (sessionUser.getGroup().getIdle() == true) {
+
+        if (sessionUser.getGroup()!=null && sessionUser.getGroup().getIdle() == true) {
             log.info("이미 그룹 미팅에 참여중입니다. 퇴장 후 다시 시도하십시오");
             throw new IllegalStateException();
         }

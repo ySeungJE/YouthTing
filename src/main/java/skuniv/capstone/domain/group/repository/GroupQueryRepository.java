@@ -10,8 +10,6 @@ import skuniv.capstone.domain.group.QGroup;
 import skuniv.capstone.domain.user.Gender;
 import skuniv.capstone.domain.user.MBTI;
 import skuniv.capstone.domain.user.QUser;
-import skuniv.capstone.domain.user.User;
-import skuniv.capstone.domain.user.repository.UserSearch;
 
 import java.util.List;
 
@@ -35,19 +33,6 @@ public class GroupQueryRepository {
                         group.idle.eq(true))
                 .limit(500)
                 .fetch();
-    }
-
-    private BooleanExpression mbtiEq(MBTI mbti) {
-        if (mbti == null) {
-            return null;
-        }
-        return QUser.user.mbti.eq(mbti);
-    }
-    private BooleanExpression idleEp(Boolean idle) {
-        if (idle == false) {
-            return null;
-        }
-        return QUser.user.idle.eq(true);
     }
     private BooleanExpression genderDif(Gender userGender) {
         if (userGender == MAN) {

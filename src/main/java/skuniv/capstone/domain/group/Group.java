@@ -32,7 +32,7 @@ public class Group {
     //== 생성 메서드 ==//
     public static Group createGroup(User master) {
         return Group.builder()
-                .name(master.getName())
+                .name(master.getName()+"의 그룹")
                 .master(master)
                 .idle(false)
                 .groupAge(0)
@@ -67,6 +67,7 @@ public class Group {
      * 그룹원들 나이 평균
      */
     public void groupAge() {
+        this.groupAge=0;
         for (User user : userList) {
             groupAge+=user.getAge();
         }

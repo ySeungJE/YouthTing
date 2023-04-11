@@ -10,16 +10,12 @@ import skuniv.capstone.domain.room.Room;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Meeting extends Request{
-    @OneToOne
-    @JoinColumn(name = "room_id")
-    private Room room;
     @Enumerated(EnumType.STRING)
     private SoloOrGroup soloOrGroup;
 
     @Builder // 이거 때문에 값이 안들어오는 거였네
-    public Meeting(Long id, String name, RequestStatus requestStatus,RequestType requestType, Room room, SoloOrGroup soloOrGroup) {
+    public Meeting(Long id, String name, RequestStatus requestStatus,RequestType requestType, SoloOrGroup soloOrGroup) {
         super(id, name, requestStatus,requestType);
-        this.room = room;
         this.soloOrGroup=soloOrGroup;
     }
 
@@ -32,11 +28,6 @@ public class Meeting extends Request{
                 .soloOrGroup(soloOrGroup)
                 .build();
     }
+
     //== 비즈니스 로직 ==//
-    /**
-     * room 초기화
-     */
-    public void updateRoom(Room room) {
-        this.room = room;
-    }
 }
