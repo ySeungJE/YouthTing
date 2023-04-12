@@ -2,6 +2,7 @@ package skuniv.capstone.web.user.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -27,23 +28,22 @@ public class UserController {
     private final UserService userService;
     private final FIleStore fileStore;
     @PostMapping("/add")
-    public String join(@RequestPart MultipartFile proFilePicture,
+    public String join(@Valid @RequestPart MultipartFile proFilePicture,
                        @Valid @RequestPart UserJoinDto userJoinDto) throws IOException {
-            User created = User.createUser(userJoinDto);
-            userService.join(created);
-            String storeProfileName = fileStore.storeFile(proFilePicture,created.getName());
-            userService.profileUpdate(created, storeProfileName); // service 밖으로 나와버렸기 때문에 변경 감지는 안되고, 다만 lazy 초기화는 된다? "확인"
+        String storeProfileName = fileStore.storeFile(proFilePicture,userJoinDto.getName());
+        userService.join(User.createUser(userJoinDto,storeProfileName));
 //            created.getSendRequestList().add(null); // 객체를 save함과 동시에 배열이 생성될 순 없는지를 확인하기 위한 문장, 일단 유저가 만들어지긴 할 거.
                                                     // 지렸닼ㅋㅋㅋㅋㅋ 이게 안되는 거였네... 나름대로 해석하자면 같은 트랜잭션 내에서 바로 list 속성을 사용하려면, @Builder.default 가 필수라는 거
-            return created.getName() + "님이 가입하셨습니다";
+        return User.createUser(userJoinDto,storeProfileName).getName() + "님이 가입하셨습니다";
     }
     @GetMapping("/list")
-    public List<UserSoloDto> soloList(@Valid @RequestBody UserSearch userSearch,
-                                      HttpServletRequest request) {
+    public List<UserSoloDto> soloList(@Valid @RequestBody UserSearch userSearch, HttpServletRequest request) {
         User sessionUser = userService.getSessionUser(request);
-        List<User> aLl = userService.findALl(sessionUser.getGender(),userSearch);
 
-        return aLl.stream()
+        userService.checkStartTime(); // 미팅참여 후 3일 지난 애들은 자동으로 퇴장
+
+        return userService.findALl(sessionUser.getGender(),userSearch)
+                .stream()
                 .map(UserSoloDto::new)
                 .collect(toList());
     }

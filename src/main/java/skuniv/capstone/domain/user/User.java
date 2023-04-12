@@ -2,6 +2,7 @@ package skuniv.capstone.domain.user;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.cglib.core.Local;
 import skuniv.capstone.domain.friendship.Friendship;
 import skuniv.capstone.domain.userrequest.UserRequest;
 import skuniv.capstone.domain.group.Group;
@@ -9,6 +10,7 @@ import skuniv.capstone.domain.room.Room;
 import skuniv.capstone.web.user.dto.MyPageDto;
 import skuniv.capstone.web.user.dto.UserJoinDto;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +48,7 @@ public class User {
     @JoinColumn(name = "group_id")
     private Group group;
     private Boolean idle;
-    
+    private LocalDateTime startTime;
     @ElementCollection
     private List<String> friendsEmail;
     @OneToMany(mappedBy = "friend", cascade = ALL) // 복함 매핑
@@ -73,17 +75,18 @@ public class User {
         this.receiveRequestList.add(userRequest);
     }
     //== 생성 메서드 ==//
-    public static User createUser(UserJoinDto userJoinDto) {
+    public static User createUser(UserJoinDto userJoinDto, String storeProfileName) {
         return User.builder()
                 .email(userJoinDto.getEmail())
                 .password(userJoinDto.getPassword())
                 .name(userJoinDto.getName())
                 .gender(userJoinDto.getGender())
                 .age(userJoinDto.getAge())
-                .univ(userJoinDto.getUniv())
+                .univ(new Univ(userJoinDto.getUnivAddress(), userJoinDto.getUnivName()))
                 .height(userJoinDto.getHeight())
                 .mbti(userJoinDto.getMbti())
                 .intro(userJoinDto.getIntro())
+                .storeProfileName(storeProfileName)
                 .idle(false)
                 .build();
     }
@@ -136,6 +139,7 @@ public class User {
      */
     public void startSoloting() {
         this.idle = true;
+        this.startTime = LocalDateTime.now(); // 솔로팅 참여한 시간 설정
     }
     /**
      * idle 상태 변경, 개인 미팅 퇴장

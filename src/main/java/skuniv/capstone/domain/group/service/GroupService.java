@@ -8,6 +8,8 @@ import skuniv.capstone.domain.group.repository.GroupQueryRepository;
 import skuniv.capstone.domain.group.repository.GroupRepository;
 import skuniv.capstone.domain.user.User;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -37,6 +39,20 @@ public class GroupService {
         sessionUser.getGroup().stopGroupting();
     }
 
+    @Transactional
+    public void checkStartTime() {
+        List<Group> groupList = groupRepository.findByIdle(true);
+        for (int i=groupList.size()-1; i>=0; i--) {
+            if (Duration.between(groupList.get(i).getStartTime(), LocalDateTime.now()).getSeconds() > 259200) {
+                g.stopGroupting();
+            }
+        }
+        groupList.forEach(g -> {
+            if (Duration.between(g.getStartTime(), LocalDateTime.now()).getSeconds() > 259200) {
+                g.stopGroupting();
+            }
+        });
+    }
     @Transactional
     public List<Group> findALl(User user) {
         return queryRepository.findAll(user.getGender(),

@@ -1,4 +1,4 @@
-package skuniv.capstone.web.room.dto;
+package skuniv.capstone.web.request.room.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;

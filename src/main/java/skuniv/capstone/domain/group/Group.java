@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import skuniv.capstone.domain.user.User;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class Group {
     @Builder.Default // 뭐야 시발 이래야 되네? 그럼 야 시발 User 에 그 수많은 List 들은 왜 그냥 만들어주고 얘는 안만들어주고 쥐랄임?
     private List<User> userList = new ArrayList<>();
     private Boolean idle;
+    private LocalDateTime startTime;
 
     //== 생성 메서드 ==//
     public static Group createGroup(User master) {
@@ -54,6 +56,7 @@ public class Group {
     public void startGroupting() {
         this.idle=true;
         groupAge(); // 이 때 나이 설정
+        this.startTime = LocalDateTime.now(); // 그룹팅 참여한 시간 설정
     }
 
     /**

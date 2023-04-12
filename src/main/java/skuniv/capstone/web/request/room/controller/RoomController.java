@@ -1,13 +1,10 @@
 package skuniv.capstone.web.request.room.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
 import org.springframework.web.bind.annotation.*;
-import skuniv.capstone.domain.chatting.Chatting;
-import skuniv.capstone.domain.group.service.GroupService;
 import skuniv.capstone.domain.request.Meeting;
 import skuniv.capstone.domain.room.service.RoomService;
 import skuniv.capstone.domain.user.User;
@@ -17,9 +14,11 @@ import skuniv.capstone.domain.userrequest.sevice.RequestService;
 import skuniv.capstone.web.request.ReceiveRequestDto;
 import skuniv.capstone.web.request.SendRequestDto;
 import skuniv.capstone.web.request.UserDto;
-import skuniv.capstone.web.room.dto.ChattingSendDto;
+import skuniv.capstone.web.request.room.dto.ShowChattingDto;
+import skuniv.capstone.web.request.room.dto.ChattingSendDto;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static skuniv.capstone.domain.request.RequestType.MEETING;
@@ -94,5 +93,15 @@ public class RoomController {
     public void chat(@RequestBody ChattingSendDto chatting, HttpServletRequest request) {
         User me = userService.getSessionUser(request);
         roomService.createChatting(me,chatting.getContent());
+    }
+
+    @GetMapping("/chatting")
+    public List<ShowChattingDto> allChatting(HttpServletRequest request) {
+        User sessionUser = userService.getSessionUser(request);
+
+        return sessionUser.getRoom().getChattingList()
+                .stream()
+                .map(c -> new ShowChattingDto(c.getContent(), c.getUser()))
+                .collect(Collectors.toList());
     }
 }

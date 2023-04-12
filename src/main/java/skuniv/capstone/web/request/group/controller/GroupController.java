@@ -120,8 +120,11 @@ public class GroupController {
     @GetMapping("/list")
     public List<GroupDto> groupList(HttpServletRequest request) {
         User sessionUser = userService.getSessionUser(request);
-        List<Group> aLl = groupService.findALl(sessionUser);// 인원수 맞춰야 하고, 성별 달라야 하고 근처 학교여야 해. 그리고 그룹을 누르면 멤버 정보도 확인 가능해야함
-        return aLl.stream()
+
+        groupService.checkStartTime();  // 미팅참여 후 3일 지난 그룹은 자동으로 퇴장
+
+        // 인원수 맞춰야 하고, 성별 달라야 하고 근처 학교여야 해. 그리고 그룹을 누르면 멤버 정보도 확인 가능해야함
+        return groupService.findALl(sessionUser).stream()
                 .map(g -> new GroupDto(g))
                 .collect(Collectors.toList());
     }

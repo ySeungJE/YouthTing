@@ -17,6 +17,8 @@ import skuniv.capstone.domain.user.repository.UserSearch;
 import skuniv.capstone.domain.userrequest.UserRequest;
 import skuniv.capstone.web.user.dto.MyPageDto;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static skuniv.capstone.web.login.controller.LoginController.LOGIN_USER;
@@ -63,8 +65,9 @@ public class UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }
-    public User getSessionUser(HttpServletRequest request) {
+    public User getSessionUser(HttpServletRequest request) { // 아니 바보야 나는 이걸로 트랜잭션까지 가져왔잖아.. 진짜 나 빡대가리 다 돌려놔야함
         User session = (User) request.getSession().getAttribute(LOGIN_USER);
+
         User user = findById(session.getId());
         return user;
     }
@@ -86,5 +89,13 @@ public class UserService {
     public void stopSoloting(User sessionUser) {
         sessionUser.stopSoloting();
     }
-
+    @Transactional
+    public void checkStartTime() {
+        List<User> userList = userRepository.findByIdle(true);
+        userList.forEach(u -> {
+            if (Duration.between(u.getStartTime(), LocalDateTime.now()).getSeconds() > 259200) {
+                u.stopSoloting();
+            }
+        });
+    }
 }
