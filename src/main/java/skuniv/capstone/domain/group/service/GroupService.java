@@ -9,7 +9,7 @@ import skuniv.capstone.domain.group.repository.GroupRepository;
 import skuniv.capstone.domain.user.User;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -41,17 +41,11 @@ public class GroupService {
 
     @Transactional
     public void checkStartTime() {
-        List<Group> groupList = groupRepository.findByIdle(true);
-        for (int i=groupList.size()-1; i>=0; i--) {
-            if (Duration.between(groupList.get(i).getStartTime(), LocalDateTime.now()).getSeconds() > 259200) {
-                g.stopGroupting();
-            }
-        }
-        groupList.forEach(g -> {
-            if (Duration.between(g.getStartTime(), LocalDateTime.now()).getSeconds() > 259200) {
-                g.stopGroupting();
-            }
-        });
+        List<Group> groups = groupRepository.findByIdleOrderByStartTimeAsc(true);
+        for (Group group : groups)
+            if (Duration.between(Instant.ofEpochSecond(group.getStartTime()), Instant.now()).getSeconds() > 259200) {
+                group.stopGroupting();
+            } else break; // StartTime 기준 오름차순을 했으므로, 한번 3일 안쪽으로 들어오면 그 후 유저들은 모두 3일 안쪽인 것
     }
     @Transactional
     public List<Group> findALl(User user) {

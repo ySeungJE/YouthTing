@@ -7,6 +7,6 @@ import skuniv.capstone.domain.user.User;
 import java.util.List;
 
 public interface GroupRepository extends JpaRepository<Group, Long> {
-    List<Group> findByIdle(boolean idle);
-    List<Group> findByIdleByGroupDesc(); // 낼 생각해보자!!
+    List<Group> findByIdle(Boolean idle);
+    List<Group> findByIdleOrderByStartTimeAsc(Boolean idle); // 낼 생각해보자!!
 }

@@ -2,6 +2,7 @@ package skuniv.capstone.domain.user.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import skuniv.capstone.domain.group.Group;
@@ -18,12 +19,15 @@ import skuniv.capstone.domain.userrequest.UserRequest;
 import skuniv.capstone.web.user.dto.MyPageDto;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import static skuniv.capstone.web.login.controller.LoginController.LOGIN_USER;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
@@ -65,7 +69,7 @@ public class UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }
-    public User getSessionUser(HttpServletRequest request) { // 아니 바보야 나는 이걸로 트랜잭션까지 가져왔잖아.. 진짜 나 빡대가리 다 돌려놔야함
+    public User getSessionUser(HttpServletRequest request) {
         User session = (User) request.getSession().getAttribute(LOGIN_USER);
 
         User user = findById(session.getId());
@@ -91,11 +95,11 @@ public class UserService {
     }
     @Transactional
     public void checkStartTime() {
-        List<User> userList = userRepository.findByIdle(true);
-        userList.forEach(u -> {
-            if (Duration.between(u.getStartTime(), LocalDateTime.now()).getSeconds() > 259200) {
-                u.stopSoloting();
-            }
-        });
+        List<User> userList = userRepository.findByIdleOrderByStartTimeAsc(true);
+        for (User user : userList) {
+            if (Duration.between(Instant.ofEpochSecond(user.getStartTime()), Instant.now()).getSeconds() > 259200) {
+                user.stopSoloting();
+            } else break; // StartTime 기준 오름차순을 했으므로, 한번 3일 안쪽으로 들어오면 그 후 유저들은 모두 3일 안쪽인 것
+        }
     }
 }

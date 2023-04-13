@@ -10,6 +10,7 @@ import skuniv.capstone.domain.room.Room;
 import skuniv.capstone.web.user.dto.MyPageDto;
 import skuniv.capstone.web.user.dto.UserJoinDto;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class User {
     @JoinColumn(name = "group_id")
     private Group group;
     private Boolean idle;
-    private LocalDateTime startTime;
+    private Long startTime;
     @ElementCollection
     private List<String> friendsEmail;
     @OneToMany(mappedBy = "friend", cascade = ALL) // 복함 매핑
@@ -139,7 +140,7 @@ public class User {
      */
     public void startSoloting() {
         this.idle = true;
-        this.startTime = LocalDateTime.now(); // 솔로팅 참여한 시간 설정
+        this.startTime = Instant.now().getEpochSecond(); // 솔로팅 참여한 시간 설정
     }
     /**
      * idle 상태 변경, 개인 미팅 퇴장
