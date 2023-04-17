@@ -62,7 +62,7 @@ public class GroupController {
 
         return list.stream()
                 .filter(u-> u.getRequest().getRequestType()==INVITE )
-                .map(u -> new ReceiveRequestDto(u))
+                .map(u -> new ReceiveRequestDto(u, u.getSendUser()))
                 .collect(toList());
     }
     @GetMapping("/send")
@@ -72,7 +72,7 @@ public class GroupController {
 
         return list.stream()
                 .filter(u-> u.getRequest().getRequestType()==INVITE )
-                .map(u -> new SendRequestDto(u))
+                .map(u -> new SendRequestDto(u,u.getReceiveUser()))
                 .collect(toList());
     }
     @PostMapping("/success/{requestId}") // request 상태가 SUCCESS 로 변경되고 마스터의 그룹에 게스트가 추가됨

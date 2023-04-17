@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static java.util.stream.Collectors.*;
+import static skuniv.capstone.web.login.controller.LoginController.LOGIN_USER;
 
 @Slf4j
 @RestController
@@ -36,6 +37,13 @@ public class UserController {
                                                     // 지렸닼ㅋㅋㅋㅋㅋ 이게 안되는 거였네... 나름대로 해석하자면 같은 트랜잭션 내에서 바로 list 속성을 사용하려면, @Builder.default 가 필수라는 거
         return User.createUser(userJoinDto,storeProfileName).getName() + "님이 가입하셨습니다";
     }
+
+    @GetMapping("/idleCheck")
+    public String idleCheck(HttpServletRequest request) {
+        User sessionUser = (User) request.getSession().getAttribute(LOGIN_USER);
+        return "false";
+    }
+
     @GetMapping("/list")
     public List<UserSoloDto> soloList(@Valid @RequestBody UserSearch userSearch, HttpServletRequest request) {
         User sessionUser = userService.getSessionUser(request);

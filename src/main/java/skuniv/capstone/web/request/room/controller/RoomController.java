@@ -57,7 +57,7 @@ public class RoomController {
 
         return list.stream()
                 .filter(u -> u.getRequest().getRequestType() == MEETING)
-                .map(u -> new ReceiveRequestDto(u))
+                .map(u -> new ReceiveRequestDto(u, u.getSendUser()))
                 .collect(toList());
     }
 
@@ -68,7 +68,7 @@ public class RoomController {
 
         return list.stream()
                 .filter(u -> u.getRequest().getRequestType() == MEETING)
-                .map(u -> new SendRequestDto(u))
+                .map(u -> new SendRequestDto(u, u.getReceiveUser()))
                 .collect(toList());
     }
 

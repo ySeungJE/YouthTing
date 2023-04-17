@@ -18,6 +18,7 @@ import skuniv.capstone.web.exhandler.UserJoinErrorResult;
 public class UserExceptionAdvice {
 
     //=============================== 유저 회원가입 예외 처리 ====================================//
+
     @ExceptionHandler // 지금 빈칸을 허용하지 않는다는 목적은 똑같은데, 문자열이랑 다른 타입의 변수들에서 나오는 에러가 달라지네. 이건 ㅈㄴ 비효율적이긴 하지. 차라리 내가 저 두개를 합쳐서 하나의 어노테이션으로 만들면?
     public ResponseEntity<UserJoinErrorResult> validationFailHandler(DataIntegrityViolationException e) { // DB 구조에 안맞아서 직접 보낸 에러
         UserJoinErrorResult userJoinErrorResult = new UserJoinErrorResult("DBNotAllowException","중복된 이메일, 프로필 사진 미첨부");

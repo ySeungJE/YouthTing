@@ -43,7 +43,7 @@ public class FriendController {
 
         return list.stream()
                 .filter(u-> u.getRequest().getRequestType()==FRIEND )
-                .map(userRequest -> new ReceiveRequestDto(userRequest))
+                .map(userRequest -> new ReceiveRequestDto(userRequest, userRequest.getSendUser()))
                 .collect(toList());
     }
     @GetMapping("/send")
@@ -53,7 +53,7 @@ public class FriendController {
 
         return list.stream()
                 .filter(u-> u.getRequest().getRequestType()==FRIEND)
-                .map(u -> new SendRequestDto(u))
+                .map(u -> new SendRequestDto(u,u.getReceiveUser()))
                 .collect(toList());
     }
     @PostMapping("/success/{requestId}") // request 상태가 SUCCESS 로 변경되고 양측이 친구로 추가됨
