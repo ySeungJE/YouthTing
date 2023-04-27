@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import skuniv.capstone.domain.login.service.LoginService;
 import skuniv.capstone.domain.user.User;
@@ -15,13 +17,18 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 @Slf4j
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class LoginController {
     public static final String LOGIN_USER = "loginUser";
     private final LoginService loginService;
+    @GetMapping("/login")
+    public String loginForm(Model model) {
+        model.addAttribute("loginForm", new LoginForm());
+        return "user/loginForm";
+    }
     @PostMapping("/login")
-    public String login(@Valid @RequestBody LoginForm form,
+    public String login(@Valid @ModelAttribute LoginForm form,
                         HttpServletRequest request) throws IOException {
 
         User loginUser = loginService.login(form.getEmail(), form.getPassword());
@@ -33,7 +40,7 @@ public class LoginController {
         HttpSession session = request.getSession();
 
         session.setAttribute(LOGIN_USER, loginUser);
-        return "["+loginUser.getName()+"]님 환영합니다";
+        return "redirect:/";
     }
     @GetMapping("/sessionTest")
     public void sessionTest(HttpServletRequest request) {
@@ -50,7 +57,7 @@ public class LoginController {
         if (session != null) {
             session.invalidate();
         }
-        return "로그아웃 완료";
+        return "redirect:/";
     }
 
     @GetMapping("/notLoginUser")

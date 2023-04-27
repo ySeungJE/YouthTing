@@ -1,0 +1,101 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<style>
+    /* 꾸미기 */
+    .hero {
+        margin-bottom: 50px;
+    }
+    .login-button {
+        margin-bottom: 50px;
+    }
+    .my-button {
+        font-size: 30px;
+        padding: 20px 40px;
+    }
+</style>
+
+<body>
+<div class="hero bg-dark text-center py-5">
+    <h1 class="text-white">YouthTing</h1>
+    <h2 class="text-white">대학생들을 위한 미팅 서비스</h2>
+</div>
+<!-- 여기 -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3 class="text-center mb-4">회원가입</h3>
+            <form action="/user/add" method="POST">
+                <div class="form-group">
+                    <label for="email">이메일</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">비밀번호</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="name">이름</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="gender">성별</label>
+                    <select class="form-control" id="gender" name="gender" required>
+                        <option value="">선택하세요</option>
+                        <option value="MAN">남성</option>
+                        <option value="WOMAN">여성</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="height">키 (cm)</label>
+                    <input type="number" class="form-control" id="height" name="height" required>
+                </div>
+                <div class="form-group">
+                    <label for="age">나이</label>
+                    <input type="number" class="form-control" id="age" name="age" required>
+                </div>
+                <div class="form-group">
+                    <label for="introduction">자기소개</label>
+                    <textarea class="form-control" id="introduction" name="introduction" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="address">주소</label>
+                    <input type="text" class="form-control" id="address" name="address" required>
+                </div>
+                <div class="form-group">
+                    <label for="school">학교 이름</label>
+                    <input type="text" class="form-control" id="school" name="school" required>
+                </div>
+                <div class="form-group">
+                    <label for="mbti">MBTI</label>
+                    <select class="form-control" id="mbti" name="mbti" required>
+                        <option value="">선택하세요</option>
+                        <option value="ISTJ">ISTJ</option>
+                        <option value="ISFJ">ISFJ</option>
+                        <option value="INFJ">INFJ</option>
+                        <option value="INTJ">INTJ</option>
+                        <option value="ISTP">ISTP</option>
+                        <option value="ISFP">ISFP</option>
+                        <option value="INFP">INFP</option>
+                        <option value="INTP">INTP</option>
+                        <option value="ESTP">ESTP</option>
+                        <option value="ESFP">ESFP</option>
+                        <option value="ENFP">ENFP</option>
+                        <option value="ENTP">ENTP</option>
+                        <option value="ESTJ">ESTJ</option>
+                        <option value="ESFJ">ESFJ</option>
+                        <option value="ENFJ">ENFJ</option>
+                        <option value="ENTJ">ENTJ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="profile_pic">프로필 사진</label>
+                    <input type="file" class="form-control-file" id="profile_pic" name="profile_pic" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mt-4">회원가입</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

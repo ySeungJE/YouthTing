@@ -5,6 +5,8 @@ import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import skuniv.capstone.domain.file.FIleStore;
@@ -21,19 +23,24 @@ import java.util.List;
 import static java.util.stream.Collectors.*;
 
 @Slf4j
-@RestController
+@Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
     private final FIleStore fileStore;
+    @GetMapping("/add")
+    public String joinForm(Model model) {           // 빈 껍데기 객체 가져가는 이유 배웠지? object 때문에
+        model.addAttribute("userForm", new UserJoinDto());
+        return "user/joinForm";
+    }
     @PostMapping("/add")
     public String join(@Valid @RequestPart MultipartFile proFilePicture,
                        @Valid @RequestPart UserJoinDto userJoinDto) throws IOException {
         String storeProfileName = fileStore.storeFile(proFilePicture,userJoinDto.getName());
         userService.join(User.createUser(userJoinDto,storeProfileName));
 //            created.getSendRequestList().add(null); // 객체를 save함과 동시에 배열이 생성될 순 없는지를 확인하기 위한 문장, 일단 유저가 만들어지긴 할 거.
-                                                    // 지렸닼ㅋㅋㅋㅋㅋ 이게 안되는 거였네... 나름대로 해석하자면 같은 트랜잭션 내에서 바로 list 속성을 사용하려면, @Builder.default 가 필수라는 거
+        // 지렸닼ㅋㅋㅋㅋㅋ 이게 안되는 거였네... 나름대로 해석하자면 같은 트랜잭션 내에서 바로 list 속성을 사용하려면, @Builder.default 가 필수라는 거
         return User.createUser(userJoinDto,storeProfileName).getName() + "님이 가입하셨습니다";
     }
     @GetMapping("/list")
