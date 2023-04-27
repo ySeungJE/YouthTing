@@ -11,7 +11,7 @@ import skuniv.capstone.domain.user.Univ;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class UserJoinDto {
     @Email(message = "이메일 형식에 맞지 않습니다")
     @NotEmpty // NotEmpty 는 NonNull 보다 순위가 늦어.
@@ -34,5 +34,6 @@ public class UserJoinDto {
     private MBTI mbti;
     @NotEmpty
     private String intro;
-
+    @NonNull
+    private MultipartFile profilePicture;
 }

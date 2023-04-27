@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor // json 받아오려면 이거 필요하던가?
+@NoArgsConstructor
 public class LoginForm {
     @NotEmpty
     private String email;

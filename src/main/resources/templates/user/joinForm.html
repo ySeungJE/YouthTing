@@ -1,0 +1,107 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<style>
+    /* 꾸미기 */
+    .hero {
+        margin-bottom: 50px;
+    }
+    .login-button {
+        margin-bottom: 50px;
+    }
+    .my-button {
+        font-size: 30px;
+        padding: 20px 40px;
+    }
+        .my-bottom{
+        margin-bottom: 100px;
+    }
+</style>
+
+<body>
+<div th:replace="fragments/bodyHeader :: bodyHeader"/>
+<div class="hero bg-dark text-center py-5">
+    <h1 class="text-white">YouthTing</h1>
+    <h2 class="text-white">대학생들을 위한 미팅 서비스</h2>
+</div>
+<!-- 여기 -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3 class="text-center mb-4">회원가입</h3>
+            <form th:action="@{/user/add}" th:object="${userForm}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label th:for="email">이메일</label>
+                    <input type="text" th:field="*{email}" class="form-control" placeholder="이메일을 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label th:for="password">비밀번호</label>
+                    <input type="text" class="form-control" th:field="*{password}" placeholder="비밀번호를 입력하세요" required>
+                </div>
+                <div class="form-group">
+                    <label th:for="name">이름</label>
+                    <input type="text" class="form-control" th:field="*{name}"  placeholder="이름을 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label th:for="gender">성별</label>
+                    <select class="form-control" th:field="*{gender}">
+                        <option value="">선택하세요</option>
+                        <option value="MAN">남성</option>
+                        <option value="WOMAN">여성</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label th:for="height">키 (cm)</label>
+                    <input type="number" class="form-control" th:field="*{height}" placeholder="키를 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label th:for="age">나이</label>
+                    <input type="number" class="form-control" th:field="*{age}" placeholder="나이를 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label th:for="intro">자기소개</label>
+                    <textarea class="form-control" th:field="*{intro}" rows="5" placeholder="자기소개를 입력하세요 ex) 본인의 스타일, 이상형, 중요하게 생각하는 점 등"></textarea>
+                </div>
+                <div class="form-group">
+                    <label th:for="univAddress">주소</label>
+                    <input type="text" class="form-control" th:field="*{univAddress}" placeholder="학교 주소를 입력하세요" required>
+                </div>
+                <div class="form-group">
+                    <label th:for="univName">학교 이름</label>
+                    <input type="text" class="form-control" th:field="*{univName}" placeholder="학교 이름을 입력하세요" required>
+                </div>
+                <div class="form-group">
+                    <label th:for="mbti">MBTI</label>
+                    <select class="form-control" th:field="*{mbti}" required>
+                        <option value="">선택하세요</option>
+                        <option value="ISTJ">ISTJ</option>
+                        <option value="ISFJ">ISFJ</option>
+                        <option value="INFJ">INFJ</option>
+                        <option value="INTJ">INTJ</option>
+                        <option value="ISTP">ISTP</option>
+                        <option value="ISFP">ISFP</option>
+                        <option value="INFP">INFP</option>
+                        <option value="INTP">INTP</option>
+                        <option value="ESTP">ESTP</option>
+                        <option value="ESFP">ESFP</option>
+                        <option value="ENFP">ENFP</option>
+                        <option value="ENTP">ENTP</option>
+                        <option value="ESTJ">ESTJ</option>
+                        <option value="ESFJ">ESFJ</option>
+                        <option value="ENFJ">ENFJ</option>
+                        <option value="ENTJ">ENTJ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label th:for="profilePicture">프로필 사진</label>
+                    <input type="file" class="form-control-file" th:field="*{profilePicture}" required>
+                </div>
+                <div class="my-bottom">
+                    <button type="submit" class="btn btn-primary btn-block mt-4">회원가입</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

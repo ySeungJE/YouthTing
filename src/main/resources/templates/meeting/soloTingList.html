@@ -1,0 +1,41 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<style>
+        /* 꾸미기 */
+        .hero {
+            margin-bottom: 50px;
+        }
+        .normal-button {
+            margin-bottom: 50px;
+        }
+        .my-button {
+            font-size: 30px;
+            padding: 20px 40px;
+        }
+    </style>
+<body>
+<div th:replace="fragments/bodyHeader :: bodyHeader"/>
+<div class="hero bg-dark text-center py-5">
+    <h1 class="text-white">YouthTing</h1>
+    <h2 class="text-white">대학생들을 위한 미팅 서비스</h2>
+</div>
+<!-- 여기 -->
+<div class="container text-center">
+    <div class="col">
+        <div class="normal-button">
+            <button class="btn btn-outline-primary my-button" type="button" ㅊ31
+                    th:onclick="|location.href='@{/login}'|">사용자
+            </button>
+        </div>
+        <div class="normal-button">
+            <form th:action="@{/user/stop}" method="post">
+                <button class="btn btn-outline-primary" type="submit">
+                    개인 미팅 퇴장
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
