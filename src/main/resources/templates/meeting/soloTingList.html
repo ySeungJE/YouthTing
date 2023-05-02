@@ -13,6 +13,10 @@
             font-size: 30px;
             padding: 20px 40px;
         }
+        .table {
+            width: 100%;
+            border: 1px solid;
+        }
     </style>
 <body>
 <div th:replace="fragments/bodyHeader :: bodyHeader"/>
@@ -20,10 +24,9 @@
     <h1 class="text-white">YouthTing</h1>
     <h2 class="text-white">대학생들을 위한 미팅 서비스</h2>
 </div>
-<!-- 여기 -->
 <div class="container text-center">
     <div class="col">
-        <table class="table table-striped">
+        <table class="table">
             <tbody>
                 <tr th:each="user : ${userList}">
                     <td><img th:src="|/user/profile/${user.storeProfileName}|" width="300" height="300"/></td>
@@ -35,6 +38,43 @@
                 </tr>
             </tbody>
         </table>
+        <div class="normal-button">
+            <form th:action="@{/user/list}" th:object="${userSearch}" method="get" style="display: flex;">
+                <div class="col-auto form-group" style="flex: 1;">
+                    <label class="sr-only" th:for="heightMin"></label>
+                    <input type="number" th:field="*{heightMin}" class="form-control mb-2" placeholder="최소 키" required>
+                </div>
+                <div class="col-auto form-group" style="flex: 1;">
+                    <label class="sr-only" th:for="heightMax"></label>
+                    <div class="input-group mb-2">
+                        <input type="number" th:field="*{heightMax}" class="form-control"  placeholder="최대 키">
+                    </div>
+                </div>
+                <div class="col-auto form-group" style="flex: 1;">
+                    <label class="sr-only" th:for="mbti"></label>
+                    <select class="form-select mb-2" th:field="*{mbti}">
+                        <option value="">MBTI 선택</option>
+                        <option value="ISTJ">ISTJ</option>
+                        <option value="ISFJ">ISFJ</option>
+                        <option value="INFJ">INFJ</option>
+                        <option value="INTJ">INTJ</option>
+                        <option value="ISTP">ISTP</option>
+                        <option value="ISFP">ISFP</option>
+                        <option value="INFP">INFP</option>
+                        <option value="INTP">INTP</option>
+                        <option value="ESTP">ESTP</option>
+                        <option value="ESFP">ESFP</option>
+                        <option value="ENFP">ENFP</option>
+                        <option value="ENTP">ENTP</option>
+                        <option value="ESTJ">ESTJ</option>
+                        <option value="ESFJ">ESFJ</option>
+                        <option value="ENFJ">ENFJ</option>
+                        <option value="ENTJ">ENTJ</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">검색</button>
+            </form>
+        </div>
         <div class="normal-button">
             <form th:action="@{/user/stop}" method="post">
                 <button class="btn btn-outline-primary" type="submit">
