@@ -2,7 +2,6 @@ package skuniv.capstone.domain.user;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.cglib.core.Local;
 import skuniv.capstone.domain.friendship.Friendship;
 import skuniv.capstone.domain.userrequest.UserRequest;
 import skuniv.capstone.domain.group.Group;
