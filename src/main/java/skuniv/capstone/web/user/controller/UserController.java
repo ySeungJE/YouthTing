@@ -46,16 +46,21 @@ public class UserController {
         return "redirect:/login";
     }
     @GetMapping("/list")
-    public List<UserSoloDto> soloList(@Valid @RequestBody UserSearch userSearch, HttpServletRequest request) {
+    public String soloList(@Valid @ModelAttribute UserSearch userSearch, HttpServletRequest request, Model model) {
         User sessionUser = userService.getSessionUser(request);
 
         userService.checkStartTime(); // 미팅참여 후 3일 지난 애들은 자동으로 퇴장
 
-        return userService.findALl(sessionUser.getGender(),userSearch)
+        List<UserSoloDto> collect = userService.findALl(sessionUser.getGender(), userSearch)
                 .stream()
                 .map(UserSoloDto::new)
                 .collect(toList());
+
+        model.addAttribute("userList", collect);
+
+        return "/meeting/soloTingList";
     }
+
     @GetMapping("/{email}")
     public UserSoloDto findOne(@PathVariable String email) {
         User user = userService.findByEmail(email);
@@ -90,7 +95,7 @@ public class UserController {
         if (sessionUser.getIdle() == false) {
             return "/meeting/soloTingStart";
         } else {
-            return "/meeting/soloTingList";
+            return "redirect:/user/list";
         }
     }
 

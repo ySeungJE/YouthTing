@@ -23,11 +23,18 @@
 <!-- 여기 -->
 <div class="container text-center">
     <div class="col">
-        <div class="normal-button">
-            <button class="btn btn-outline-primary my-button" type="button" ㅊ31
-                    th:onclick="|location.href='@{/login}'|">사용자
-            </button>
-        </div>
+        <table class="table table-striped">
+            <tbody>
+                <tr th:each="user : ${userList}">
+                    <td><img th:src="|/user/profile/${user.storeProfileName}|" width="300" height="300"/></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.height}"></td>
+                    <td th:text="${user.mbti}"></td>
+                    <td th:text="${user.univName}"></td>
+                    <td th:text="${user.intro}"></td>
+                </tr>
+            </tbody>
+        </table>
         <div class="normal-button">
             <form th:action="@{/user/stop}" method="post">
                 <button class="btn btn-outline-primary" type="submit">

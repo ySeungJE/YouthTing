@@ -31,6 +31,7 @@
   <p>Email: <span th:text="${myData.email}"></span></p>
   <p>Password: <span th:text="${myData.password}"></span></p>
   <p>Introduction: <span th:text="${myData.intro}"></span></p>
+  <a href="#" th:href="@{/items/{id}/edit (id=${item.id})}" class="btn btn-primary" role="button">수정</a>
 </div>
 </body>
 </html>
