@@ -38,7 +38,7 @@ public class User {
     @Column(columnDefinition = "TEXT")
     private String intro;
     @Embedded
-    private Univ univ;
+    private Univ univ;;
     @Enumerated(EnumType.STRING)
     private MBTI mbti;
     private String storeProfileName;
