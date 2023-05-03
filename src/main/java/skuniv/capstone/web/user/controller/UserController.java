@@ -84,5 +84,6 @@ public class UserController {
         log.info("{}님이 개인 미팅에서 퇴장하였습니다", sessionUser.getName());
     }
 
+    @PostMapping("/idleCheck")
 
 }
