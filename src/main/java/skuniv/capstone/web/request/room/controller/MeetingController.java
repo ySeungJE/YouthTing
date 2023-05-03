@@ -1,11 +1,13 @@
 package skuniv.capstone.web.request.room.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
 import org.springframework.web.bind.annotation.*;
 import skuniv.capstone.domain.request.Meeting;
+import skuniv.capstone.domain.request.SoloOrGroup;
 import skuniv.capstone.domain.room.service.RoomService;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.service.UserService;
@@ -17,17 +19,19 @@ import skuniv.capstone.web.request.UserDto;
 import skuniv.capstone.web.request.room.dto.ShowChattingDto;
 import skuniv.capstone.web.request.room.dto.ChattingSendDto;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static skuniv.capstone.domain.request.RequestType.MEETING;
+import static skuniv.capstone.domain.request.SoloOrGroup.*;
 
 @Slf4j
 @RestController
 @RequestMapping("/meeting")
 @RequiredArgsConstructor
-public class RoomController {
+public class MeetingController {
 
     private final UserService userService;
     private final RoomService roomService;
@@ -49,7 +53,28 @@ public class RoomController {
             throw new IllegalStateException();
         }
     }
+    @GetMapping("/checkSender/{userRequestId}") // 이거 보완좀 해야 할듯
+    public void checkPartner(@PathVariable Long userRequestId, HttpServletResponse response) throws IOException {
+        UserRequest userRequest = requestService.findUserRequest(userRequestId);
+        Meeting meeting = (Meeting) Hibernate.unproxy(requestService.findRequest(userRequest.getRequest().getId()));
 
+        if (meeting.getSoloOrGroup()== SOLO) {
+            response.sendRedirect("/user/"+userRequest.getSendUser().getEmail());
+        } else {
+            response.sendRedirect("/group/"+userRequest.getSendUser().getEmail());
+        }
+    }
+    @GetMapping("/checkReceiver/{userRequestId}") // 이거 보완좀 해야 할듯
+    public void check(@PathVariable Long userRequestId, HttpServletResponse response) throws IOException {
+        UserRequest userRequest = requestService.findUserRequest(userRequestId);
+        Meeting meeting = (Meeting) Hibernate.unproxy(requestService.findRequest(userRequest.getRequest().getId()));
+
+        if (meeting.getSoloOrGroup()== SOLO) {
+            response.sendRedirect("/user/"+userRequest.getReceiveUser().getEmail());
+        } else {
+            response.sendRedirect("/group/"+userRequest.getReceiveUser().getEmail());
+        }
+    }
     @GetMapping("/receive")
     public List<ReceiveRequestDto> receiveList(HttpServletRequest request) {
         User me = userService.getSessionUser(request);
@@ -72,11 +97,17 @@ public class RoomController {
                 .collect(toList());
     }
 
-    @PostMapping("/success/{requestId}") // 룸 객체가 만들어지고 유저와 양방향 매핑됨
-    public void successMeeting(@PathVariable Long requestId) {
-        UserRequest userRequest = requestService.findUserRequest(requestId);
+    @PostMapping("/success/{userRequestId}") // 룸 객체가 만들어지고 유저와 양방향 매핑됨
+    public void successMeeting(@PathVariable Long userRequestId) {
+        UserRequest userRequest = requestService.findUserRequest(userRequestId);
         Meeting meeting = (Meeting) Hibernate.unproxy(requestService.findRequest(userRequest.getRequest().getId())); // proxy 를 해제하는 것으로 형 변환을 할 수 있다. 근데 접때는 대체 어떻게 그냥 형변환한거지
         roomService.successMeeting(userRequest, meeting);
+    }
+    @GetMapping("/soloOrGroup/{requestId}")
+    public SoloOrGroup checkMeetingType(@PathVariable Long requestId) {
+        UserRequest userRequest = requestService.findUserRequest(requestId);
+        Meeting meeting = (Meeting) Hibernate.unproxy(requestService.findRequest(userRequest.getRequest().getId())); // proxy 를 해제하는 것으로 형 변환을 할 수 있다. 근데 접때는 대체 어떻게 그냥 형변환한거지
+        return meeting.getSoloOrGroup();
     }
 
     @GetMapping("/member")

@@ -5,6 +5,8 @@ import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import skuniv.capstone.domain.file.FIleStore;
@@ -16,6 +18,7 @@ import skuniv.capstone.web.user.dto.UserSoloDto;
 import skuniv.capstone.web.user.dto.UserJoinDto;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 
 import static java.util.stream.Collectors.*;
@@ -49,6 +52,7 @@ public class UserController {
     }
     @GetMapping("/{email}")
     public UserSoloDto findOne(@PathVariable String email) {
+        log.info("email={}", email);
         User user = userService.findByEmail(email);
         return new UserSoloDto(user);
     }
@@ -71,7 +75,7 @@ public class UserController {
         User sessionUser = userService.getSessionUser(request);
 
         if (sessionUser.getGroup()!=null && sessionUser.getGroup().getIdle() == true) {
-            log.info("이미 그룹 미팅에 참여중입니다. 퇴장 후 다시 시도하십시오");
+            log.info("그룹이 존재하거나 이미 그룹 미팅에 참여중입니다. 퇴장 후 다시 시도하십시오");
             throw new IllegalStateException();
         }
         userService.startSoloting(sessionUser);
@@ -88,5 +92,10 @@ public class UserController {
     public Boolean idleCheck(HttpServletRequest request) {
         User sessionUser = userService.getSessionUser(request);
         return sessionUser.getIdle();
+    }
+    @GetMapping("/profile/{profileName}")
+    public Resource downloadImage(@PathVariable String profileName) throws MalformedURLException {
+//        "file:/C:/Users/YoonSJ/Desktop/inflearn/file_upload/c7c2c3b4-e123-4688-81ea-37d0d38719a2.png
+        return new UrlResource("file:" + fileStore.getFullPath(profileName));
     }
 }

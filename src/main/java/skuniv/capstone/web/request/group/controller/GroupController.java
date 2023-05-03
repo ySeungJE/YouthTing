@@ -90,7 +90,7 @@ public class GroupController {
                 .collect(toList());
         return new GroupMember(new UserDto(user.getGroup().getMaster()), guest);
     }
-    @GetMapping("/member/{email}")
+    @GetMapping("/{email}")
     public GroupMember otherGroupMember(@PathVariable String email) {
         User user = userService.findByEmail(email);
         List<User> groupUser = user.getGroup().getUserList();
