@@ -20,9 +20,9 @@ public class Meeting extends Request{
     }
 
     //== 생성자 메서드 ==//
-    public static Meeting createMeeting(String name, RequestStatus requestStatus,RequestType requestType,SoloOrGroup soloOrGroup) {
+    public static Meeting createMeeting(String name1,String name2, RequestStatus requestStatus,RequestType requestType,SoloOrGroup soloOrGroup) {
         return Meeting.builder()
-                .name(name+"님의 미팅 신청")
+                .name("["+name1+"] -> ["+name2+"]")
                 .requestStatus(requestStatus)
                 .requestType(requestType)
                 .soloOrGroup(soloOrGroup)

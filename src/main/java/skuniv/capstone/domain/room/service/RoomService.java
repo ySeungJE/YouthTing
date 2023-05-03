@@ -26,12 +26,12 @@ public class RoomService {
 
     private final UserRepository userRepository;
     public void requestGroupRoom(User me, User someone) {
-        Meeting meeting = Meeting.createMeeting(me.getName(), WAIT, MEETING, GROUP);
+        Meeting meeting = Meeting.createMeeting(me.getName()+"의 그룹", someone.getName()+"의 그룹", WAIT, MEETING, GROUP);
         UserRequest userRequest = UserRequest.createUserRequest(me, someone, meeting);
         userRequest.requestProcess();
     }
     public void requestSoloRoom(User me, User someone) {
-        Meeting meeting = Meeting.createMeeting(me.getName(), WAIT, MEETING, SOLO);
+        Meeting meeting = Meeting.createMeeting(me.getName(),someone.getName(), WAIT, MEETING, SOLO);
         UserRequest userRequest = UserRequest.createUserRequest(me, someone, meeting);
         userRequest.requestProcess();
     }
