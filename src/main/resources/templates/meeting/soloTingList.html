@@ -37,8 +37,11 @@
                     <td th:text="${user.intro}">
                     <td>
                         <form th:action="|/meeting/request/${user.email}|" method="post">
-                            <button class="btn btn-outline-primary" type="submit">
+                            <button th:if="${user.requested == false}" class="btn btn-outline-primary" type="submit">
                                 신청
+                            </button>
+                            <button th:if="${user.requested == true}" class="btn btn-outline-primary" type="submit" disabled>
+                                신청 완료
                             </button>
                         </form>
                     </td>

@@ -54,7 +54,7 @@ public class UserController {
 
         List<UserSoloDto> collect = userService.findALl(sessionUser.getGender(), userSearch)
                 .stream()
-                .map(user -> new UserSoloDto(user,sessionUser.getSendRequestList()))
+                .map(user -> new UserSoloDto(sessionUser, user))
                 .collect(toList());
 
         model.addAttribute("userList", collect);

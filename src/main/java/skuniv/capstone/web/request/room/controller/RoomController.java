@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import skuniv.capstone.domain.request.Meeting;
 import skuniv.capstone.domain.room.service.RoomService;
@@ -24,7 +26,7 @@ import static java.util.stream.Collectors.toList;
 import static skuniv.capstone.domain.request.RequestType.MEETING;
 
 @Slf4j
-@RestController
+@Controller
 @RequestMapping("/meeting")
 @RequiredArgsConstructor
 public class RoomController {
@@ -34,7 +36,7 @@ public class RoomController {
     private final RequestService requestService;
 
     @PostMapping("/request/{email}")
-    public void requestGroup(@PathVariable String email, HttpServletRequest request) {
+    public String requestGroup(@PathVariable String email, HttpServletRequest request) {
         User me = userService.getSessionUser(request);
         User someone = userService.findByEmail(email);
         log.info("someone={}", email);
@@ -48,28 +50,35 @@ public class RoomController {
             log.info("에러 발생 : 상대에게 미팅을 신청할 수 없습니다");
             throw new IllegalStateException();
         }
+        return "redirect:/user/list";
     }
 
     @GetMapping("/receive")
-    public List<ReceiveRequestDto> receiveList(HttpServletRequest request) {
+    public String receiveList(HttpServletRequest request, Model model) {
         User me = userService.getSessionUser(request);
         List<UserRequest> list = me.getReceiveRequestList();
 
-        return list.stream()
+        List<ReceiveRequestDto> collect = list.stream()
                 .filter(u -> u.getRequest().getRequestType() == MEETING)
                 .map(u -> new ReceiveRequestDto(u))
                 .collect(toList());
+
+        model.addAttribute("requestList", collect);
+        return "/meeting/receive";
     }
 
     @GetMapping("/send")
-    public List<SendRequestDto> sendList(HttpServletRequest request) {
+    public String sendList(HttpServletRequest request, Model model) {
         User me = userService.getSessionUser(request);
         List<UserRequest> list = me.getSendRequestList();
 
-        return list.stream()
+        List<SendRequestDto> collect = list.stream()
                 .filter(u -> u.getRequest().getRequestType() == MEETING)
                 .map(u -> new SendRequestDto(u))
                 .collect(toList());
+
+        model.addAttribute("requestList", collect);
+        return "/meeting/send";
     }
 
     @PostMapping("/success/{requestId}") // 룸 객체가 만들어지고 유저와 양방향 매핑됨

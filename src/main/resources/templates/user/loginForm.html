@@ -28,7 +28,7 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h3 class="text-center mb-4">회원가입</h3>
+            <h3 class="text-center mb-4">로그인</h3>
             <form action="/login" method="POST">
                 <div class="form-group">
                     <label for="email">이메일</label>
@@ -40,6 +40,9 @@
                 </div>
                 <div class="my-bottom">
                     <button type="submit" class="btn btn-primary btn-block mt-4">로그인</button>
+                    <button  class="btn btn-primary btn-block mt-4" type="button"
+                             th:onclick="|location.href='@{/user/add}'|">회원가입
+                    </button>
                 </div>
             </form>
         </div>

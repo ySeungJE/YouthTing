@@ -16,16 +16,8 @@ public class UserSoloDto {
     private String univName;
     private String email;
     private String storeProfileName;
+    private Boolean requested;
 
-    public UserSoloDto(User user, List<UserRequest> sendRequestList) {
-        name = user.getName();
-        height = user.getHeight();
-        intro = user.getIntro();
-        mbti = user.getMbti();
-        univName = user.getUniv().getUnivName();
-        email = user.getEmail();
-        storeProfileName = user.getStoreProfileName();
-    }
     public UserSoloDto(User user) {
         name = user.getName();
         height = user.getHeight();
@@ -34,5 +26,15 @@ public class UserSoloDto {
         univName = user.getUniv().getUnivName();
         email = user.getEmail();
         storeProfileName = user.getStoreProfileName();
+    }
+    public UserSoloDto(User sessionUser, User user) {
+        name = user.getName();
+        height = user.getHeight();
+        intro = user.getIntro();
+        mbti = user.getMbti();
+        univName = user.getUniv().getUnivName();
+        email = user.getEmail();
+        storeProfileName = user.getStoreProfileName();
+        requested = sessionUser.getReceiversSolo().contains(user.getId());
     }
 }
