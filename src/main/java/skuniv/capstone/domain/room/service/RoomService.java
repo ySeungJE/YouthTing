@@ -26,11 +26,13 @@ public class RoomService {
 
     private final UserRepository userRepository;
     public void requestGroupRoom(User me, User someone) {
+        me.getReceiversGroup().add(someone.getGroup().getId());
         Meeting meeting = Meeting.createMeeting(me.getName(), WAIT, MEETING, GROUP);
         UserRequest userRequest = UserRequest.createUserRequest(me, someone, meeting);
         userRequest.requestProcess();
     }
     public void requestSoloRoom(User me, User someone) {
+        me.getReceiversSolo().add(someone.getId());
         Meeting meeting = Meeting.createMeeting(me.getName(), WAIT, MEETING, SOLO);
         UserRequest userRequest = UserRequest.createUserRequest(me, someone, meeting);
         userRequest.requestProcess();

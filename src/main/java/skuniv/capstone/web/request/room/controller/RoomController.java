@@ -45,7 +45,7 @@ public class RoomController {
             log.info("{}님의 그룹에게 미팅을 신청했습니다", someone.getName());
             roomService.requestGroupRoom(me, someone);
         } else {
-            log.info("에러 발생 : 채팅룸에 입장할 수 없습니다");
+            log.info("에러 발생 : 상대에게 미팅을 신청할 수 없습니다");
             throw new IllegalStateException();
         }
     }
