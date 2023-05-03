@@ -122,5 +122,4 @@ public class UserController {
 //        "file:/C:/Users/YoonSJ/Desktop/inflearn/file_upload/c7c2c3b4-e123-4688-81ea-37d0d38719a2.png
         return new UrlResource("file:" + fileStore.getFullPath(profileName));
     }
-
 }
