@@ -15,6 +15,7 @@ import skuniv.capstone.domain.file.FIleStore;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.repository.UserSearch;
 import skuniv.capstone.domain.user.service.UserService;
+import skuniv.capstone.domain.userrequest.UserRequest;
 import skuniv.capstone.web.user.dto.MyPageDto;
 import skuniv.capstone.web.user.dto.UserSoloDto;
 import skuniv.capstone.web.user.dto.UserJoinDto;
@@ -53,7 +54,7 @@ public class UserController {
 
         List<UserSoloDto> collect = userService.findALl(sessionUser.getGender(), userSearch)
                 .stream()
-                .map(UserSoloDto::new)
+                .map(user -> new UserSoloDto(user,sessionUser.getSendRequestList()))
                 .collect(toList());
 
         model.addAttribute("userList", collect);

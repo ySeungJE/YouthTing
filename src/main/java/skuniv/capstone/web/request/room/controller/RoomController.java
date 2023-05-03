@@ -37,7 +37,7 @@ public class RoomController {
     public void requestGroup(@PathVariable String email, HttpServletRequest request) {
         User me = userService.getSessionUser(request);
         User someone = userService.findByEmail(email);
-
+        log.info("someone={}", email);
         if (me.getIdle() == true && someone.getIdle() == true) {
             log.info("{}님에게 미팅을 신청했습니다", someone.getName());
             roomService.requestSoloRoom(me, someone);
