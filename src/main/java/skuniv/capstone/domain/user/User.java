@@ -13,7 +13,9 @@ import skuniv.capstone.web.user.dto.UserJoinDto;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.*;
@@ -52,6 +54,10 @@ public class User {
     private Long startTime;
     @ElementCollection
     private List<String> friendsEmail;
+    @ElementCollection
+    @MapKeyColumn(name = "receiver")
+    @Column(name = "meeting_type")
+    private Map<String, String> Receivers = new HashMap<>();
     @OneToMany(mappedBy = "friend", cascade = ALL) // 복함 매핑
     private List<Friendship> friendShipList = new ArrayList<>();
     @OneToMany(mappedBy = "sendUser", cascade = ALL) // 복합 매핑
