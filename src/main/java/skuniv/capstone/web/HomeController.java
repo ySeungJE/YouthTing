@@ -13,7 +13,7 @@ import skuniv.capstone.web.login.controller.LoginController;
 @Slf4j
 @Controller
 public class HomeController {
-    @GetMapping("/")
+//    @GetMapping("/")
     public String homeLoginV3Spring(
             @SessionAttribute(name = LoginController.LOGIN_USER, required = false) User loginUser, Model model) {
 
@@ -25,5 +25,10 @@ public class HomeController {
         // 세션이 유지되면 로그인으로 이동
         model.addAttribute("user", loginUser);
         return "loginHome";
+    }
+
+    @GetMapping("/chatting")
+    public String goChatting() {
+        return "/chatting/chatting";
     }
 }
