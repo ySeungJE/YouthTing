@@ -2,11 +2,13 @@ package skuniv.capstone.web.user.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import skuniv.capstone.domain.file.FIleStore;
@@ -94,8 +96,13 @@ public class UserController {
         return sessionUser.getIdle();
     }
     @GetMapping("/profile/{profileName}")
-    public Resource downloadImage(@PathVariable String profileName) throws MalformedURLException {
+    public ResponseEntity<?> downloadImage(@PathVariable String profileName) throws MalformedURLException {
 //        "file:/C:/Users/YoonSJ/Desktop/inflearn/file_upload/c7c2c3b4-e123-4688-81ea-37d0d38719a2.png
-        return new UrlResource("file:" + fileStore.getFullPath(profileName));
+        Resource resource = new UrlResource("file:" + fileStore.getFullPath(profileName));
+        String contentType = "application/octet-stream";
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 }
