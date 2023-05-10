@@ -52,7 +52,7 @@
             <form th:action="@{/user/list}" th:object="${userSearch}" method="get" style="display: flex;">
                 <div class="col-auto form-group" style="flex: 1;">
                     <label class="sr-only" th:for="heightMin"></label>
-                    <input type="number" th:field="*{heightMin}" class="form-control mb-2" placeholder="최소 키" required>
+                    <input type="number" th:field="*{heightMin}" class="form-control mb-2" placeholder="최소 키">
                 </div>
                 <div class="col-auto form-group" style="flex: 1;">
                     <label class="sr-only" th:for="heightMax"></label>

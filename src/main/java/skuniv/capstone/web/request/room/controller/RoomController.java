@@ -104,6 +104,9 @@ public class RoomController {
         roomService.createChatting(me,chatting.getContent());
     }
 
+//    @PostMapping("/deny/{userRequestId}")
+//    public void denyRequest(@PathVariable String userRequestId)
+
     @GetMapping("/chatting")
     public List<ShowChattingDto> allChatting(HttpServletRequest request) {
         User sessionUser = userService.getSessionUser(request);
