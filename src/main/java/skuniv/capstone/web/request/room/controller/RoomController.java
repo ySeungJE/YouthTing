@@ -7,7 +7,9 @@ import org.hibernate.Hibernate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import skuniv.capstone.domain.chatting.Chatting;
 import skuniv.capstone.domain.request.Meeting;
+import skuniv.capstone.domain.room.Room;
 import skuniv.capstone.domain.room.service.RoomService;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.service.UserService;
@@ -117,7 +119,10 @@ public class RoomController {
 //                .collect(Collectors.toList());
 //    }
     @GetMapping("/chatting")
-    public String goChat() {
+    public String goChat(HttpServletRequest request, Model model) {
+        User sessionUser = userService.getSessionUser(request);
+        List<Chatting> chattingList = sessionUser.getRoom().getChattingList(); // 이게 지금 다 lazy 초기화하는 거지
+        model.addAttribute("chatList", chattingList);
         return "chatting";
     }
 }
