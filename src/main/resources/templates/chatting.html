@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <link rel='stylesheet' type='text/css' href='./css/chatt.css'>
+</head>
+<body>
+<div id='chatt'>
+    <h1>WebSocket Chatting</h1>
+    <!--여기를 고쳐야지 어떻게? ChatDto가 원하는 것에 맞게. 그리고 js에서 JSON으로 변환하면서 time도 추가하면 됨.-->
+    <input type='text' id='type' placeholder="type 입력">
+    <input type='text' id='roomId' placeholder="roomId 입력">
+    <input type='text' id='sender' placeholder="sender 입력">
+    <input type='button' value='로그인' id='btnLogin'>
+    <br/>
+    <div id='talk'></div>
+    <div id='sendZone'>
+        <textarea id='msg' value='hi...' ></textarea>
+        <input type='button' value='전송' id='btnSend'>
+    </div>
+</div>
+<script src='./js/chatt.js'></script>
+</body>
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<html>-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Insert title here</title>-->
+<!--    <link rel='stylesheet' type='text/css' href='./css/chatt.css'>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div id='chatt'>-->
+<!--    <h1>WebSocket Chatting</h1>-->
+<!--    &lt;!&ndash;여기를 고쳐야지 어떻게? ChatDto가 원하는 것에 맞게. 그리고 js에서 JSON으로 변환하면서 time도 추가하면 됨.&ndash;&gt;-->
+<!--    <input type='text' id='type' placeholder="요청 type 입력">-->
+<!--    <input type='text' id='roomId' placeholder="roomId 입력">-->
+<!--    <input type='text' id='sender' placeholder="닉네임 입력">-->
+<!--    <input type='button' value='로그인' id='btnLogin'>-->
+<!--    <br/>-->
+<!--    <div id='talk'></div>-->
+<!--    <div id='sendZone'>-->
+<!--        <textarea id='msg' value='hi...' ></textarea>-->
+<!--        <input type='button' value='전송' id='btnSend'>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<script src='./js/chatt.js'></script>-->
+<!--</body>-->
+
+<!--</html>-->
