@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import skuniv.capstone.domain.login.service.LoginService;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.web.login.dto.LoginForm;
+import skuniv.capstone.web.login.dto.LoginReturnDto;
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -21,7 +22,7 @@ public class LoginController {
     public static final String LOGIN_USER = "loginUser";
     private final LoginService loginService;
     @PostMapping("/login")
-    public String login(@Valid @RequestBody LoginForm form,
+    public LoginReturnDto login(@Valid @RequestBody LoginForm form,
                         HttpServletRequest request) throws IOException {
 
         User loginUser = loginService.login(form.getEmail(), form.getPassword());
@@ -33,7 +34,8 @@ public class LoginController {
         HttpSession session = request.getSession();
 
         session.setAttribute(LOGIN_USER, loginUser);
-        return "["+loginUser.getName()+"]님 환영합니다";
+
+        return new LoginReturnDto(loginUser);
     }
     @GetMapping("/sessionTest")
     public void sessionTest(HttpServletRequest request) {
