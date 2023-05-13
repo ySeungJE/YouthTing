@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import skuniv.capstone.domain.chatting.Chatting;
 import skuniv.capstone.domain.request.*;
 import skuniv.capstone.domain.room.Room;
+import skuniv.capstone.domain.room.repository.RoomRepository;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.repository.UserRepository;
 import skuniv.capstone.domain.user.service.UserService;
@@ -24,6 +25,7 @@ import static skuniv.capstone.web.login.controller.LoginController.LOGIN_USER;
 @Transactional
 public class RoomService {
 
+    private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     public void requestGroupRoom(User me, User someone) {
         me.getReceiversGroup().add(someone.getGroup().getId());
@@ -53,6 +55,9 @@ public class RoomService {
     public void createChatting(User me,String content) {
         Chatting.createChatting(content, me, me.getRoom());
 
+    }
+    public Room findRoomById(Long id) {
+        return roomRepository.findById(id).orElse(null);
     }
 
 }
