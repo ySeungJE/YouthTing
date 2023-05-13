@@ -32,20 +32,20 @@ public class ChattingService {
         }
     }
     public void handleAction(WebSocketSession session, Chatting message) {
-        // message 에 담긴 타입을 확인한다.
-        // 이때 message 에서 getType 으로 가져온 내용이
-        // ChatDTO 의 열거형인 MessageType 안에 있는 ENTER 과 동일한 값이라면
-        if (message.getType().equals(ChatDTO.MessageType.ENTER)) { // 나같은 경우에는 파라미터에 미팅멤버 list 를 추가해서, 한명씩 돌리면서 이 ENTER 작업을 해줘야지
-            // sessions 에 넘어온 session 을 담고,
-            sessions.add(session, message.getRoom().getId());
-
-            // message 에는 입장하였다는 메시지를 띄운다
-            message.setMessage(message.getSender() + " 님이 입장하셨습니다");
-            sendMessage(message);
-        } else if (message.getType().equals(ChatDTO.MessageType.TALK)) {
-            message.setMessage(message.getMessage());
-            sendMessage(message, message.getRoom().getId());
-        }
+//        // message 에 담긴 타입을 확인한다.
+//        // 이때 message 에서 getType 으로 가져온 내용이
+//        // ChatDTO 의 열거형인 MessageType 안에 있는 ENTER 과 동일한 값이라면
+//        if (message.getType().equals(ChatDTO.MessageType.ENTER)) { // 나같은 경우에는 파라미터에 미팅멤버 list 를 추가해서, 한명씩 돌리면서 이 ENTER 작업을 해줘야지
+//            // sessions 에 넘어온 session 을 담고,
+//            sessions.add(session, message.getRoom().getId());
+//
+//            // message 에는 입장하였다는 메시지를 띄운다
+//            message.setMessage(message.getSender() + " 님이 입장하셨습니다");
+//            sendMessage(message);
+//        } else if (message.getType().equals(ChatDTO.MessageType.TALK)) {
+//            message.setMessage(message.getMessage());
+//            sendMessage(message, message.getRoom().getId());
+//        }
     }
 
     public <T> void sendMessage(T message, Long roomId) {

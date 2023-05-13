@@ -18,7 +18,7 @@ public class Chatting {
     @Column(name = "chatting_id")
     private Long id;
     private String content;
-    private LocalDateTime time;
+    private String time;
     private String sender;
     //    @ManyToOne
 //    @JoinColumn(name = "user_id")

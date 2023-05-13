@@ -98,22 +98,26 @@ public class RoomController {
                 .collect(toList());
     }
 
-    @PostMapping("/chatting") // 이거 왜 안됐었냐? 케스케이드를 안했잖아ㅋㅋㅋㅋㅋ persist 가 전파가 안되니까 chatting 이 save가 안된거지
-    public void chat(@RequestBody ChattingSendDto chatting, HttpServletRequest request) {
-        User me = userService.getSessionUser(request);
-        roomService.createChatting(me,chatting.getContent());
-    }
-
-//    @PostMapping("/deny/{userRequestId}")
-//    public void denyRequest(@PathVariable String userRequestId)
-
+//    @PostMapping("/chatting") // 이거 왜 안됐었냐? 케스케이드를 안했잖아ㅋㅋㅋㅋㅋ persist 가 전파가 안되니까 chatting 이 save가 안된거지
+//    public void chat(@RequestBody ChattingSendDto chatting, HttpServletRequest request) {
+//        User me = userService.getSessionUser(request);
+//        roomService.createChatting(me,chatting.getContent());
+//    }
+//
+////    @PostMapping("/deny/{userRequestId}")
+////    public void denyRequest(@PathVariable String userRequestId)
+//
+//    @GetMapping("/chatting")
+//    public List<ShowChattingDto> allChatting(HttpServletRequest request) {
+//        User sessionUser = userService.getSessionUser(request);
+//
+//        return sessionUser.getRoom().getChattingList()
+//                .stream()
+//                .map(c -> new ShowChattingDto(c.getContent(), c.getUser()))
+//                .collect(Collectors.toList());
+//    }
     @GetMapping("/chatting")
-    public List<ShowChattingDto> allChatting(HttpServletRequest request) {
-        User sessionUser = userService.getSessionUser(request);
-
-        return sessionUser.getRoom().getChattingList()
-                .stream()
-                .map(c -> new ShowChattingDto(c.getContent(), c.getUser()))
-                .collect(Collectors.toList());
+    public String goChat() {
+        return "chatting";
     }
 }

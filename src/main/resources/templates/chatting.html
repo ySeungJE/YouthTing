@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+<!--    <link rel='stylesheet' type='text/css' href='./css/chatt.css'>-->
+    <style>
+@charset "UTF-8";
+
+*{
+	box-sizing: border-box;
+}
+
+#chatt{
+	width: 800px;
+	margin: 20px auto;
+}
+
+#chatt #talk{
+	width: 800px;
+	height: 400px;
+	overflow: scroll;
+	border : 1px solid #aaa;
+}
+#chatt #msg{
+	width: 740px;
+	height:100px;
+	display: inline-block;
+}
+
+#chatt #sendZone > *{
+	vertical-align: top;
+
+}
+#chatt #btnSend{
+	width: 54px;
+	height: 100px;
+}
+
+#chatt #talk div{
+	width: 70%;
+	display: inline-block;
+	padding: 6px;
+	border-radius:10px;
+
+}
+
+#chatt .me{
+	background-color : #ffc;
+	margin : 1px 0px 2px 30%;
+}
+
+#chatt .other{
+	background-color : #eee;
+	margin : 2px;
+}
+    </style>
+</head>
+<body>
+<div id='chatt'>
+    <h1>WebSocket Chatting</h1>
+    <!--여기를 고쳐야지 어떻게? ChatDto가 원하는 것에 맞게. 그리고 js에서 JSON으로 변환하면서 time도 추가하면 됨.-->
+    <input type='text' id='type' placeholder="type 입력">
+    <input type='text' id='roomId' placeholder="roomId 입력">
+    <input type='text' id='sender' placeholder="sender 입력">
+    <input type='button' value='로그인' id='btnLogin'>
+    <br/>
+    <div id='talk'></div>
+    <div id='sendZone'>
+        <textarea id='msg' value='hi...' ></textarea>
+        <input type='button' value='전송' id='btnSend'>
+    </div>
+</div>
+<!--<script src='./js/chatt.js'></script>-->
+<script type="text/javascript">
+function getId(id){
+	return document.getElementById(id);
+}
+
+var data = {};//전송 데이터(JSON)
+
+var ws ;
+var mid = getId('mid');
+var type = getId('type');
+var roomId = getId('roomId');
+var sender = getId('sender');
+var btnLogin = getId('btnLogin');
+var btnSend = getId('btnSend');
+var talk = getId('talk');
+var msg = getId('msg');
+
+btnLogin.onclick = function(){
+    //여기도 고쳐야지, 엔드포인트가 변했으니까 그에 맞춰야 함
+	ws = new WebSocket("ws://" + location.host + "/ws/chat");
+
+	ws.onmessage = function(msg){ // 함수 안의 함수, 얘는 따로 작동할 수도 있다는 것.
+		var data = JSON.parse(msg.data);
+		var css;
+
+		if(data.sender == sender.value){
+			css = 'class=me';
+		}else{
+			css = 'class=other';
+		}
+
+		var item = `<div ${css} >
+		                <span><b>${data.sender}</b></span> [ ${data.time} ]<br/>
+                      <span>${data.message}</span>
+						</div>`;
+
+		talk.innerHTML += item;
+		talk.scrollTop=talk.scrollHeight;//스크롤바 하단으로 이동
+	}
+}
+
+msg.onkeyup = function(ev){
+	if(ev.keyCode == 13){
+		send();
+	}
+}
+
+btnSend.onclick = function(){
+	send();
+}
+
+function send(){
+//	if(msg.value.trim() != ''){
+	     // data.mid 라는 걸 새로 지정해준 거, 이런식으로 선언할 수 있음
+        data.type = type.value;
+        data.roomId = roomId.value;
+        data.sender = sender.value;
+		data.message = msg.value;
+		data.time = new Date().toLocaleString();
+		var temp = JSON.stringify(data);
+		ws.send(temp);
+//	}
+	msg.value ='';
+}
+</script>
+</body>
+</html>
