@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>Insert title here</title>
-<!--    <link rel='stylesheet' type='text/css' href='./css/chatt.css'>-->
-    <style>
+<head th:replace="fragments/header :: header" />
+<style>
 @charset "UTF-8";
 
 *{
@@ -56,8 +53,8 @@
 	margin : 2px;
 }
     </style>
-</head>
 <body>
+<div th:replace="fragments/bodyHeader :: bodyHeader"/>
 <div id='chatt'>
     <h1>WebSocket Chatting</h1>
     <!--여기를 고쳐야지 어떻게? ChatDto가 원하는 것에 맞게. 그리고 js에서 JSON으로 변환하면서 time도 추가하면 됨.-->

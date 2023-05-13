@@ -28,11 +28,11 @@ public class Chatting {
     private Room room;
 
     //== 생성 메서드 ==//
-    public static Chatting createChatting(String content, User user, Room room) { // 얘도 생성과 매핑을 동시에
+    public static Chatting createChatting(String content, User user, Room room, String time) { // 얘도 생성과 매핑을 동시에
         Chatting chatting = Chatting.builder()
                 .content(content)
+                .time(time)
                 .sender(user.getName())
-                .time(LocalDateTime.now())
                 .build();
         chatting.room = room;
         room.getChattingList().add(chatting);
