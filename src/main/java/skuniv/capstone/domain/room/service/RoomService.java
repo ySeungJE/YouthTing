@@ -52,9 +52,8 @@ public class RoomService {
             log.info("{}님의 그룹,{}님의 그룹의 미팅이 성사되었습니다", userRequest.getSendUser().getName(),userRequest.getReceiveUser().getName());
         }
     }
-    public void createChatting(User me,String content, String time) {
-        Chatting.createChatting(content, me, me.getRoom(),time);
-
+    public Chatting createChatting(Long userId, Room room,String sender ,String content, String time) {
+        return Chatting.createChatting(content, sender,userId,room,time);
     }
     public Room findRoomById(Long id) {
         return roomRepository.findById(id).orElse(null);

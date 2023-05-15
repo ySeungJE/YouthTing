@@ -24,9 +24,15 @@ public class Room {
     @OneToMany(mappedBy = "room")
     @Builder.Default
     private List<User> userList = new ArrayList<>();
-    @OneToMany(mappedBy = "room", cascade = ALL) // 이걸 안하니까 안됐던거 같은데?
+    @OneToMany(mappedBy = "room", cascade = ALL, fetch = FetchType.EAGER) // 이걸 안하니까 안됐던거 같은데?
     @Builder.Default
     private List<Chatting> chattingList = new ArrayList<>();
+
+    //== 연관관계 편의 메서드 ==//
+    public void addChatting(Chatting chatting) {
+        chatting.updateRoom(this);
+        this.chattingList.add(chatting);
+    }
 
     //== 생성 메소드 ==//
     public static Room createGroupRoom(String myName, String friendName) {

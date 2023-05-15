@@ -84,10 +84,11 @@ public class RoomController {
     }
 
     @PostMapping("/success/{requestId}") // 룸 객체가 만들어지고 유저와 양방향 매핑됨
-    public void successMeeting(@PathVariable Long requestId) {
+    public String successMeeting(@PathVariable Long requestId) {
         UserRequest userRequest = requestService.findUserRequest(requestId);
         Meeting meeting = (Meeting) Hibernate.unproxy(requestService.findRequest(userRequest.getRequest().getId())); // proxy 를 해제하는 것으로 형 변환을 할 수 있다. 근데 접때는 대체 어떻게 그냥 형변환한거지
         roomService.successMeeting(userRequest, meeting);
+        return "redirect:/meeting/receive";
     }
 
     @GetMapping("/member")
@@ -123,6 +124,9 @@ public class RoomController {
         User sessionUser = userService.getSessionUser(request);
         List<Chatting> chattingList = sessionUser.getRoom().getChattingList(); // 이게 지금 다 lazy 초기화하는 거지
         model.addAttribute("chatList", chattingList);
+        model.addAttribute("myId", sessionUser.getId());
+        model.addAttribute("roomId", sessionUser.getRoom().getId());
+        model.addAttribute("sender", sessionUser.getName());
         return "chatting";
     }
 }

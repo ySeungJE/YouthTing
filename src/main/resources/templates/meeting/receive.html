@@ -33,18 +33,17 @@
                 <th></th>
             </tr>
             <tr th:each="request : ${requestList}">
-<!--                <td><img th:src="|/user/profile/${request.storeProFileName}|" width="200" height="200"/></td>-->
                 <td th:text="${request.title}"></td>
                 <td th:text="${request.status}"></td>
                 <td>
-                    <form th:action="|/|" method="get">
+                    <form th:action="|/meeting/success/${request.userRequestId}|" method="POST">
                         <button th:if="${request.status.name() == 'WAIT'}" class="btn btn-outline-primary" type="submit">
                             수락
                         </button>
-                        <button th:if="${request.status.name() == 'WAIT'}" class="btn btn-outline-primary" type="submit">
-                            거절
-                        </button>
                     </form>
+                    <button th:if="${request.status.name() == 'WAIT'}" class="btn btn-outline-primary" type="submit">
+                        거절
+                    </button>
                 </td>
             </tr>
             </tbody>

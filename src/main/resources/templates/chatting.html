@@ -41,7 +41,6 @@
 	display: inline-block;
 	padding: 6px;
 	border-radius:10px;
-
 }
 
 #chatt .me{
@@ -62,19 +61,25 @@
 </div>
 <div id='chatt'>
     <h1>WebSocket Chatting</h1>
-    <!--여기를 고쳐야지 어떻게? ChatDto가 원하는 것에 맞게. 그리고 js에서 JSON으로 변환하면서 time도 추가하면 됨.-->
-    <input type='text' id='type' placeholder="type 입력">
-    <input type='text' id='roomId' placeholder="roomId 입력">
-    <input type='text' id='sender' placeholder="sender 입력">
+    <!--여기를 고쳐야지 어떻게? Chatting 엔티티가 원하는 것에 맞게. 근데 나에겐 sessionUser 가 있잖아 그리고 js에서 JSON으로 변환하면서 time도 추가하면 됨.-->
+    <input type='text' th:value="${myId}" id='myId'>
+    <input type='text' th:value="${roomId}" id='roomId'>
+    <input type='text' th:value="${sender}" id='sender'>
     <br/>
-    <div id='talk'></div>
-<!--    여기다가 controller에서 준 채팅 리스트들 뿌리는 거부터 하자-->
+    <div id='talk'>
+        <div th:attr="class=${chatting.userId == myId ? 'me' : 'other'}" th:each="chatting : ${chatList}">
+            <span><b th:text="${chatting.sender}"></b></span><span th:text="|[ ${chatting.time} ]|"></span><br/>
+            <span th:text="${chatting.content}"></span>
+        </div>
+    </div>
     <div id='sendZone'>
         <textarea id='msg' value='hi...' ></textarea>
         <input type='button' value='전송' id='btnSend'>
     </div>
 </div>
-<!--<script src='./js/chatt.js'></script>-->
+<!--<span id='sender' th:value="${sender}">123456</span>-->
+<!--<span id='userId' th:text="${myId}" hidden="hidden">123456</span>-->
+<!--<span id='roomId' th:text="${roomId}" hidden="hidden">123456</span>-->
 <script type="text/javascript">
 function getId(id){
 	return document.getElementById(id);
@@ -83,9 +88,8 @@ function getId(id){
 var data = {};//전송 데이터(JSON)
 
 var ws ;
-var mid = getId('mid');
-var type = getId('type');
 var roomId = getId('roomId');
+var myId = getId('myId');
 var sender = getId('sender');
 var btnSend = getId('btnSend');
 var talk = getId('talk');
@@ -125,16 +129,14 @@ btnSend.onclick = function(){
 }
 
 function send(){
-//	if(msg.value.trim() != ''){
 	     // data.mid 라는 걸 새로 지정해준 거, 이런식으로 선언할 수 있음
-        data.type = type.value;
-        data.roomId = roomId.value;
+        data.roomNum = roomId.value;
         data.sender = sender.value;
-		data.message = msg.value;
+        data.userId = myId.value;
+		data.content = msg.value;
 		data.time = new Date().toLocaleString();
 		var temp = JSON.stringify(data);
 		ws.send(temp);
-//	}
 	msg.value ='';
 }
 </script>

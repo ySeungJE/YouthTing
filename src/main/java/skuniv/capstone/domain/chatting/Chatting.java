@@ -19,20 +19,22 @@ public class Chatting {
     private Long id;
     private String content;
     private String time;
+    private Long userId;
+    private Long roomNum;
     private String sender;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id") // 그냥 이거는.. 음 room 에서 chatting 배열이 꼭 필요하므로 좀 불편하지만 해야 하는..? 느낌으로 인식해야 할듯
     private Room room;
 
     //== 생성 메서드 ==//
-    public static Chatting createChatting(String content, User user, Room room, String time) { // 얘도 생성과 매핑을 동시에
+    public static Chatting createChatting(String content, String sender, Long userId , Room room, String time) { // 얘도 생성과 매핑을 동시에
         Chatting chatting = Chatting.builder()
                 .content(content)
                 .time(time)
-                .sender(user.getName())
+                .sender(sender)
+                .userId(userId)
                 .build();
         chatting.room = room;
-        room.getChattingList().add(chatting);
         return chatting;
     }
 
@@ -43,5 +45,8 @@ public class Chatting {
      */
     public void updateContent(String content) {
         this.content = content;
+    }
+    public void updateRoom(Room room) {
+        this.room = room;
     }
 }
