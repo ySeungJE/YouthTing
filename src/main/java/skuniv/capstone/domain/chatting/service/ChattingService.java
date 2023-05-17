@@ -22,9 +22,9 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class ChattingService {
     private final ObjectMapper mapper;
-    private Map<Long, Set<WebSocketSession>> roomSessions = new HashMap<>();
+//    private Map<Long, Set<WebSocketSession>> roomSessions = new HashMap<>();
     private final RoomRepository roomRepository;
-
+    private Map<Long, Set<WebSocketSession>> roomSessions = new HashMap<>();
     public <T> void sendMessage(WebSocketSession session, T message) {
         try{
             session.sendMessage(new TextMessage(mapper.writeValueAsString(message)));
@@ -34,17 +34,23 @@ public class ChattingService {
     }
 
     @Transactional
-    public void handleAction(WebSocketSession session, Chatting message) {
+    public void handleAction(WebSocketSession session, Chatting message, Map<Long, Set<WebSocketSession>> roomSessions) {
         System.out.println("ChattingService.handleAction");
-        // message 에 담긴 타입을 확인한다.
-        // 이때 message 에서 getType 으로 가져온 내용이
-        // ChatDTO 의 열거형인 MessageType 안에 있는 ENTER 과 동일한 값이라면
+
+        this.roomSessions = roomSessions;
 
         Room room = roomRepository.findById(message.getRoomNum()).orElse(null);
         room.addChatting(message);
 
         // chatting 이 room 에 들어가는 거까지 ok, 이제 웹소켓 송신하는거 이어서 구현하자
 
+//        if (roomSessions.isEmpty()) {
+//            roomSessions.put(message.getRoomNum(), new HashSet<>());
+//            roomSessions.get(message.getRoomNum()).add(session);
+//        } else {
+//            roomSessions.get(message.getRoomNum()).add(session);
+//        }
+        sendMessage(message, message.getRoomNum());
 //        if (message.getType().equals(ChatDTO.MessageType.ENTER)) { // 나같은 경우에는 파라미터에 미팅멤버 list 를 추가해서, 한명씩 돌리면서 이 ENTER 작업을 해줘야지
 //            // sessions 에 넘어온 session 을 담고,
 //            sessions.add(session, message.getRoom().getId());
@@ -59,6 +65,8 @@ public class ChattingService {
     }
 
     public <T> void sendMessage(T message, Long roomId) {
+        System.out.println("roomSessions.get(roomId) = " + roomSessions.get(roomId));
+        roomSessions.values(); //   HttpSessionHandshakeInterceptor 를 사용해서 attribute 에 roomId 가져오면 됨. 그걸 내일 하자
         roomSessions.get(roomId).parallelStream().forEach(session -> sendMessage(session, message));
     }
 }

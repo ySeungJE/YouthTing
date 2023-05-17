@@ -1,5 +1,6 @@
 package skuniv.capstone.domain.chatting;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import skuniv.capstone.domain.friendship.Friendship;
@@ -24,6 +25,7 @@ public class Chatting {
     private String sender;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id") // 그냥 이거는.. 음 room 에서 chatting 배열이 꼭 필요하므로 좀 불편하지만 해야 하는..? 느낌으로 인식해야 할듯
+    @JsonIgnore
     private Room room;
 
     //== 생성 메서드 ==//
