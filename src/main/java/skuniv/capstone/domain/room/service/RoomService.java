@@ -10,14 +10,11 @@ import skuniv.capstone.domain.room.Room;
 import skuniv.capstone.domain.room.repository.RoomRepository;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.repository.UserRepository;
-import skuniv.capstone.domain.user.service.UserService;
 import skuniv.capstone.domain.userrequest.UserRequest;
 
-import static skuniv.capstone.domain.request.RequestStatus.SUCCESS;
-import static skuniv.capstone.domain.request.RequestStatus.WAIT;
+import static skuniv.capstone.domain.request.RequestStatus.*;
 import static skuniv.capstone.domain.request.RequestType.*;
 import static skuniv.capstone.domain.request.SoloOrGroup.*;
-import static skuniv.capstone.web.login.controller.LoginController.LOGIN_USER;
 
 @Slf4j
 @Service
@@ -59,4 +56,7 @@ public class RoomService {
         return roomRepository.findById(id).orElse(null);
     }
 
+    public void meetingFail(UserRequest userRequest) {
+        userRequest.getRequest().changeStatus(FAIL);
+    }
 }

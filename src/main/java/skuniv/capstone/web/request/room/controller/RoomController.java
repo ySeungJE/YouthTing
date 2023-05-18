@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import skuniv.capstone.domain.chatting.Chatting;
 import skuniv.capstone.domain.request.Meeting;
+import skuniv.capstone.domain.request.RequestStatus;
 import skuniv.capstone.domain.room.Room;
 import skuniv.capstone.domain.room.service.RoomService;
 import skuniv.capstone.domain.user.User;
@@ -101,6 +102,13 @@ public class RoomController {
                 .collect(toList());
     }
 
+    @PostMapping("/fail/{userRequestId}")
+    public String meetingFail(@PathVariable Long userRequestId ,HttpServletRequest request) {
+        UserRequest userRequest = requestService.findUserRequest(userRequestId);
+        roomService.meetingFail(userRequest);
+        return "redirect:/meeting/send";
+    }
+
 //    @PostMapping("/chatting") // 이거 왜 안됐었냐? 케스케이드를 안했잖아ㅋㅋㅋㅋㅋ persist 가 전파가 안되니까 chatting 이 save가 안된거지
 //    public void chat(@RequestBody ChattingSendDto chatting, HttpServletRequest request) {
 //        User me = userService.getSessionUser(request);
@@ -121,11 +129,13 @@ public class RoomController {
 //    }
     @GetMapping("/chatting")
     public String goChat(HttpServletRequest request, Model model) {
+
         User sessionUser = userService.getSessionUser(request);
         List<Chatting> chattingList = sessionUser.getRoom().getChattingList(); // 이게 지금 다 lazy 초기화하는 거지
+        model.addAttribute("roomName", sessionUser.getRoom().getName());
         model.addAttribute("chatList", chattingList);
         model.addAttribute("myId", sessionUser.getId());
-        model.addAttribute("roomId", sessionUser.getRoom().getId());
+//        model.addAttribute("roomId", sessionUser.getRoom().getId());
         model.addAttribute("sender", sessionUser.getName());
         return "chatting";
     }

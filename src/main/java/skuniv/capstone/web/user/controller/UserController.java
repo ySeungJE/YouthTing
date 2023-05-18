@@ -1,14 +1,17 @@
 package skuniv.capstone.web.user.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import skuniv.capstone.domain.file.FIleStore;
@@ -20,6 +23,7 @@ import skuniv.capstone.web.user.dto.MyPageDto;
 import skuniv.capstone.web.user.dto.UserSoloDto;
 import skuniv.capstone.web.user.dto.UserJoinDto;
 
+import javax.naming.Binding;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
@@ -38,10 +42,31 @@ public class UserController {
         model.addAttribute("userForm", new UserJoinDto());
         return "user/joinForm";
     }
-    @PostMapping("/add")
-    public String join(@Valid @ModelAttribute UserJoinDto userJoinDto) throws IOException {
+
+//    @GetMapping("/test")
+//    public String checkUserId(HttpServletRequest request) {
+//        System.out.println(request.getSession().getAttributeNames());
+//        return "redirect:/";
+//    }
+
+    @PostMapping("/add") // 여기서 이메일 중복되면 클라에 오류 메세지 띄워주는거부터 하자
+    public String join(@Valid @ModelAttribute("userForm") UserJoinDto userJoinDto,
+                       BindingResult bindingResult) throws IOException {
+
+        if (bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
+            return "user/joinForm";
+        }
+
         String storeProfileName = fileStore.storeFile(userJoinDto.getProfilePicture(),userJoinDto.getName());
-        userService.join(User.createUser(userJoinDto,storeProfileName));
+
+        try {
+            userService.join(User.createUser(userJoinDto,storeProfileName));
+        } catch (DataIntegrityViolationException e) {
+            bindingResult.reject("emailDuplicated", "이메일이 중복됩니다");
+            return "user/joinForm";
+        }
+
 //            created.getSendRequestList().add(null); // 객체를 save함과 동시에 배열이 생성될 순 없는지를 확인하기 위한 문장, 일단 유저가 만들어지긴 할 거.
         // 지렸닼ㅋㅋㅋㅋㅋ 이게 안되는 거였네... 나름대로 해석하자면 같은 트랜잭션 내에서 바로 list 속성을 사용하려면, @Builder.default 가 필수라는 거
         return "redirect:/login";
@@ -49,6 +74,7 @@ public class UserController {
     @GetMapping("/list")
     public String soloList(@Valid @ModelAttribute UserSearch userSearch, HttpServletRequest request, Model model) {
         User sessionUser = userService.getSessionUser(request);
+
 
         userService.checkStartTime(); // 미팅참여 후 3일 지난 애들은 자동으로 퇴장
 

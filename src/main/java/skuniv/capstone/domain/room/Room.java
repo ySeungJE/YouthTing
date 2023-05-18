@@ -37,11 +37,11 @@ public class Room {
     //== 생성 메소드 ==//
     public static Room createGroupRoom(String myName, String friendName) {
         return Room.builder()
-                .name(myName + "님의 그룹," + friendName + "님의 그룹의 미팅룸").build();
+                .name("[ "+myName + "의 그룹, " + friendName + "의 그룹 ] 의 채팅룸").build();
     }
     public static Room createSoloRoom(String myName, String friendName) {
         return Room.builder()
-                .name(myName + "님," + friendName + "님의 미팅룸").build();
+                .name("[ "+myName + ", " + friendName + " ] 의 채팅룸").build();
     }
 
     //== 비즈니스 로직 ==//

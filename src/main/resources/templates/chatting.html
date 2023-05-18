@@ -60,15 +60,15 @@
     <h2 class="text-white">대학생들을 위한 미팅 서비스</h2>
 </div>
 <div id='chatt'>
-    <h1>WebSocket Chatting</h1>
+    <h2 th:text="${roomName}">WebSocket Chatting</h2>
     <!--여기를 고쳐야지 어떻게? Chatting 엔티티가 원하는 것에 맞게. 근데 나에겐 sessionUser 가 있잖아 그리고 js에서 JSON으로 변환하면서 time도 추가하면 됨.-->
-    <input type='text' th:value="${myId}" id='myId'>
-    <input type='text' th:value="${roomId}" id='roomId'>
-    <input type='text' th:value="${sender}" id='sender'>
+<!--    <input type='text' th:value="${myId}" id='myId'>-->
+<!--    <input type='text' th:value="${roomId}" id='roomId'>-->
+    <input type='text' th:value="${sender}" id='sender' hidden="hidden">
     <br/>
     <div id='talk'>
         <div th:attr="class=${chatting.userId == myId ? 'me' : 'other'}" th:each="chatting : ${chatList}">
-            <span><b th:text="${chatting.sender}"></b></span><span th:text="|[ ${chatting.time} ]|"></span><br/>
+            <span><b th:text="${chatting.sender} "></b></span><span th:text="| [ ${chatting.time} ]|"></span><br/>
             <span th:text="${chatting.content}"></span>
         </div>
     </div>
@@ -77,9 +77,6 @@
         <input type='button' value='전송' id='btnSend'>
     </div>
 </div>
-<!--<span id='sender' th:value="${sender}">123456</span>-->
-<!--<span id='userId' th:text="${myId}" hidden="hidden">123456</span>-->
-<!--<span id='roomId' th:text="${roomId}" hidden="hidden">123456</span>-->
 <script type="text/javascript">
 function getId(id){
 	return document.getElementById(id);
@@ -88,8 +85,8 @@ function getId(id){
 var data = {};//전송 데이터(JSON)
 
 var ws ;
-var roomId = getId('roomId');
-var myId = getId('myId');
+<!--var roomId = getId('roomId');-->
+<!--var myId = getId('myId');-->
 var sender = getId('sender');
 var btnSend = getId('btnSend');
 var talk = getId('talk');
@@ -97,6 +94,7 @@ var msg = getId('msg');
 
 window.onload = function () {
     ws = new WebSocket("ws://" + location.host + "/ws/chat");
+    talk.scrollTop=talk.scrollHeight;
 
     	ws.onmessage = function(msg){ // 함수 안의 함수, 얘는 따로 작동할 수도 있다는 것.
 		var data = JSON.parse(msg.data);
@@ -132,9 +130,9 @@ btnSend.onclick = function(){
 
 function send(){
 	     // data.mid 라는 걸 새로 지정해준 거, 이런식으로 선언할 수 있음
-        data.roomNum = roomId.value;
-        data.sender = sender.value;
-        data.userId = myId.value;
+<!--        data.roomNum = roomId.value;-->
+<!--        data.sender = sender.value;-->
+<!--        data.userId = myId.value;-->
 		data.content = msg.value;
 		data.time = new Date().toLocaleString();
 		var temp = JSON.stringify(data);

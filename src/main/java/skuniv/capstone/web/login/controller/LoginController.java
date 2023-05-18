@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import skuniv.capstone.domain.login.service.LoginService;
 import skuniv.capstone.domain.user.User;
@@ -27,21 +28,31 @@ public class LoginController {
         model.addAttribute("loginForm", new LoginForm());
         return "user/loginForm";
     }
+
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute LoginForm form,
+    public String login(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult ,
+                        @RequestParam(defaultValue = "/") String redirectURL,
                         HttpServletRequest request) throws IOException {
+
+        if (bindingResult.hasErrors()) {
+            return "login/loginForm";
+        }
 
         User loginUser = loginService.login(form.getEmail(), form.getPassword());
 
         if (loginUser == null) {
-            throw new IllegalArgumentException();
+            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다");
+            return "user/loginForm";
         }
+
+        System.out.println("redirectURL = " + redirectURL);
 
         HttpSession session = request.getSession();
 
         session.setAttribute(LOGIN_USER, loginUser);
-        return "redirect:/";
+        return "redirect:"+redirectURL;
     }
+
     @GetMapping("/sessionTest")
     public void sessionTest(HttpServletRequest request) {
         HttpSession session = request.getSession();

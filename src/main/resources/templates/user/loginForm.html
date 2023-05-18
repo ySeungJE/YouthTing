@@ -16,6 +16,10 @@
     .my-bottom{
         margin-bottom: 100px;
     }
+     .field-error {
+ border-color: #dc3545;
+ color: #dc3545;
+ }
 </style>
 
 <body>
@@ -29,14 +33,20 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h3 class="text-center mb-4">로그인</h3>
-            <form action="/login" method="POST">
-                <div class="form-group">
-                    <label for="email">이메일</label>
-                    <input type="text" class="form-control" id="email" name="email" required>
+            <form action="/login" th:object="${loginForm}" th:action method="POST">
+                <div th:if="${#fields.hasGlobalErrors()}">
+                    <p class="field-error" th:each="err : ${#fields.globalErrors()}"
+                       th:text="${err}">전체 오류 메시지</p>
                 </div>
                 <div class="form-group">
-                    <label for="password">비밀번호</label>
-                    <input type="text" class="form-control" id="password" name="password" required>
+                    <label th:for="email">이메일</label>
+                    <input type="text" class="form-control" th:field="*{email}" required th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{email}" />
+                </div>
+                <div class="form-group">
+                    <label th:for="password">비밀번호</label>
+                    <input type="text" class="form-control" th:field="*{password}" required th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{password}" />
                 </div>
                 <div class="my-bottom">
                     <button type="submit" class="btn btn-primary btn-block mt-4">로그인</button>

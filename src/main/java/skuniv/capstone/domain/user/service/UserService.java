@@ -102,4 +102,8 @@ public class UserService {
             } else break; // StartTime 기준 오름차순을 했으므로, 한번 3일 안쪽으로 들어오면 그 후 유저들은 모두 3일 안쪽인 것
         }
     }
+
+//    public boolean findDuplicated(String email) {
+//
+//    }
 }

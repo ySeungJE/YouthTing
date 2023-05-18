@@ -51,4 +51,9 @@ public class Chatting {
     public void updateRoom(Room room) {
         this.room = room;
     }
+    public void fillOthers(String sender, Long userId, Long roomNum) {
+        this.sender=sender;
+        this.userId=userId;
+        this.roomNum=roomNum;
+    }
 }

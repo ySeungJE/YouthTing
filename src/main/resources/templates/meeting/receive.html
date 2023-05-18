@@ -40,10 +40,16 @@
                         <button th:if="${request.status.name() == 'WAIT'}" class="btn btn-outline-primary" type="submit">
                             수락
                         </button>
+                        <button th:if="${request.status.name() == 'WAIT'}" class="btn btn-outline-primary" type="submit"
+                                th:onclick="|/meeting/fail/${request.userRequestId}|">
+                            거절
+                        </button>
                     </form>
-                    <button th:if="${request.status.name() == 'WAIT'}" class="btn btn-outline-primary" type="submit">
-                        거절
-                    </button>
+<!--                    <form th:action="|/meeting/fail/${request.userRequestId}|" method="POST">-->
+<!--                        <button th:if="${request.status.name() == 'WAIT'}" class="btn btn-outline-primary" type="submit">-->
+<!--                            거절-->
+<!--                        </button>-->
+<!--                    </form>-->
                 </td>
             </tr>
             </tbody>

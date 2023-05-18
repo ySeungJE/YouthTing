@@ -37,8 +37,8 @@
                 <td th:text="${request.title}"></td>
                 <td th:text="${request.status}"></td>
                 <td>
-                    <form th:action="|/|" method="post">
-                        <button class="btn btn-outline-primary" type="submit">
+                    <form th:action="|/meeting/fail/${request.userRequestId}|" method="post">
+                        <button th:if="${request.status.name() == 'WAIT'}" class="btn btn-outline-primary" type="submit">
                             취소
                         </button>
                     </form>

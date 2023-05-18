@@ -35,8 +35,6 @@ public class ChattingService {
 
     @Transactional
     public void handleAction(WebSocketSession session, Chatting message, Map<Long, Set<WebSocketSession>> roomSessions) {
-        System.out.println("ChattingService.handleAction");
-
         this.roomSessions = roomSessions;
 
         Room room = roomRepository.findById(message.getRoomNum()).orElse(null);
@@ -66,7 +64,7 @@ public class ChattingService {
 
     public <T> void sendMessage(T message, Long roomId) {
         System.out.println("roomSessions.get(roomId) = " + roomSessions.get(roomId));
-        roomSessions.values(); //   HttpSessionHandshakeInterceptor 를 사용해서 attribute 에 roomId 가져오면 됨. 그걸 내일 하자
+        //   HttpSessionHandshakeInterceptor 를 사용해서 attribute 에 roomId 가져오면 됨. 그걸 내일 하자
         roomSessions.get(roomId).parallelStream().forEach(session -> sendMessage(session, message));
     }
 }
