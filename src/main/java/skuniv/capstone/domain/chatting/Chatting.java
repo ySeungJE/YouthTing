@@ -23,6 +23,9 @@ public class Chatting {
     private Long userId;
     private Long roomNum;
     private String sender;
+    private String storeProfileName;
+    private String storeProfileUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id") // 그냥 이거는.. 음 room 에서 chatting 배열이 꼭 필요하므로 좀 불편하지만 해야 하는..? 느낌으로 인식해야 할듯
     @JsonIgnore
@@ -51,9 +54,11 @@ public class Chatting {
     public void updateRoom(Room room) {
         this.room = room;
     }
-    public void fillOthers(String sender, Long userId, Long roomNum) {
+    public void fillOthers(String sender, Long userId,String storeProfileName, Long roomNum) {
         this.sender=sender;
         this.userId=userId;
         this.roomNum=roomNum;
+        this.storeProfileName = storeProfileName;
+        this.storeProfileUrl = "http://localhost:8080/user/profile/"+storeProfileName;
     }
 }

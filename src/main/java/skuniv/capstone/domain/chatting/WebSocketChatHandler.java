@@ -43,7 +43,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         Chatting chatting = mapper.readValue(payload, Chatting.class);
         User user = (User)session.getAttributes().get("user");
 
-        chatting.fillOthers(user.getName(), user.getId(), getRoomId(user));
+        chatting.fillOthers(user.getName(), user.getId(), user.getStoreProfileName() ,getRoomId(user));
 
 //        if (roomSessions.containsKey(chatting.getRoomNum())==false) {
 //            roomSessions.put(chatting.getRoomNum(), new HashSet<>());

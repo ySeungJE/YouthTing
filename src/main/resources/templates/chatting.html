@@ -13,16 +13,19 @@
 	width: 800px;
 	margin: 20px auto;
 	margin-bottom: 200px;
+    border: 1px solid;
+    background-color : #9bbbd4;
 }
 
 #chatt #talk{
 	width: 800px;
-	height: 400px;
+	height: 800px;
 	overflow: scroll;
 	border : 1px solid #aaa;
 }
+
 #chatt #msg{
-	width: 740px;
+	width: 737px;
 	height:100px;
 	display: inline-block;
 }
@@ -32,7 +35,7 @@
 
 }
 #chatt #btnSend{
-	width: 54px;
+	width: 56px;
 	height: 100px;
 }
 
@@ -44,13 +47,20 @@
 }
 
 #chatt .me{
-	background-color : #ffc;
+	float: right;
+	text-align: right;
+	background-color : #fef01b;
 	margin : 1px 0px 2px 30%;
 }
 
 #chatt .other{
-	background-color : #eee;
+    float: left;
+	background-color : #ffffff;
 	margin : 2px;
+}
+.forMarginTop {
+	margin-top : 25px;
+    text-align: center;
 }
     </style>
 <body>
@@ -60,16 +70,15 @@
     <h2 class="text-white">대학생들을 위한 미팅 서비스</h2>
 </div>
 <div id='chatt'>
-    <h2 th:text="${roomName}">WebSocket Chatting</h2>
-    <!--여기를 고쳐야지 어떻게? Chatting 엔티티가 원하는 것에 맞게. 근데 나에겐 sessionUser 가 있잖아 그리고 js에서 JSON으로 변환하면서 time도 추가하면 됨.-->
-<!--    <input type='text' th:value="${myId}" id='myId'>-->
-<!--    <input type='text' th:value="${roomId}" id='roomId'>-->
+    <h2 th:text="${roomName}" class="forMarginTop">WebSocket Chatting</h2>
+<!--    &lt;!&ndash;여기  &ndash;&gt; 에 메뉴 바를 만드는 것부터 다시 하자-->
     <input type='text' th:value="${sender}" id='sender' hidden="hidden">
     <br/>
     <div id='talk'>
         <div th:attr="class=${chatting.userId == myId ? 'me' : 'other'}" th:each="chatting : ${chatList}">
+            <span><img th:src="|/user/profile/${chatting.storeProfileName}|" width="50" height="50"/></span>
             <span><b th:text="${chatting.sender} "></b></span><span th:text="| [ ${chatting.time} ]|"></span><br/>
-            <span th:text="${chatting.content}"></span>
+            <span th:text="${chatting.content}" class="talkBox"></span>
         </div>
     </div>
     <div id='sendZone'>
@@ -77,6 +86,7 @@
         <input type='button' value='전송' id='btnSend'>
     </div>
 </div>
+</body>
 <script type="text/javascript">
 function getId(id){
 	return document.getElementById(id);
@@ -107,6 +117,7 @@ window.onload = function () {
 		}
 
 		var item = `<div ${css} >
+		<span><img src="${data.storeProfileUrl}" width="50" height="50"/></span>
 		                <span><b>${data.sender}</b></span> [ ${data.time} ]<br/>
                       <span>${data.content}</span>
 						</div>`;
@@ -140,5 +151,4 @@ function send(){
 	msg.value ='';
 }
 </script>
-</body>
 </html>

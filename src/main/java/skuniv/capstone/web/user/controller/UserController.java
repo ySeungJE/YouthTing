@@ -59,6 +59,7 @@ public class UserController {
         }
 
         String storeProfileName = fileStore.storeFile(userJoinDto.getProfilePicture(),userJoinDto.getName());
+        System.out.println("storeProfileName = " + storeProfileName);
 
         try {
             userService.join(User.createUser(userJoinDto,storeProfileName));
