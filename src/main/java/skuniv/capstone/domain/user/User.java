@@ -2,8 +2,6 @@ package skuniv.capstone.domain.user;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.validator.constraints.UniqueElements;
-import org.springframework.cglib.core.Local;
 import skuniv.capstone.domain.friendship.Friendship;
 import skuniv.capstone.domain.userrequest.UserRequest;
 import skuniv.capstone.domain.group.Group;
@@ -12,11 +10,7 @@ import skuniv.capstone.web.user.dto.MyPageDto;
 import skuniv.capstone.web.user.dto.UserJoinDto;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.*;
@@ -53,13 +47,14 @@ public class User {
     private Group group;
     private Boolean idle;
     private Long startTime;
+    private String uniqueCode;
+    private Boolean authorized;
     @ElementCollection
     private List<String> friendsEmail;
     @ElementCollection
     private List<Long> receiversSolo;
     @ElementCollection
     private List<Long> receiversGroup;
-
     @OneToMany(mappedBy = "friend", cascade = ALL) // 복함 매핑
     private List<Friendship> friendShipList = new ArrayList<>();
     @OneToMany(mappedBy = "sendUser", cascade = ALL) // 복합 매핑
@@ -97,9 +92,10 @@ public class User {
                 .intro(userJoinDto.getIntro())
                 .storeProfileName(storeProfileName)
                 .idle(false)
+                .authorized(false)
+                .uniqueCode(UUID.randomUUID().toString())
                 .build();
     }
-
 
     //== 비즈니스 로직 ==//
 //    public void setFriendShip(User me, User friend) { // friendship 은 사실상 생성되면 변하지 않으니.. 생성 메서드에 로직을 넣을까
@@ -163,4 +159,17 @@ public class User {
         this.room = room;
     }
 
+    /**
+     * 학교 인증 완료
+     */
+    public void upgradeAuthority() {
+        this.authorized = true;
+    }
+
+    /**
+     * 채팅룸에서 퇴장
+     */
+    public void exitRoom() {
+        this.room=null;
+    }
 }

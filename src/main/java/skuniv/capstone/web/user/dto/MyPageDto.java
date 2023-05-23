@@ -18,6 +18,7 @@ public class MyPageDto {
     private String univName;
     private String email;
     private String storeProfileName;
+    private Boolean authorized;
 
     public MyPageDto(User user) {
         this.name = user.getName();
@@ -28,5 +29,6 @@ public class MyPageDto {
         this.height = user.getHeight();
         this.intro = user.getIntro();
         this.storeProfileName =user.getStoreProfileName();
+        this.authorized = user.getAuthorized();
     }
 }

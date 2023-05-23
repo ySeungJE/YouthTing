@@ -103,6 +103,17 @@ public class UserService {
         }
     }
 
+    @Transactional
+    public Boolean userConfirm(String code, User sessionUser) {
+        Boolean result = code.equals(sessionUser.getUniqueCode());
+        if (result==true) {
+            sessionUser.upgradeAuthority();
+        }
+        return result;
+    }
+
+    public void exitRoom(User sessionUser) {
+    }
 //    public boolean findDuplicated(String email) {
 //
 //    }

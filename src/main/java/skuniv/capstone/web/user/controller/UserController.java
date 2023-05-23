@@ -1,5 +1,6 @@
 package skuniv.capstone.web.user.controller;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -19,14 +20,16 @@ import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.repository.UserSearch;
 import skuniv.capstone.domain.user.service.UserService;
 import skuniv.capstone.domain.userrequest.UserRequest;
+import skuniv.capstone.springEmail.EmailService;
 import skuniv.capstone.web.user.dto.MyPageDto;
 import skuniv.capstone.web.user.dto.UserSoloDto;
 import skuniv.capstone.web.user.dto.UserJoinDto;
 
-import javax.naming.Binding;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.*;
 
@@ -37,6 +40,8 @@ import static java.util.stream.Collectors.*;
 public class UserController {
     private final UserService userService;
     private final FIleStore fileStore;
+    private final EmailService emailService;
+    private static Map<String, String> emailMapper = new HashMap<>();
     @GetMapping("/add")
     public String joinForm(Model model) {           // 빈 껍데기 객체 가져가는 이유 배웠지? object 때문에
         model.addAttribute("userForm", new UserJoinDto());
@@ -58,13 +63,24 @@ public class UserController {
             return "user/joinForm";
         }
 
+        String userEmail = userJoinDto.getEmail();
+        String univEmail = emailMapper.get(userJoinDto.getUnivName());
+
+        log.info("{} {}", userEmail, univEmail);
+
+        System.out.println("userEmail.contains(univEmail) = " + userEmail.contains(univEmail));
+        if (userEmail.contains(univEmail)!=true) {
+            bindingResult.rejectValue("email","wrongEmailForm", userJoinDto.getUnivName()+"의 웹메일 형식과 다릅니다");
+            return "user/joinForm";
+        }
+
         String storeProfileName = fileStore.storeFile(userJoinDto.getProfilePicture(),userJoinDto.getName());
         System.out.println("storeProfileName = " + storeProfileName);
 
         try {
             userService.join(User.createUser(userJoinDto,storeProfileName));
         } catch (DataIntegrityViolationException e) {
-            bindingResult.reject("emailDuplicated", "이메일이 중복됩니다");
+            bindingResult.rejectValue("email","emailDuplicated", "중복된 이메일입니다");
             return "user/joinForm";
         }
 
@@ -90,9 +106,10 @@ public class UserController {
     }
 
     @GetMapping("/{email}")
-    public UserSoloDto findOne(@PathVariable String email) {
+    public String findOne(@PathVariable String email, Model model) {
         User user = userService.findByEmail(email);
-        return new UserSoloDto(user);
+        model.addAttribute("soloUser", new UserSoloDto(user));
+        return "user/soloUser";
     }
     @GetMapping("/myPage")
     public String myData(HttpServletRequest request, Model model) {
@@ -128,13 +145,19 @@ public class UserController {
     }
 
     @PostMapping("/start")
-    public String joinSoloTing(HttpServletRequest request) {
+    public String joinSoloTing(HttpServletRequest request, Model model) {
         User sessionUser = userService.getSessionUser(request);
+
+        if (sessionUser.getAuthorized() != true) {
+            model.addAttribute("authorized", false);
+            return "/meeting/soloTingStart";
+        }
 
         userService.startSoloting(sessionUser);
 
         log.info("{}님이 미팅에 참여하였습니다", sessionUser.getName());
-        return "redirect:/user/start";
+
+        return "redirect:/user/list";
     }
     @PostMapping("/stop")
     public String exitGroup(HttpServletRequest request) {
@@ -149,5 +172,35 @@ public class UserController {
     public Resource downloadImage(@PathVariable String profileName) throws MalformedURLException {
 //        "file:/C:/Users/YoonSJ/Desktop/inflearn/file_upload/c7c2c3b4-e123-4688-81ea-37d0d38719a2.png
         return new UrlResource("file:" + fileStore.getFullPath(profileName));
+    }
+    @PostMapping("/emailConfirm")
+    public String emailConfirm(HttpServletRequest request, Model model) throws Exception {
+        User sessionUser = userService.getSessionUser(request);
+        String confirm = emailService.sendSimpleMessage(sessionUser.getEmail());
+        model.addAttribute("uniqueCode", sessionUser.getUniqueCode());
+        model.addAttribute("authorized", sessionUser.getAuthorized());
+        return "/user/confirmForm";
+    }
+    @GetMapping("confirm")
+    public String userConfirmForm(HttpServletRequest request, Model model) {
+        User sessionUser = userService.getSessionUser(request);
+        model.addAttribute("uniqueCode", sessionUser.getUniqueCode());
+        model.addAttribute("authorized", sessionUser.getAuthorized());
+        return "user/confirmForm";
+    }
+
+    @PostMapping("confirm")
+    public String userConfirm(@RequestParam String code, HttpServletRequest request, Model model) {
+        User sessionUser = userService.getSessionUser(request);
+        Boolean confirmed = userService.userConfirm(code, sessionUser);
+        model.addAttribute("confirmed", confirmed);
+        return "redirect:/user/confirm";
+    }
+
+    @PostConstruct
+    public void init() {
+        emailMapper.put("서경대학교","@skuniv.ac.kr");
+        emailMapper.put("국민대학교","@kookmin.ac.kr");
+        emailMapper.put("고졸자", "@gmail.com");
     }
 }

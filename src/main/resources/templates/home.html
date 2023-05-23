@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header" />
+<head th:replace="~{fragments/header :: header}" />
 <style>
         /* 꾸미기 */
         .hero {
@@ -15,7 +15,7 @@
         }
     </style>
 <body>
-<div th:replace="fragments/bodyHeader :: bodyHeader"/>
+<div th:replace="~{fragments/bodyHeader :: bodyHeader}"/>
 <div class="hero bg-dark text-center py-5">
     <h1 class="text-white">YouthTing</h1>
     <h2 class="text-white">대학생들을 위한 미팅 서비스</h2>
@@ -33,6 +33,7 @@
                     th:onclick="|location.href='@{/user/add}'|">회원가입
             </button>
         </div>
+<!--        <button onclick ="window.open('http://localhost:8080/','test','width=500,height=500,resizable=no')"></button>-->
     </div>
 </div>
 </body>

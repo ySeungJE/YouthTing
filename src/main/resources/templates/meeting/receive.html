@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header" />
+<head th:replace="~{fragments/header :: header}" />
 <style>
         /* 꾸미기 */
         .hero {
@@ -18,7 +18,7 @@
         }
     </style>
 <body>
-<div th:replace="fragments/bodyHeader :: bodyHeader"/>
+<div th:replace="~{fragments/bodyHeader :: bodyHeader}"/>
 <div class="hero bg-dark text-center py-5">
     <h1 class="text-white">YouthTing</h1>
     <h2 class="text-white">대학생들을 위한 미팅 서비스</h2>
@@ -33,7 +33,10 @@
                 <th></th>
             </tr>
             <tr th:each="request : ${requestList}">
-                <td th:text="${request.title}"></td>
+<!--                <td><img th:src="|/user/profile/${request.storeProFileName}|" width="50" height="50" role="button"-->
+<!--                         th:onclick=|"window.open('http://localhost:8080/','test','width=500,height=500,resizable=no')"|/></td>-->
+                <td th:text="${request.title}" role="button"
+                    th:onclick=|"window.open('http://localhost:8080/','test','width=500,height=500,resizable=no')"|></td>
                 <td th:text="${request.status}"></td>
                 <td>
                     <form th:action="|/meeting/success/${request.userRequestId}|" method="POST">

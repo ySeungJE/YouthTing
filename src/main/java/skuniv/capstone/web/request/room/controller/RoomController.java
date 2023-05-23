@@ -139,4 +139,11 @@ public class RoomController {
         model.addAttribute("sender", sessionUser.getName());
         return "chatting";
     }
+
+    @PostMapping("/exit")
+    public String exitRoom(HttpServletRequest request) {
+        User sessionUser = userService.getSessionUser(request);
+        roomService.exitRoom(sessionUser);
+        return "redirect:/";
+    }
 }
