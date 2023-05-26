@@ -28,13 +28,15 @@
         <table class="table">
             <tbody>
             <tr>
+                <th></th>
                 <th>받은 사람</th>
                 <th>요청 상태</th>
                 <th></th>
             </tr>
             <tr th:each="request : ${requestList}">
-<!--                <td><img th:src="|/user/profile/${request.storeProFileName}|" width="200" height="200"/></td>-->
+                <td><img th:src="|/user/profile/${request.storeProFileName}|" width="50" height="50" role="button" id="getProfile" class="profile"/></td>
                 <td th:text="${request.title}"></td>
+                <td th:value="${request.email}" th:text="${request.email}" id="getEmail"></td>
                 <td th:text="${request.status}"></td>
                 <td>
                     <form th:action="|/meeting/fail/${request.userRequestId}|" method="post">
@@ -49,4 +51,16 @@
     </div>
 </div>
 </body>
+<script type="text/javascript">
+function getId(id){
+	return document.getElementById(id);
+}
+var email = document.getElementById('getEmail').innerHTML;
+
+window.onload = function(){
+    getId("getProfile").onclick = function(){
+        window.open('/user/'+email,"","width=500px,height=635px, left=100px, top=100px;");
+    }
+};
+</script>
 </html>

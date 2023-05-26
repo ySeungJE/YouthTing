@@ -3,8 +3,9 @@
 <head th:replace="~{fragments/header :: header}" />
 <style>
         /* 꾸미기 */
-        .hero {
-            margin-bottom: 50px;
+        .pict {
+            margin-top: 50px;
+            margin-bottom: 20px;
         }
         .normal-button {
           margin-bottom: 100px;
@@ -13,29 +14,16 @@
             font-size: 30px;
             padding: 20px 40px;
         }
-        .unAuthorized {
-            color:red;
-        }
     </style>
 <body>
-<!--<div th:replace="~{fragments/bodyHeader :: bodyHeader}"/>-->
-<!--<div class="hero bg-dark text-center py-5">-->
-<!--    <h1 class="text-white">YouthTing</h1>-->
-<!--    <h2 class="text-white">대학생들을 위한 미팅 서비스</h2>-->
-<!--</div>-->
-<!-- 여기 -->
 <div class="container text-center">
-<!--    <h1>Welcome to My Page</h1>-->
-    <img th:src="|/user/profile/${myData.storeProfileName}|" width="300" height="300"/>
-    <p>Name: <span th:text="${myData.name}"></span></p>
-    <p>Height: <span th:text="${myData.height}"></span></p>
-    <p>MBTI: <span th:text="${myData.mbti}"></span></p>
-    <p>School: <span  th:if="${myData.authorized}==true" th:text="${myData.univName}"></span>
-        <span  th:if="${myData.authorized}==false" class="unAuthorized" th:text="미인증자"></span></p>
-    <p>Email: <span th:text="${myData.email}"></span></p>
-    <p>Password: <span th:text="${myData.password}"></span></p>
-    <p>Introduction: <span th:text="${myData.intro}"></span></p>
-    <a href="#" th:href="@{/}" class="btn btn-primary normal-button" role="button">수정</a>
+    <img th:src="|/user/profile/${soloUser.storeProfileName}|" width="300" height="300" class="pict"/>
+    <p>Name: <span th:text="${soloUser.name}"></span></p>
+    <p>UnivName: <span th:text="${soloUser.univName}"></span>
+    <p>Height: <span th:text="${soloUser.height}"></span></p>
+    <p>MBTI: <span th:text="${soloUser.mbti}"></span></p>
+    <p>Email: <span th:text="${soloUser.email}"></span></p>
+    <p>Introduction: <span th:text="${soloUser.intro}"></span></p>
 </div>
 </body>
 </html>

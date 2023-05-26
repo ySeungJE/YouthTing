@@ -20,6 +20,9 @@
  border-color: #dc3545;
  color: #dc3545;
  }
+ .addressButton {
+    margin-top: 8px;
+ }
 </style>
 
 <body>
@@ -81,15 +84,16 @@
                     <div class="field-error" th:errors="*{intro}"/>
                 </div>
                 <div class="form-group">
-                    <label th:for="univAddress">주소</label>
-                    <input type="text" class="form-control" th:field="*{univAddress}" placeholder="학교 주소를 입력하세요" required
+                    <label th:for="univAddress"></label>
+                    <input type="button" onclick="sample6_execDaumPostcode()" value="학교주소 검색" class="addressButton"><br>
+                    <input type="text" class="form-control" th:field="*{univAddress}" placeholder="주소" required
                            th:errorclass="field-error">
                     <div class="field-error" th:errors="*{univAddress}"/>
                 </div>
                 <div class="form-group">
                     <label th:for="univName">학교 이름</label>
-                    <input type="text" class="form-control" th:field="*{univName}" placeholder="학교 이름을 입력하세요" required
-                           th:errorclass="field-error">
+                <input type="text" class="form-control" th:field="*{univName}" placeholder="학교이름(띄어쓰기 없이) ex)국민대학교" required
+                       th:errorclass="field-error">
                     <div class="field-error" th:errors="*{univName}"/>
                 </div>
                 <div class="form-group">
@@ -130,4 +134,24 @@
     </div>
 </div>
 </body>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                var addr = ''; // 주소 변수
+
+                if (data.userSelectedType === 'R') {
+                    addr = data.roadAddress;
+                } else {
+                    addr = data.jibunAddress;
+                }
+
+                document.getElementById("univAddress").value = addr;
+
+                document.getElementById("univName").focus();
+            }
+        }).open();
+    }
+</script>
 </html>

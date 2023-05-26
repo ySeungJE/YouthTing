@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="button" onclick="sample6_execDaumPostcode()" value="학교주소 입력"><br>
+<input type="text" id="univAddress" placeholder="주소"><br>
+<input type="text" id="univName" placeholder="학교이름 ex)국민대학교">
+</body>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                var addr = ''; // 주소 변수
+
+                if (data.userSelectedType === 'R') {
+                    addr = data.roadAddress;
+                } else {
+                    addr = data.jibunAddress;
+                }
+
+                document.getElementById("univAddress").value = addr;
+
+                document.getElementById("univName").focus();
+            }
+        }).open();
+    }
+</script>
+</html>

@@ -107,6 +107,7 @@ public class UserController {
 
     @GetMapping("/{email}")
     public String findOne(@PathVariable String email, Model model) {
+        log.info("{}", email);
         User user = userService.findByEmail(email);
         model.addAttribute("soloUser", new UserSoloDto(user));
         return "user/soloUser";

@@ -28,15 +28,16 @@
         <table class="table">
             <tbody>
             <tr>
+                <th></th>
                 <th>보낸 사람</th>
+                <th>Email</th>
                 <th>요청 상태</th>
                 <th></th>
             </tr>
             <tr th:each="request : ${requestList}">
-<!--                <td><img th:src="|/user/profile/${request.storeProFileName}|" width="50" height="50" role="button"-->
-<!--                         th:onclick=|"window.open('http://localhost:8080/','test','width=500,height=500,resizable=no')"|/></td>-->
-                <td th:text="${request.title}" role="button"
-                    th:onclick=|"window.open('http://localhost:8080/','test','width=500,height=500,resizable=no')"|></td>
+                <td><img th:src="|/user/profile/${request.storeProFileName}|" width="50" height="50" role="button" id="getProfile" class="profile"/></td>
+                <td th:text="${request.title}"></td>
+                <td th:value="${request.email}" th:text="${request.email}" id="getEmail"></td>
                 <td th:text="${request.status}"></td>
                 <td>
                     <form th:action="|/meeting/success/${request.userRequestId}|" method="POST">
@@ -48,16 +49,24 @@
                             거절
                         </button>
                     </form>
-<!--                    <form th:action="|/meeting/fail/${request.userRequestId}|" method="POST">-->
-<!--                        <button th:if="${request.status.name() == 'WAIT'}" class="btn btn-outline-primary" type="submit">-->
-<!--                            거절-->
-<!--                        </button>-->
-<!--                    </form>-->
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
 </div>
+<!--th:onclick="window.open('http://localhost:8080/user/${request.email}','test','width=500,height=600,resizable=no')"-->
 </body>
+<script type="text/javascript">
+function getId(id){
+	return document.getElementById(id);
+}
+var email = document.getElementById('getEmail').innerHTML;
+
+window.onload = function(){
+    getId("getProfile").onclick = function(){
+        window.open('/user/'+email,"","width=500px,height=635px, left=100px, top=100px;");
+    }
+};
+</script>
 </html>

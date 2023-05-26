@@ -70,7 +70,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
 
         super.afterConnectionEstablished(session);
         log.info("클라이언트 접속됨");
-        log.info("before:roomSessions[{}] = {}", roomId, roomSessions.get(roomId));
+        log.info("roomSessions[{}] = {}", roomId, roomSessions.get(roomId));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         roomSessions.get(roomId).remove(session);
         super.afterConnectionClosed(session, status);
         log.info("클라이언트 접속해제");
-        log.info("before:roomSessions[{}] = {}", roomId, roomSessions.get(roomId));
+        log.info("roomSessions[{}] = {}", roomId, roomSessions.get(roomId));
     }
 
     @Transactional(readOnly = true)
