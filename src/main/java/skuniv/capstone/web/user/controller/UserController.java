@@ -112,6 +112,13 @@ public class UserController {
         model.addAttribute("soloUser", new UserSoloDto(user));
         return "user/soloUser";
     }
+    @GetMapping("/profileClick/{storeProFileName}")
+    public String findByStoreProFileName(@PathVariable String storeProFileName, Model model) {
+        log.info("{}", storeProFileName);
+        User user = userService.findByStoreProfileName(storeProFileName);
+        model.addAttribute("soloUser", new UserSoloDto(user));
+        return "user/soloUser";
+    }
     @GetMapping("/myPage")
     public String myData(HttpServletRequest request, Model model) {
         User sessionUser = userService.getSessionUser(request);
@@ -202,6 +209,6 @@ public class UserController {
     public void init() {
         emailMapper.put("서경대학교","@skuniv.ac.kr");
         emailMapper.put("국민대학교","@kookmin.ac.kr");
-        emailMapper.put("고졸자", "@gmail.com");
+        emailMapper.put("성신여자대학교", "@gmail.com");
     }
 }

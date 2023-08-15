@@ -14,5 +14,4 @@ public class LoginService {
     public User login(String email, String password) {
         return userRepository.findByEmail(email).filter(u -> u.getPassword().equals(password)).orElse(null);
     }
-
 }

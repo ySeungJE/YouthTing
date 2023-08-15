@@ -38,7 +38,7 @@ public class EmailServiceImpl implements EmailService{
         msgg += "<button type='submit' >인증하기</button>";
         msgg += "</form>";
         message.setText(msgg, "utf-8", "html");//내용
-        message.setFrom(new InternetAddress("2017301050@skuniv.ac.kr","YouthTing"));//보내는 사람
+        message.setFrom(new InternetAddress("dbstmdwp988@gmail.com","YouthTing"));//보내는 사람
 
         return message;
     }

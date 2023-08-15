@@ -146,4 +146,11 @@ public class RoomController {
         roomService.exitRoom(sessionUser);
         return "redirect:/";
     }
+
+    @GetMapping("/showMap")
+    public String showMap(HttpServletRequest request) {
+//        User sessionUser = userService.getSessionUser(request);
+//        roomService.exitRoom(sessionUser);
+        return "/meeting/showMap";
+    }
 }

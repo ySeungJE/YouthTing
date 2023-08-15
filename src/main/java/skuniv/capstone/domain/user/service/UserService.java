@@ -69,6 +69,10 @@ public class UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }
+    public User findByStoreProfileName(String storeProfileName) {
+        return userRepository.findByStoreProfileName(storeProfileName).orElse(null);
+    }
+
     public User getSessionUser(HttpServletRequest request) {
         User session = (User) request.getSession().getAttribute(LOGIN_USER);
 
@@ -106,6 +110,7 @@ public class UserService {
     @Transactional
     public Boolean userConfirm(String code, User sessionUser) {
         Boolean result = code.equals(sessionUser.getUniqueCode());
+
         if (result==true) {
             sessionUser.upgradeAuthority();
         }
