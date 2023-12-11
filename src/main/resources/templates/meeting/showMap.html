@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}" />
     <meta charset="utf-8">
     <title>미팅장소 검색</title>
     <style>
@@ -120,9 +120,13 @@
         <div id="pagination"></div>
     </div>
 </div>
-
-
-
+<!--position : absolute;-->
+<!--right: 200px;-->
+<!--height : 200px;-->
+<!--width : 200px;-->
+<!--background-color: blue;-->
+<button style="position: absolute; right: 650px; top: 0px; height: 40px; width: 80px; z-index: 1;"
+    onclick="history.back();">돌아가기</button>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9743aa7ccf5631c99568e006d3b10006&libraries=services"></script>
 <script>
 
@@ -523,11 +527,12 @@ function keywordDisplayPlaces(places) {
 
 // 검색결과 항목을 Element로 반환하는 함수입니다
 function getListItem(index, places) {
-
+    var test = '성신여대 술집';
     var el = document.createElement('li'),
     itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
-                '<div class="info">' +
-                '   <h5>' + places.place_name + '</h5>';
+        // '<div class="info">' +
+        '<div class="info" OnClick="window.open(`https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query='+places.place_name+'`)" style="cursor:pointer;">' +
+                '   <a>' + places.place_name + '</a>';
 
     if (places.road_address_name) {
         itemStr += '    <span>' + places.road_address_name + '</span>' +
@@ -543,6 +548,12 @@ function getListItem(index, places) {
     el.className = 'item';
 
     return el;
+}
+
+function spaceSearch(name) {
+    // window.open()
+    // location.href=`https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=`
+    alert(name);
 }
 
 // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
