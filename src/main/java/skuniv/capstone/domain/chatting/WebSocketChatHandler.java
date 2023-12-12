@@ -31,11 +31,10 @@ import static skuniv.capstone.web.login.controller.LoginController.LOGIN_USER;
 public class WebSocketChatHandler extends TextWebSocketHandler {
     private final ObjectMapper mapper;
     private final UserRepository userRepository;
-//    private final RoomRepository roomRepository;
     private final ChattingService chattingService;
     private Map<Long, Set<WebSocketSession>> roomSessions = new HashMap<>();
 
-    @Override // 프론트에서 send한 걸 일단 얘가 받았잖아. 일단 받았으면 대박인거ㅋㅋㅋㅋㅋ
+    @Override // 프론트에서 ws.send 로 메세지 보내면 호출되는 함수.
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 
         String payload = message.getPayload();
@@ -43,20 +42,15 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         Chatting chatting = mapper.readValue(payload, Chatting.class);
         User user = (User)session.getAttributes().get("user");
 
+        // 프론트에서 온 message 기반으로 객체 만들어주고, user 정보 삽입해서 db에 저장
         chatting.fillOthers(user.getName(), user.getId(), user.getStoreProfileName() ,getRoomId(user));
 
-//        if (roomSessions.containsKey(chatting.getRoomNum())==false) {
-//            roomSessions.put(chatting.getRoomNum(), new HashSet<>());
-//            roomSessions.get(chatting.getRoomNum()).add(session);
-//        } else {
-//            roomSessions.get(chatting.getRoomNum()).add(session);
-//        }
-
+        // 웹소켓 실시간 통신을 위해서 호출
         chattingService.handleAction(session, chatting, roomSessions);
     }
 
     // 웹소켓 서버에 클라이언트가 접속하면 호출되는 메소드
-    @Override
+    @Override // 웹소켓에 연결되면 호출되는 함수. WebSocketSession 에 넣어놨던 user 정보를 가져와서 해당 roomId에 WebSocketSession을 추가(입장)
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 
         Long roomId = getRoomId((User) session.getAttributes().get("user"));
@@ -73,7 +67,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         log.info("roomSessions[{}] = {}", roomId, roomSessions.get(roomId));
     }
 
-    @Override
+    @Override // 웹소켓 연결이 끊기면 호출되는 함수. 채팅룸에서 WebSocketSession를 제거함으로써 유저를 퇴장시킴
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         Long roomId = getRoomId((User) session.getAttributes().get("user"));
 

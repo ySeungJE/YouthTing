@@ -13,7 +13,7 @@ import static skuniv.capstone.web.login.controller.LoginController.*;
 
 public class HttpHandshakeInterceptor implements HandshakeInterceptor {
 
-    @Override
+    @Override // 웹소켓 연결 전에 호출되는 메소드. WebSocketSession 안에 user의 정보를 입력한다
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
                                    Map attributes) {
         if (request instanceof ServletServerHttpRequest) {
