@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <div class="header" th:fragment="bodyHeader">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -11,7 +14,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
                             그 외
                         </a>
@@ -22,25 +25,47 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            보낸 요청
+                            개인 미팅
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/meeting/send">미팅 요청</a>
-                            <a class="dropdown-item" href="#">친구 요청</a>
-                            <a class="dropdown-item" href="#">그룹 요청</a>
+                            <a class="dropdown-item" href="/meeting/receive">받은 요청</a>
+                            <a class="dropdown-item" href="/meeting/send">보낸 요청</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            받은 요청
+                            그룹 미팅
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/meeting/receive">미팅 요청</a>
-                            <a class="dropdown-item" href="#">친구 요청</a>
                             <a class="dropdown-item" href="#">받은 요청</a>
+                            <a class="dropdown-item" href="#">보낸 요청</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            친구
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <button class="dropdown-item" onclick="window.open('/friend/inputEmail','','width=600px,height=400px, left=700px, top=350px;')">친구 추가</button>
+                            <a class="dropdown-item" href="/friend/receive">받은 요청</a>
+                            <a class="dropdown-item" href="#">보낸 요청</a>
+                            <a class="dropdown-item" href="/friend/list">내 친구</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            그룹
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">그룹 초대</a>
+                            <a class="dropdown-item" href="#">받은 요청</a>
+                            <a class="dropdown-item" href="#">보낸 요청</a>
+                            <a class="dropdown-item" href="/group/member">내 그룹</a>
                         </div>
                     </li>
                 </ul>
@@ -48,3 +73,15 @@
         </div>
     </nav>
 </div>
+
+<script>
+    function checkFriend() {
+        alert("email");
+
+        // 여기에 친구 확인 로직 추가
+        // var email = document.getElementById('emailInput').value;
+
+        // alert(email);
+
+    }
+</script>

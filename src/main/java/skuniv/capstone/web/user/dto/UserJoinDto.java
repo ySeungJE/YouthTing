@@ -36,4 +36,18 @@ public class UserJoinDto {
     private String intro;
     @NonNull
     private MultipartFile profilePicture;
+
+    public UserJoinDto(String email, String password, String name, Gender gender, Integer age,
+                       String univAddress, String univName, Integer height, MBTI mbti, String intro) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.gender = gender;
+        this.age = age;
+        this.univAddress = univAddress;
+        this.univName = univName;
+        this.height = height;
+        this.mbti = mbti;
+        this.intro = intro;
+    }
 }

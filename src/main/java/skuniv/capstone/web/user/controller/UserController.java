@@ -208,7 +208,7 @@ public class UserController {
     @PostConstruct
     public void init() {
         emailMapper.put("서경대학교","@skuniv.ac.kr");
-        emailMapper.put("국민대학교","@kookmin.ac.kr");
+        emailMapper.put("국민대학교","@naver.com");
         emailMapper.put("성신여자대학교", "@gmail.com");
     }
 }

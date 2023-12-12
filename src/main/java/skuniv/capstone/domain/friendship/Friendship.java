@@ -16,7 +16,7 @@ public class Friendship {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User me;
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "friend_id")
     private User friend;
 

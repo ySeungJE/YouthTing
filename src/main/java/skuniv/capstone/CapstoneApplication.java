@@ -21,4 +21,6 @@ public class CapstoneApplication implements WebMvcConfigurer {
 	Hibernate5JakartaModule hibernate5Module() {
 		return new Hibernate5JakartaModule();
 	}
+
+
 }
