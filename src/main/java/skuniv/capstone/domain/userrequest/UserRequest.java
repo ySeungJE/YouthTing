@@ -66,6 +66,7 @@ public class UserRequest {
     public String successInvite() {
         this.request.changeStatus(RequestStatus.SUCCESS);
         this.receiveUser.setGroup(this.sendUser.getGroup());
+
         return sendUser.getName() + "님의 그룹에 " + receiveUser.getName() + "님이 참가하였습니다";
     }
 }

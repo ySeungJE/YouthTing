@@ -1,8 +1,6 @@
 package skuniv.capstone.domain.request;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import skuniv.capstone.domain.group.Group;
@@ -12,7 +10,7 @@ import skuniv.capstone.domain.group.Group;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Invite extends Request{
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
     @Builder

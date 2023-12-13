@@ -172,4 +172,11 @@ public class User {
     public void exitRoom() {
         this.room=null;
     }
+
+    /**
+     * 그룹에서 퇴장
+     */
+    public void groupOut() {
+        this.group = null;
+    }
 }

@@ -1,0 +1,85 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}" />
+<style>
+        /* 꾸미기 */
+        .hero {
+            margin-bottom: 50px;
+        }
+        .normal-button {
+            margin-bottom: 50px;
+        }
+        .my-button {
+            font-size: 30px;
+            padding: 20px 40px;
+        }
+        .table {
+            width: 100%;
+            border: 1px solid;
+        }
+    </style>
+<body>
+<div th:replace="~{fragments/bodyHeader :: bodyHeader}"/>
+<div class="hero bg-dark text-center py-5">
+    <h1 class="text-white">YouthTing</h1>
+    <h2 class="text-white">대학생들을 위한 미팅 서비스</h2>
+</div>
+<div class="container text-center">
+    <div class="col">
+        <table class="table">
+            <tbody>
+                <tr th:each="group : ${groupList}">
+                    <td><img th:src="|/user/profile/${group.masterProfile}|" width="250" height="250"/></td>
+                    <td th:text="${group.groupName}"></td>
+                    <td th:text="${group.groupAge}"></td>
+                    <td th:text="${group.masterEmail}"></td>
+                    <td th:text="${group.headCount}"></td>
+                    <td th:text="${group.univName}">
+                    <td>
+                        <form th:action="|/meeting/request/${group.email}|" method="post">
+                            <button th:if="${group.requested == false}" class="btn btn-outline-primary" type="submit">
+                                신청
+                            </button>
+                            <button th:if="${group.requested == true}" class="btn btn-outline-primary" type="submit" disabled>
+                                신청 완료
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="normal-button">
+            <form th:action="@{/group/list}" th:object="${groupSearch}" method="get" style="display: flex;">
+                <div class="col-auto form-group" style="flex: 1;">
+                    <label class="sr-only" th:for="groupAgeMax"></label>
+                    <input type="number" th:field="*{groupAgeMax}" class="form-control mb-2" placeholder="최소 나이">
+                </div>
+                <div class="col-auto form-group" style="flex: 1;">
+                    <label class="sr-only" th:for="groupAgeMin"></label>
+                    <div class="input-group mb-2">
+                        <input type="number" th:field="*{groupAgeMin}" class="form-control"  placeholder="최대 나이">
+                    </div>
+                </div>
+                <div class="col-auto form-group" style="flex: 1;">
+                    <label class="sr-only" th:for="univName"></label>
+                    <select class="form-select mb-2" th:field="*{univName}">
+                        <option value="">학교 선택</option>
+                        <option value="성신여자대학교">성신여자대학교</option>
+                        <option value="서경대학교">서경대학교</option>
+                        <option value="국민대학교">국민대학교</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">검색</button>
+            </form>
+        </div>
+        <div class="normal-button">
+            <form th:action="@{/group/stop}" method="post">
+                <button class="btn btn-outline-primary" type="submit">
+                    개인 미팅 퇴장
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

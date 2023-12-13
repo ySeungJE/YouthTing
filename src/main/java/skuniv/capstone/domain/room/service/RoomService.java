@@ -56,10 +56,6 @@ public class RoomService {
         return roomRepository.findById(id).orElse(null);
     }
 
-    public void meetingFail(UserRequest userRequest) {
-        userRequest.getRequest().changeStatus(FAIL);
-    }
-
     public void exitRoom(User sessionUser) {
         sessionUser.exitRoom();
     }

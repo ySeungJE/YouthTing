@@ -103,16 +103,20 @@ public class RoomController {
     }
 
     @PostMapping("/fail/{userRequestId}")
-    public String meetingFail(@PathVariable Long userRequestId ,HttpServletRequest request) {
+    public String meetingFail(@PathVariable Long userRequestId, HttpServletRequest request) {
         UserRequest userRequest = requestService.findUserRequest(userRequestId);
-        roomService.meetingFail(userRequest);
-        return "redirect:/meeting/send";
+        requestService.meetingFail(userRequest);
+        return "redirect:" + request.getHeader("Referer");
     }
 
     @GetMapping("/chatting")
     public String goChat(HttpServletRequest request, Model model) {
-
         User sessionUser = userService.getSessionUser(request);
+
+        if (sessionUser.getRoom() == null) {
+            return "redirect:/user/start";
+        }
+
         List<Chatting> chattingList = sessionUser.getRoom().getChattingList(); // 이게 지금 다 lazy 초기화하는 거지
         model.addAttribute("roomName", sessionUser.getRoom().getName());
         model.addAttribute("chatList", chattingList);

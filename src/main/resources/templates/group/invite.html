@@ -55,9 +55,21 @@
 <script type="text/javascript">
     function groupInvite(email) {
 
-
-        const button = getId(email);
-        button.disabled = true;
+        $.ajax({
+            type: 'POST',
+            url: '/group/request/' + email,
+            success: function(response) {
+                // 성공적으로 요청이 완료된 경우 실행할 코드
+                alert(response+' 님에게 그룹 초대 완료!');
+                const button = getId(email);
+                button.disabled = true;
+            },
+            error: function(error) {
+                // 요청이 실패한 경우 실행할 코드
+                console.error(error);
+                alert('그룹 초대 요청에 실패했습니다');
+            }
+        });
     }
     function getId(id){
         return document.getElementById(id);

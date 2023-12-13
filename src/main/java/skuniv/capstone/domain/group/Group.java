@@ -2,6 +2,7 @@ package skuniv.capstone.domain.group;
 
 import jakarta.persistence.*;
 import lombok.*;
+import skuniv.capstone.domain.request.Invite;
 import skuniv.capstone.domain.user.User;
 
 import java.time.Instant;
@@ -26,9 +27,12 @@ public class Group {
     @OneToOne
     @JoinColumn(name = "master_id")
     private User master;
-    @OneToMany(mappedBy = "group", cascade = ALL) // 얘는 user 가 양방향 매핑해줌
+    @OneToMany(mappedBy = "group") // 얘는 user 가 양방향 매핑해줌
     @Builder.Default // 뭐야 시발 이래야 되네? 그럼 야 시발 User 에 그 수많은 List 들은 왜 그냥 만들어주고 얘는 안만들어주고 쥐랄임?
     private List<User> userList = new ArrayList<>();
+    @OneToMany(mappedBy = "group", cascade = ALL) // 얘는 user 가 양방향 매핑해줌
+    @Builder.Default // 여기에도 invite 정보가 있어야 cascade로 지울수가 있는가?
+    private List<Invite> inviteList = new ArrayList<>();
     private Boolean idle;
     private Long startTime;
 
@@ -76,5 +80,17 @@ public class Group {
             groupAge+=user.getAge();
         }
         this.groupAge/=this.userList.size();
+    }
+
+    /**
+     * 이 그룹에서 해당 유저를 퇴장
+     * @param sessionUser
+     */
+    public void memberOut(User sessionUser) {
+        this.userList.remove(sessionUser);
+    }
+
+    public void addInvite(Invite build) {
+        this.inviteList.add(build);
     }
 }

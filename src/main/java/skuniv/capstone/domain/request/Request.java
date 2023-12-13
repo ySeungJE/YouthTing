@@ -3,6 +3,7 @@ package skuniv.capstone.domain.request;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import skuniv.capstone.domain.userrequest.UserRequest;
 
 @Getter
 @Entity
@@ -22,6 +23,8 @@ public class Request {
     @Enumerated(EnumType.STRING)
     private RequestType requestType;
 
+    @OneToOne(mappedBy = "request", optional = false)
+    private UserRequest userRequest;
     //== 비즈니스 로직 ==//
     public String changeStatus(RequestStatus status) {
         this.requestStatus = status;

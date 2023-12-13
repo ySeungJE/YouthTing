@@ -8,6 +8,8 @@ import skuniv.capstone.domain.request.repository.RequestRepository;
 import skuniv.capstone.domain.userrequest.UserRequest;
 import skuniv.capstone.domain.userrequest.repository.UserRequestRepository;
 
+import static skuniv.capstone.domain.request.RequestStatus.FAIL;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -35,4 +37,8 @@ public class RequestService {
         return requestRepository.findById(id).orElse(null);
     }
 
+    @Transactional
+    public void meetingFail(UserRequest userRequest) {
+        userRequest.getRequest().changeStatus(FAIL);
+    }
 }

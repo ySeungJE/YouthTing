@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import skuniv.capstone.domain.group.Group;
 import skuniv.capstone.domain.group.repository.GroupQueryRepository;
 import skuniv.capstone.domain.group.repository.GroupRepository;
+import skuniv.capstone.domain.group.repository.GroupSearch;
 import skuniv.capstone.domain.user.User;
 
 import java.time.Duration;
@@ -48,9 +49,21 @@ public class GroupService {
             } else break; // StartTime 기준 오름차순을 했으므로, 한번 3일 안쪽으로 들어오면 그 후 유저들은 모두 3일 안쪽인 것
     }
     @Transactional
-    public List<Group> findALl(User user) {
+    public List<Group> findALl(User user, GroupSearch groupSearch) {
         return queryRepository.findAll(user.getGender(),
                 user.getGroup().getUserList().size(),
-                user.getUniv().getUnivAddress());
+                user.getUniv().getUnivAddress(), groupSearch);
+    }
+
+    @Transactional
+    public void groupOut(User sessionUser) {
+        if (sessionUser.getGroup().getUserList().size() == 1) {
+            sessionUser.getGroup().memberOut(sessionUser);
+            groupRepository.delete(sessionUser.getGroup());
+            sessionUser.groupOut();
+        } else {
+            sessionUser.getGroup().memberOut(sessionUser);
+            sessionUser.groupOut();
+        }
     }
 }

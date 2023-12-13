@@ -20,16 +20,18 @@ import static skuniv.capstone.domain.user.Gender.WOMAN;
 @RequiredArgsConstructor
 public class GroupQueryRepository {
     private final EntityManager em;
-    public List<Group> findAll(Gender gender, Integer headCount, String univAddress) { // 키와 mbti를 설정해서 동적 검색
+    public List<Group> findAll(Gender gender, Integer headCount, String univAddress, GroupSearch groupSearch) { // 키와 mbti를 설정해서 동적 검색
         JPAQueryFactory query = new JPAQueryFactory(em);
         QGroup group = QGroup.group;
 
         return query // 성별이 달라야 하고 인원수, 주소가 같아야만 출력
                 .select(group)
                 .from(group)
-                .where( group.userList.size().eq(headCount),
+                .where(group.userList.size().eq(headCount),
                         genderDif(gender),
-                        group.master.univ.univAddress.eq(univAddress),
+                        univNameEq(groupSearch.getUnivName()),
+//                        group.master.univ.univAddress.eq(univAddress),
+                        ageRange(groupSearch.getGroupAgeMin(), groupSearch.getGroupAgeMax()),
                         group.idle.eq(true))
                 .limit(500)
                 .fetch();
@@ -41,4 +43,21 @@ public class GroupQueryRepository {
             return QGroup.group.master.gender.eq(MAN);
         }
     }
+    private BooleanExpression ageRange(Integer ageMin, Integer ageMax) {
+        if (ageMin==null && ageMax==null){
+            ageMin=0; ageMax=35;
+        } else if (ageMin!=null && ageMax==null) {
+            ageMax=35;
+        } else if (ageMin==null && ageMax!=null) {
+            ageMin=0;
+        }
+        return QGroup.group.groupAge.between(ageMin,ageMax);
+    }
+    private BooleanExpression univNameEq(String univName) {
+        if (univName == null) {
+            return null;
+        }
+        return QGroup.group.master.univ.univName.eq(univName);
+    }
+
 }

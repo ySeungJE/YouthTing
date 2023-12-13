@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -71,19 +72,27 @@ public class FriendController {
     }
 
     @GetMapping("/send")
-    public List<SendRequestDto> sendList(HttpServletRequest request) {
+    public String sendList(HttpServletRequest request, Model model) {
         User me = userService.getSessionUser(request);
         List<UserRequest> list = me.getSendRequestList();
 
-        return list.stream()
-                .filter(u-> u.getRequest().getRequestType()==FRIEND)
+        List<SendRequestDto> collect = list.stream()
+                .filter(u -> u.getRequest().getRequestType() == FRIEND)
                 .map(u -> new SendRequestDto(u))
                 .collect(toList());
+        model.addAttribute("requestList", collect);
+        return "/friend/send";
     }
     @PostMapping("/success/{requestId}") // request 상태가 SUCCESS 로 변경되고 양측이 친구로 추가됨
     public String successFriend(@PathVariable Long requestId) {
         requestService.successFriend(requestId);  // 이래서 시발 귀찮게 String으로 확인 안하는 구나 log 가 훨씬 낫다
         return "redirect:/friend/receive";
+    }
+    @PostMapping("/fail/{userRequestId}")
+    public String friendFail(@PathVariable Long userRequestId, HttpServletRequest request) {
+        UserRequest userRequest = requestService.findUserRequest(userRequestId);
+        requestService.meetingFail(userRequest);
+        return "redirect:" + request.getHeader("Referer");
     }
     @GetMapping("/list")
     public String friendList(HttpServletRequest request, Model model) {
