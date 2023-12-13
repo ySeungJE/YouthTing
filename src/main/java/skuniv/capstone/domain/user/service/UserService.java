@@ -3,8 +3,6 @@ package skuniv.capstone.domain.user.service;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import skuniv.capstone.domain.group.Group;
@@ -13,7 +11,6 @@ import skuniv.capstone.domain.request.Invite;
 import skuniv.capstone.domain.request.RequestStatus;
 import skuniv.capstone.domain.request.RequestType;
 import skuniv.capstone.domain.user.Gender;
-import skuniv.capstone.domain.user.MBTI;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.repository.UserQueryRepository;
 import skuniv.capstone.domain.user.repository.UserRepository;
@@ -24,8 +21,6 @@ import skuniv.capstone.web.user.dto.UserJoinDto;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 import static skuniv.capstone.domain.user.Gender.*;
@@ -126,8 +121,8 @@ public class UserService {
     @Transactional
 //    @EventListener(ApplicationReadyEvent.class)
     public void initData() {
-        User join = join(User.createUser(new UserJoinDto("2017301050@skuniv.ac.kr", "123", "user_man1", MAN, 26, "서울 성북구 서경로 124", "서경대학교",
-                178, ISTP, "안녕하세요"), "user_man1Init.jpg"));
+        User join = join(User.createUser(new UserJoinDto("20173user_man1Init.jpg01050@skuniv.ac.kr", "123", "user_man1", MAN, 26, "서울 성북구 서경로 124", "서경대학교",
+                178, ISTP, "안녕하세요"), ""));
         User join1 = join(User.createUser(new UserJoinDto("testMan1@naver.com", "123", "user_man2", MAN, 25, "서울 성북구 서경로 124", "국민대학교",
                 180, ENFJ, "안녕하세요"), "user_man2Init.jpg"));
         User join2 = join(User.createUser(new UserJoinDto("testWoman1@gmail.com", "123", "user_woman1", WOMAN, 23, "서울 성북구 보문로34다길 2", "성신여자대학교",

@@ -1,0 +1,74 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}" />
+<style>
+    /* 꾸미기 */
+    .hero {
+        margin-bottom: 50px;
+    }
+    .normal-button {
+        margin-bottom: 50px;
+    }
+    .my-button {
+        font-size: 30px;
+        padding: 20px 40px;
+    }
+    .table {
+        width: 100%;
+    }
+</style>
+<body>
+<div th:replace="~{fragments/bodyHeader :: bodyHeader}"/>
+<div class="hero bg-dark text-center py-5">
+    <h1 class="text-white">YouthTing</h1>
+    <h2 class="text-white">대학생들을 위한 미팅 서비스</h2>
+</div>
+<div class="container text-center">
+    <div class="col">
+        <table class="table">
+            <tbody>
+            <tr>
+                <th></th>
+                <th>친구 이름</th>
+                <th>Email</th>
+                <th>학교</th>
+                <th></th>
+            </tr>
+            <tr th:each="friend : ${friendList}">
+                <td><img th:src="|/user/profile/${friend.storeProfileName}|" width="50" height="50" role="button" th:id="${friend.storeProfileName}" class="profile" onclick="showProfile(this.id)"/></td>
+                <td th:text="${friend.name}"></td>
+                <td th:value="${friend.email}" th:text="${friend.email}" th:id="'getEmail'+${friend.email}"></td>
+                <td th:text="${friend.univName}"></td>
+                <td>
+<!--                    <form th:action="|/group/request/${friend.email}|" method="POST">-->
+                        <button class="btn btn-outline-primary" th:id="${friend.email}" type="submit" th:onclick="groupInvite([[${friend.email}]])">
+                            초대
+                        </button>
+<!--                    </form>-->
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    function groupInvite(email) {
+
+
+        const button = getId(email);
+        button.disabled = true;
+    }
+    function getId(id){
+        return document.getElementById(id);
+    }
+
+    <!--var email = document.getElementById('getEmail1').innerHTML;-->
+
+    function showProfile(this_id) {
+        window.open('/user/profileClick/'+this_id,"","width=500px,height=635px, left=100px, top=100px;");
+    }
+
+
+</script>
+</html>

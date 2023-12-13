@@ -86,12 +86,15 @@ public class FriendController {
         return "redirect:/friend/receive";
     }
     @GetMapping("/list")
-    public List<UserDto> friendList(HttpServletRequest request) {
+    public String friendList(HttpServletRequest request, Model model) {
         User user = userService.getSessionUser(request); // session 주는건 되네 ㅋㅋㅋ
 
-        return user.getFriendShipList().stream()
+        List<UserDto> collect = user.getFriendShipList().stream()
                 .map(l -> new UserDto(l.getMe()))// 이거 진짜 왜이랰ㅋㅋㅋㅋㅋㅋㅋㅋㅋ getMe 를 해야 정상적으로 출력되는 현상... 어떻게 해도 고쳐지지가 않음
                 .collect(toList());
+
+        model.addAttribute("friendList", collect);
+        return "friend/friendList";
     }
 
 

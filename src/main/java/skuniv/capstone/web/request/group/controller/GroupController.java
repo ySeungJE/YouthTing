@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import skuniv.capstone.domain.group.Group;
 import skuniv.capstone.domain.group.service.GroupService;
@@ -24,13 +26,26 @@ import static java.util.stream.Collectors.toList;
 import static skuniv.capstone.domain.request.RequestType.*;
 
 @Slf4j
-@RestController
+@Controller
 @RequestMapping("/group")
 @RequiredArgsConstructor
 public class GroupController {
     private final UserService userService;
     private final GroupService groupService;
     private final RequestService requestService;
+
+    @GetMapping("/invite")
+    public String inviteGroup(HttpServletRequest request, Model model) {
+        User user = userService.getSessionUser(request); // session 주는건 되네 ㅋㅋㅋ
+
+        List<UserDto> collect = user.getFriendShipList().stream()
+                .map(l -> new UserDto(l.getMe()))// 이거 진짜 왜이랰ㅋㅋㅋㅋㅋㅋㅋㅋㅋ getMe 를 해야 정상적으로 출력되는 현상... 어떻게 해도 고쳐지지가 않음
+                .collect(toList());
+
+        model.addAttribute("friendList", collect);
+        return "/group/invite";
+    }
+
     @PostMapping
     public String createGroup(HttpServletRequest request) {
         User me = userService.getSessionUser(request);
