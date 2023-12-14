@@ -31,7 +31,7 @@ public class UserRequest {
 
     //== 생성 메서드 ==//
     public static UserRequest createUserRequest(User sendUser, User receiveUser, Request request) {
-        return UserRequest.builder()
+                return UserRequest.builder()
                 .sendUser(sendUser)
                 .receiveUser(receiveUser)
                 .request(request)

@@ -2,8 +2,6 @@ package skuniv.capstone.web.request.group.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -13,7 +11,6 @@ import skuniv.capstone.domain.group.Group;
 import skuniv.capstone.domain.group.repository.GroupSearch;
 import skuniv.capstone.domain.group.service.GroupService;
 import skuniv.capstone.domain.user.User;
-import skuniv.capstone.domain.user.repository.UserSearch;
 import skuniv.capstone.domain.user.service.UserService;
 import skuniv.capstone.domain.userrequest.UserRequest;
 import skuniv.capstone.domain.userrequest.sevice.RequestService;
@@ -24,7 +21,6 @@ import skuniv.capstone.web.request.group.dto.GroupDto;
 import skuniv.capstone.web.request.group.dto.GroupMemberDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static skuniv.capstone.domain.request.RequestType.*;
@@ -209,6 +205,6 @@ public class GroupController {
 
         model.addAttribute("groupList", groupList);
 
-        return "/group/groupTingList";
+        return "/meeting/groupTingList";
     }
 }

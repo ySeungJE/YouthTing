@@ -58,7 +58,8 @@ public class User {
     @OneToMany(mappedBy = "friend", cascade = ALL) // 복함 매핑
     private List<Friendship> friendShipList = new ArrayList<>();
     @OneToMany(mappedBy = "sendUser", cascade = ALL) // 복합 매핑
-    @Builder.Default
+    @Builder.Default // OneToMany 매핑에서는 대상을 list로 가지기 때문에, DB 상에는 참조하지 않고 서버 내에서 List가 만들어짐.
+                        // 그래서 UserReqeust를 삭제해도 참조 무결성 제약에 걸리지 않고 삭제 가능하다.
     private List<UserRequest> sendRequestList = new ArrayList<>();
     @OneToMany(mappedBy = "receiveUser", cascade = ALL) // 복합 매핑
     private List<UserRequest> receiveRequestList = new ArrayList<>();

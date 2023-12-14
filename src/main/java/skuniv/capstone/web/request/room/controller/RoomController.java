@@ -9,8 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import skuniv.capstone.domain.chatting.Chatting;
 import skuniv.capstone.domain.request.Meeting;
-import skuniv.capstone.domain.request.RequestStatus;
-import skuniv.capstone.domain.room.Room;
 import skuniv.capstone.domain.room.service.RoomService;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.service.UserService;
@@ -19,11 +17,8 @@ import skuniv.capstone.domain.userrequest.sevice.RequestService;
 import skuniv.capstone.web.request.ReceiveRequestDto;
 import skuniv.capstone.web.request.SendRequestDto;
 import skuniv.capstone.web.request.UserDto;
-import skuniv.capstone.web.request.room.dto.ShowChattingDto;
-import skuniv.capstone.web.request.room.dto.ChattingSendDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static skuniv.capstone.domain.request.RequestType.MEETING;
@@ -53,11 +48,11 @@ public class RoomController {
             log.info("에러 발생 : 상대에게 미팅을 신청할 수 없습니다");
             throw new IllegalStateException();
         }
-        return "redirect:/user/list";
+        return "redirect:" + request.getHeader("Referer");
     }
 
-    @GetMapping("/receive")
-    public String receiveList(HttpServletRequest request, Model model) {
+    @GetMapping("/soloTingReceive")
+    public String soloTingReceiveList(HttpServletRequest request, Model model) {
         User me = userService.getSessionUser(request);
         List<UserRequest> list = me.getReceiveRequestList();
 
@@ -67,11 +62,11 @@ public class RoomController {
                 .collect(toList());
 
         model.addAttribute("requestList", collect);
-        return "/meeting/receive";
+        return "/meeting/soloTingReceive";
     }
 
-    @GetMapping("/send")
-    public String sendList(HttpServletRequest request, Model model) {
+    @GetMapping("/soloTingSend")
+    public String soloTingSendList(HttpServletRequest request, Model model) {
         User me = userService.getSessionUser(request);
         List<UserRequest> list = me.getSendRequestList();
 
@@ -81,7 +76,34 @@ public class RoomController {
                 .collect(toList());
 
         model.addAttribute("requestList", collect);
-        return "/meeting/send";
+        return "/meeting/soloTingSend";
+    }
+    @GetMapping("/groupTingReceive")
+    public String groupTingReceiveList(HttpServletRequest request, Model model) {
+        User me = userService.getSessionUser(request);
+        List<UserRequest> list = me.getReceiveRequestList();
+
+        List<ReceiveRequestDto> collect = list.stream()
+                .filter(u -> u.getRequest().getRequestType() == MEETING)
+                .map(u -> new ReceiveRequestDto(u))
+                .collect(toList());
+
+        model.addAttribute("requestList", collect);
+        return "/meeting/soloTingReceive";
+    }
+
+    @GetMapping("/groupTingSend")
+    public String groupTingSendList(HttpServletRequest request, Model model) {
+        User me = userService.getSessionUser(request);
+        List<UserRequest> list = me.getSendRequestList();
+
+        List<SendRequestDto> collect = list.stream()
+                .filter(u -> u.getRequest().getRequestType() == MEETING)
+                .map(u -> new SendRequestDto(u))
+                .collect(toList());
+
+        model.addAttribute("requestList", collect);
+        return "/meeting/soloTingSend";
     }
 
     @PostMapping("/success/{requestId}") // 룸 객체가 만들어지고 유저와 양방향 매핑됨

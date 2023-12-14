@@ -17,4 +17,8 @@ public class UserSearch {
     private Integer heightMin;
     @Positive
     private Integer heightMax;
+    @Positive
+    private Integer ageMin;
+    @Positive
+    private Integer ageMax;
 }

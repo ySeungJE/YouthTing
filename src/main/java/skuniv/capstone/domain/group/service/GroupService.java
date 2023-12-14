@@ -57,12 +57,16 @@ public class GroupService {
 
     @Transactional
     public void groupOut(User sessionUser) {
-        if (sessionUser.getGroup().getUserList().size() == 1) {
-            sessionUser.getGroup().memberOut(sessionUser);
-            groupRepository.delete(sessionUser.getGroup());
-            sessionUser.groupOut();
+        Group group = sessionUser.getGroup();
+
+        if (group.getUserList().size() == 1) {
+            sessionUser.groupOut(); // user에서 먼저 groupId 에 null을 넣어줘서 참조관계를 제거.
+//            group.memberOut(sessionUser);
+            groupRepository.delete(group); // 그 다음 group 삭제하면? mapped by된 request 객체들을 cascade
+                                            // -> request 속 mapped by된 userRequest를 cascade
+
         } else {
-            sessionUser.getGroup().memberOut(sessionUser);
+            group.memberOut(sessionUser);
             sessionUser.groupOut();
         }
     }

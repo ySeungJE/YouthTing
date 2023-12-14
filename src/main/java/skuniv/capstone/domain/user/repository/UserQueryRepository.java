@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import skuniv.capstone.domain.group.QGroup;
 import skuniv.capstone.domain.user.Gender;
 import skuniv.capstone.domain.user.MBTI;
 import skuniv.capstone.domain.user.QUser;
@@ -26,6 +27,7 @@ public class UserQueryRepository {
                 .select(user)
                 .from(user)
                 .where(mbtiEq(userSearch.getMbti()),
+                        ageRange(userSearch.getAgeMin(), userSearch.getAgeMax()),
                         heightRange(userSearch.getHeightMin(), userSearch.getHeightMax()),
                         QUser.user.idle.eq(true),
                         genderDif(userGender))
@@ -39,11 +41,15 @@ public class UserQueryRepository {
         }
         return QUser.user.mbti.eq(mbti);
     }
-    private BooleanExpression idleEp(Boolean idle) {
-        if (idle == false) {
-            return null;
+    private BooleanExpression ageRange(Integer ageMin, Integer ageMax) {
+        if (ageMin==null && ageMax==null){
+            ageMin=0; ageMax=35;
+        } else if (ageMin!=null && ageMax==null) {
+            ageMax=35;
+        } else if (ageMin==null && ageMax!=null) {
+            ageMin=0;
         }
-        return QUser.user.idle.eq(true);
+        return QUser.user.age.between(ageMin,ageMax);
     }
     private BooleanExpression genderDif(Gender userGender) {
         if (userGender == MAN) {

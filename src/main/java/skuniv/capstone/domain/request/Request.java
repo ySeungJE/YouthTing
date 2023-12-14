@@ -2,8 +2,9 @@ package skuniv.capstone.domain.request;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import skuniv.capstone.domain.userrequest.UserRequest;
+
+import static jakarta.persistence.CascadeType.*;
 
 @Getter
 @Entity
@@ -18,16 +19,28 @@ public class Request {
     @Column(name = "request_id")
     private Long id;
     private String name;
+
     @Enumerated(EnumType.STRING)
     private RequestStatus requestStatus;
     @Enumerated(EnumType.STRING)
     private RequestType requestType;
 
-    @OneToOne(mappedBy = "request", optional = false)
+    @OneToOne(mappedBy = "request", cascade = ALL)
     private UserRequest userRequest;
+
+    public Request(Long id, String name, RequestStatus requestStatus, RequestType requestType) {
+        this.id = id;
+        this.name = name;
+        this.requestStatus = requestStatus;
+        this.requestType = requestType;
+    }
     //== 비즈니스 로직 ==//
     public String changeStatus(RequestStatus status) {
         this.requestStatus = status;
         return "Request 의 상태가 SUCCESS 로 변경되었습니다";
+    }
+
+    public void updateUserRequest(UserRequest userRequest) {
+        this.userRequest = userRequest;
     }
 }

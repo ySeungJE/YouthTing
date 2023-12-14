@@ -28,6 +28,15 @@
     <div class="col">
         <table class="table">
             <tbody>
+                <tr>
+                    <th></th>
+                    <th>그룹</th>
+                    <th>그룹 나이</th>
+                    <th>그룹장 email</th>
+                    <th>인원</th>
+                    <th>학교</th>
+                    <th></th>
+                </tr>
                 <tr th:each="group : ${groupList}">
                     <td><img th:src="|/user/profile/${group.masterProfile}|" width="250" height="250"/></td>
                     <td th:text="${group.groupName}"></td>
@@ -36,7 +45,7 @@
                     <td th:text="${group.headCount}"></td>
                     <td th:text="${group.univName}">
                     <td>
-                        <form th:action="|/meeting/request/${group.email}|" method="post">
+                        <form th:action="|/meeting/request/${group.masterEmail}|" method="post">
                             <button th:if="${group.requested == false}" class="btn btn-outline-primary" type="submit">
                                 신청
                             </button>
@@ -75,7 +84,7 @@
         <div class="normal-button">
             <form th:action="@{/group/stop}" method="post">
                 <button class="btn btn-outline-primary" type="submit">
-                    개인 미팅 퇴장
+                    그룹 미팅 퇴장
                 </button>
             </form>
         </div>

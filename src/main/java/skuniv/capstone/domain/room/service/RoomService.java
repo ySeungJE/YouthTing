@@ -28,12 +28,14 @@ public class RoomService {
         me.getReceiversGroup().add(someone.getGroup().getId());
         Meeting meeting = Meeting.createMeeting(me.getName()+"의 그룹",someone.getName()+"의 그룹", WAIT, MEETING, GROUP);
         UserRequest userRequest = UserRequest.createUserRequest(me, someone, meeting);
+        meeting.updateUserRequest(userRequest);
         userRequest.requestProcess();
     }
     public void requestSoloRoom(User me, User someone) {
         me.getReceiversSolo().add(someone.getId());
         Meeting meeting = Meeting.createMeeting(me.getName(), someone.getName(),WAIT, MEETING, SOLO);
         UserRequest userRequest = UserRequest.createUserRequest(me, someone, meeting);
+        meeting.updateUserRequest(userRequest);
         userRequest.requestProcess();
     }
     public void successMeeting(UserRequest userRequest, Meeting meeting) {

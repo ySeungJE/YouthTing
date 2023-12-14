@@ -28,9 +28,20 @@
     <div class="col">
         <table class="table">
             <tbody>
+                <tr>
+                    <th></th>
+                    <th>이름</th>
+                    <th>나이</th>
+                    <th>키</th>
+                    <th>mbti</th>
+                    <th>학교</th>
+                    <th>소개</th>
+                    <th></th>
+                </tr>
                 <tr th:each="user : ${userList}">
                     <td><img th:src="|/user/profile/${user.storeProfileName}|" width="300" height="300"/></td>
                     <td th:text="${user.name}"></td>
+                    <td th:text="${user.age}"></td>
                     <td th:text="${user.height}"></td>
                     <td th:text="${user.mbti}"></td>
                     <td th:text="${user.univName}"></td>
@@ -58,6 +69,16 @@
                     <label class="sr-only" th:for="heightMax"></label>
                     <div class="input-group mb-2">
                         <input type="number" th:field="*{heightMax}" class="form-control"  placeholder="최대 키">
+                    </div>
+                </div>
+                <div class="col-auto form-group" style="flex: 1;">
+                    <label class="sr-only" th:for="ageMin"></label>
+                    <input type="number" th:field="*{ageMin}" class="form-control mb-2" placeholder="최소 나이">
+                </div>
+                <div class="col-auto form-group" style="flex: 1;">
+                    <label class="sr-only" th:for="ageMax"></label>
+                    <div class="input-group mb-2">
+                        <input type="number" th:field="*{ageMax}" class="form-control"  placeholder="최대 나이">
                     </div>
                 </div>
                 <div class="col-auto form-group" style="flex: 1;">

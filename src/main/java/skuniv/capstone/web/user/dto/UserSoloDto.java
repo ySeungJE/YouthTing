@@ -11,6 +11,7 @@ import java.util.List;
 public class UserSoloDto {
     private String name;
     private Integer height;
+    private Integer age;
     private String intro;
     private MBTI mbti;
     private String univName;
@@ -30,6 +31,7 @@ public class UserSoloDto {
     public UserSoloDto(User sessionUser, User user) {
         name = user.getName();
         height = user.getHeight();
+        age = user.getAge();
         intro = user.getIntro();
         mbti = user.getMbti();
         univName = user.getUniv().getUnivName();
