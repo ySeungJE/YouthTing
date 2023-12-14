@@ -111,7 +111,7 @@ public class RoomController {
         UserRequest userRequest = requestService.findUserRequest(requestId);
         Meeting meeting = (Meeting) Hibernate.unproxy(requestService.findRequest(userRequest.getRequest().getId())); // proxy 를 해제하는 것으로 형 변환을 할 수 있다. 근데 접때는 대체 어떻게 그냥 형변환한거지
         roomService.successMeeting(userRequest, meeting);
-        return "redirect:/meeting/receive";
+        return "redirect:/meeting/chatting";
     }
 
     @GetMapping("/member")

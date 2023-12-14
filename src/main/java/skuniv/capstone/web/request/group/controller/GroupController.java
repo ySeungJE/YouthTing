@@ -110,10 +110,10 @@ public class GroupController {
         return "/group/send";
     }
     @PostMapping("/success/{requestId}") // request 상태가 SUCCESS 로 변경되고 마스터의 그룹에 게스트가 추가됨
-    public String successInvite(@PathVariable Long requestId) {
+    public String successInvite(@PathVariable Long requestId, HttpServletRequest request) {
         requestService.successInvite(requestId);
 
-        return "redirect:/";
+        return "redirect:" + request.getHeader("Referer");
     }
     @PostMapping("/fail/{userRequestId}")
     public String groupFail(@PathVariable Long userRequestId, HttpServletRequest request) {
