@@ -28,6 +28,5 @@ public class Meeting extends Request{
                 .soloOrGroup(soloOrGroup)
                 .build();
     }
-
     //== 비즈니스 로직 ==//
 }

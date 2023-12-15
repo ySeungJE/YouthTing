@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import skuniv.capstone.domain.chatting.Chatting;
 import skuniv.capstone.domain.request.Meeting;
+import skuniv.capstone.domain.request.SoloOrGroup;
 import skuniv.capstone.domain.room.service.RoomService;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.service.UserService;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static skuniv.capstone.domain.request.RequestType.MEETING;
+import static skuniv.capstone.domain.request.SoloOrGroup.*;
 
 @Slf4j
 @Controller
@@ -57,7 +59,7 @@ public class RoomController {
         List<UserRequest> list = me.getReceiveRequestList();
 
         List<ReceiveRequestDto> collect = list.stream()
-                .filter(u -> u.getRequest().getRequestType() == MEETING)
+                .filter(u -> u.getRequest().getRequestType() == MEETING && ((Meeting)u.getRequest()).getSoloOrGroup()== SOLO)
                 .map(u -> new ReceiveRequestDto(u))
                 .collect(toList());
 
@@ -71,7 +73,7 @@ public class RoomController {
         List<UserRequest> list = me.getSendRequestList();
 
         List<SendRequestDto> collect = list.stream()
-                .filter(u -> u.getRequest().getRequestType() == MEETING)
+                .filter(u -> u.getRequest().getRequestType() == MEETING && ((Meeting)u.getRequest()).getSoloOrGroup()== SOLO)
                 .map(u -> new SendRequestDto(u))
                 .collect(toList());
 
@@ -84,7 +86,7 @@ public class RoomController {
         List<UserRequest> list = me.getReceiveRequestList();
 
         List<ReceiveRequestDto> collect = list.stream()
-                .filter(u -> u.getRequest().getRequestType() == MEETING)
+                .filter(u -> u.getRequest().getRequestType() == MEETING && ((Meeting)u.getRequest()).getSoloOrGroup()== GROUP)
                 .map(u -> new ReceiveRequestDto(u))
                 .collect(toList());
 
@@ -98,7 +100,7 @@ public class RoomController {
         List<UserRequest> list = me.getSendRequestList();
 
         List<SendRequestDto> collect = list.stream()
-                .filter(u -> u.getRequest().getRequestType() == MEETING)
+                .filter(u -> u.getRequest().getRequestType() == MEETING && ((Meeting)u.getRequest()).getSoloOrGroup()== GROUP)
                 .map(u -> new SendRequestDto(u))
                 .collect(toList());
 
