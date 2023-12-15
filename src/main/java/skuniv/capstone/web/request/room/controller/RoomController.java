@@ -59,7 +59,8 @@ public class RoomController {
         List<UserRequest> list = me.getReceiveRequestList();
 
         List<ReceiveRequestDto> collect = list.stream()
-                .filter(u -> u.getRequest().getRequestType() == MEETING && ((Meeting)u.getRequest()).getSoloOrGroup()== SOLO)
+                .filter(u -> u.getRequest().getRequestType() == MEETING
+                        && ((Meeting)Hibernate.unproxy((u.getRequest()))).getSoloOrGroup()==SOLO)
                 .map(u -> new ReceiveRequestDto(u))
                 .collect(toList());
 
@@ -73,7 +74,8 @@ public class RoomController {
         List<UserRequest> list = me.getSendRequestList();
 
         List<SendRequestDto> collect = list.stream()
-                .filter(u -> u.getRequest().getRequestType() == MEETING && ((Meeting)u.getRequest()).getSoloOrGroup()== SOLO)
+                .filter(u -> u.getRequest().getRequestType() == MEETING
+                        && ((Meeting)Hibernate.unproxy((u.getRequest()))).getSoloOrGroup()==SOLO)
                 .map(u -> new SendRequestDto(u))
                 .collect(toList());
 
@@ -86,7 +88,8 @@ public class RoomController {
         List<UserRequest> list = me.getReceiveRequestList();
 
         List<ReceiveRequestDto> collect = list.stream()
-                .filter(u -> u.getRequest().getRequestType() == MEETING && ((Meeting)u.getRequest()).getSoloOrGroup()== GROUP)
+                .filter(u -> u.getRequest().getRequestType() == MEETING
+                        && ((Meeting)Hibernate.unproxy((u.getRequest()))).getSoloOrGroup()==GROUP)
                 .map(u -> new ReceiveRequestDto(u))
                 .collect(toList());
 
@@ -100,7 +103,8 @@ public class RoomController {
         List<UserRequest> list = me.getSendRequestList();
 
         List<SendRequestDto> collect = list.stream()
-                .filter(u -> u.getRequest().getRequestType() == MEETING && ((Meeting)u.getRequest()).getSoloOrGroup()== GROUP)
+                .filter(u -> u.getRequest().getRequestType() == MEETING
+                        && ((Meeting)Hibernate.unproxy((u.getRequest()))).getSoloOrGroup()==GROUP)
                 .map(u -> new SendRequestDto(u))
                 .collect(toList());
 
