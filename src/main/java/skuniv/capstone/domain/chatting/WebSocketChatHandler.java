@@ -70,7 +70,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
     @Override // 웹소켓 연결이 끊기면 호출되는 함수. 채팅룸에서 WebSocketSession를 제거함으로써 유저를 퇴장시킴
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         Long roomId = getRoomId((User) session.getAttributes().get("user"));
-
+        if(roomId==-1L) return;
         roomSessions.get(roomId).remove(session);
         super.afterConnectionClosed(session, status);
         log.info("클라이언트 접속해제");
@@ -80,7 +80,15 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
     @Transactional(readOnly = true)
     public Long getRoomId(User sessionUser) {
         User dbUser  = userRepository.findById(sessionUser.getId()).orElse(null);
+        if(dbUser.getRoom()==null) return -1L;
         return dbUser.getRoom().getId();
     }
 
+    public Object getRoomSessions() {
+        return this.roomSessions;
+    }
+
+    public void removeSession(Long id) {
+        this.roomSessions.remove(id);
+    }
 }

@@ -4,12 +4,17 @@ package skuniv.capstone.domain.room;
 import jakarta.persistence.*;
 import lombok.*;
 import skuniv.capstone.domain.chatting.Chatting;
+import skuniv.capstone.domain.group.Group;
+import skuniv.capstone.domain.request.SoloOrGroup;
 import skuniv.capstone.domain.user.User;
+import skuniv.capstone.domain.userrequest.UserRequest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.FetchType.LAZY;
+import static skuniv.capstone.domain.request.SoloOrGroup.*;
 
 @Getter
 @Entity
@@ -27,6 +32,11 @@ public class Room {
     @OneToMany(mappedBy = "room", cascade = ALL, fetch = FetchType.EAGER) // 이걸 안하니까 안됐던거 같은데?
     @Builder.Default
     private List<Chatting> chattingList = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private SoloOrGroup soloOrGroup;
+    @OneToOne(cascade = ALL) // 양방향 매핑
+    @JoinColumn(name = "user_request_id")
+    private UserRequest userRequest;
 
     //== 연관관계 편의 메서드 ==//
     public void addChatting(Chatting chatting) {
@@ -35,13 +45,19 @@ public class Room {
     }
 
     //== 생성 메소드 ==//
-    public static Room createGroupRoom(String myName, String friendName) {
+    public static Room createGroupRoom(String myName, String friendName, UserRequest userRequest, SoloOrGroup soloOrGroup) {
         return Room.builder()
-                .name("[ "+myName + "의 그룹, " + friendName + "의 그룹 ] 의 채팅룸").build();
+                .name("[ "+myName + "의 그룹, " + friendName + "의 그룹 ] 의 채팅룸")
+                .userRequest(userRequest)
+                .soloOrGroup(soloOrGroup)
+                .build();
     }
-    public static Room createSoloRoom(String myName, String friendName) {
+    public static Room createSoloRoom(String myName, String friendName, UserRequest userRequest, SoloOrGroup soloOrGroup) {
         return Room.builder()
-                .name("[ "+myName + ", " + friendName + " ] 의 채팅룸").build();
+                .name("[ "+myName + ", " + friendName + " ] 의 채팅룸")
+                .userRequest(userRequest)
+                .soloOrGroup(soloOrGroup)
+                .build();
     }
 
     //== 비즈니스 로직 ==//
@@ -51,6 +67,7 @@ public class Room {
     public void enterGroup(List<User> group1,List<User> group2) {
         group1.forEach(u->u.setRoom(this));
         group2.forEach(u->u.setRoom(this));
+        soloOrGroup = GROUP;
     }
 
     /**
@@ -59,5 +76,6 @@ public class Room {
     public void enterUser(User user1, User user2) {
         user1.setRoom(this);
         user2.setRoom(this);
+        soloOrGroup = SOLO;
     }
 }

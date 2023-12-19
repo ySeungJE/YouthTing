@@ -38,14 +38,15 @@
                     <th></th>
                 </tr>
                 <tr th:each="group : ${groupList}">
-                    <td><img th:src="|/user/profile/${group.masterProfile}|" width="250" height="250"/></td>
+                    <td><img th:src="|/user/profile/${group.masterProfile}|" role="button" th:id="${group.masterEmail}" width="250" height="250"
+                             onclick="window.open((`/group/member/`+this.id),'','width=800px, height=500px, left=600px, top=150px;')"/></td>
                     <td th:text="${group.groupName}"></td>
                     <td th:text="${group.groupAge}"></td>
                     <td th:text="${group.masterEmail}"></td>
                     <td th:text="${group.headCount}"></td>
                     <td th:text="${group.univName}">
                     <td>
-                        <form th:action="|/meeting/request/${group.masterEmail}|" method="post">
+                        <form th:action="|/meeting/requestGroupTing/${group.masterEmail}|" method="post">
                             <button th:if="${group.requested == false}" class="btn btn-outline-primary" type="submit">
                                 신청
                             </button>

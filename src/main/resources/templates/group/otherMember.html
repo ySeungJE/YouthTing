@@ -1,0 +1,60 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}" />
+<style>
+    /* 꾸미기 */
+    .hero {
+        margin-bottom: 50px;
+    }
+    .normal-button {
+        margin-bottom: 50px;
+    }
+    .my-button {
+        font-size: 30px;
+        padding: 20px 40px;
+    }
+    .table {
+        width: 100%;
+    }
+</style>
+<body>
+<div class="hero bg-dark text-center">
+    <h1 class="text-white">YouthTing</h1>
+    <h2 class="text-white">그룹 정보</h2>
+</div>
+<div class="hero container text-center">
+    <div class="col">
+        <table class="table">
+            <tbody>
+            <tr>
+                <th></th>
+                <th>멤버 이름</th>
+                <th>Email</th>
+                <th>학교</th>
+                <th></th>
+            </tr>
+            <tr th:each="member : ${members}">
+                <td><img th:src="|/user/profile/${member.storeProfileName}|" width="50" height="50" role="button" th:id="${member.storeProfileName}" class="profile" onclick="showProfile(this.id)"/></td>
+                <td th:text="${member.name}"></td>
+                <td th:value="${member.email}" th:text="${member.email}" th:id="'getEmail'+${member.email}"></td>
+                <td th:text="${member.univName}"></td>
+                <td th:if="${member.master}==true" th:text="그룹장" style="color: darkblue"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    function getId(id){
+        return document.getElementById(id);
+    }
+
+    <!--var email = document.getElementById('getEmail1').innerHTML;-->
+    function showProfile(this_id) {
+        window.open('/user/profileClick/'+this_id,"","width=500px,height=635px, left=100px, top=100px;");
+    }
+
+
+</script>
+</html>

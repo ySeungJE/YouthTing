@@ -40,6 +40,12 @@
         </div>
     </div>
 </div>
-
 </body>
+<script th:inline="javascript">
+    window.onload = function () {
+        if ([[${errorCode}]] == "noRoom") {
+            alert("진행중인 미팅이 없습니다.");
+        }
+    };
+</script>
 </html>

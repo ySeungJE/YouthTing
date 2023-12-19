@@ -57,7 +57,13 @@
 </div>
 <!--th:onclick="window.open('http://localhost:8080/user/${request.email}','test','width=500,height=600,resizable=no')"-->
 </body>
-<script type="text/javascript">
+<script th:inline="javascript">
+
+    window.onload = function () {
+        if ([[${errorCode}]] == "RoomAlreadyExist") {
+            alert("나 또는 상대방의 미팅이 이미 진행중입니다");
+        }
+    };
 function getId(id){
 	return document.getElementById(id);
 }

@@ -1,0 +1,17 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}" />
+<div class="container text-center">
+    <div class="col">
+        <table class="table">
+            <tbody>
+            <tr th:each="member : ${memberList}">
+                <td><img th:src="|/user/profile/${member.storeProfileName}|" width="50" height="50" role="button" th:id="${member.storeProfileName}" class="profile" onclick="showProfile(this.id)"/></td>
+                <td th:text="${member.name}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

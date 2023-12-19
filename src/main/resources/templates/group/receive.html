@@ -35,7 +35,8 @@
                 <th></th>
             </tr>
             <tr th:each="request : ${requestList}">
-                <td><img th:src="|/user/profile/${request.storeProFileName}|" width="50" height="50" role="button" th:id="${request.storeProFileName}" class="profile" onclick="showProfile(this.id)"/></td>
+                <td><img th:src="|/user/profile/${request.storeProFileName}|" width="50" height="50" role="button" th:id="${request.storeProFileName}" class="profile"
+                         onclick="window.open((`/group/member/`+this.id),'','width=800px, height=500px, left=600px, top=150px;')"/></td>
                 <td th:text="${request.title}"></td>
                 <td th:value="${request.email}" th:text="${request.email}" th:id="'getEmail'+${request.userRequestId}"></td>
                 <td th:text="${request.status}"></td>

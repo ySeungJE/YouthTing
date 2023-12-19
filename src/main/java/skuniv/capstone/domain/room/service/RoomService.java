@@ -5,13 +5,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import skuniv.capstone.domain.chatting.Chatting;
+import skuniv.capstone.domain.chatting.WebSocketChatHandler;
 import skuniv.capstone.domain.request.*;
 import skuniv.capstone.domain.room.Room;
 import skuniv.capstone.domain.room.repository.RoomRepository;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.repository.UserRepository;
 import skuniv.capstone.domain.userrequest.UserRequest;
+import skuniv.capstone.web.request.group.controller.GroupController;
 
+import static skuniv.capstone.domain.chatting.WebSocketChatHandler.*;
 import static skuniv.capstone.domain.request.RequestStatus.*;
 import static skuniv.capstone.domain.request.RequestType.*;
 import static skuniv.capstone.domain.request.SoloOrGroup.*;
@@ -24,6 +27,7 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
+    private final WebSocketChatHandler webSocketChatHandler;
     public void requestGroupRoom(User me, User someone) {
         me.getReceiversGroup().add(someone.getGroup().getId());
         Meeting meeting = Meeting.createMeeting(me.getName()+"의 그룹",someone.getName()+"의 그룹", WAIT, MEETING, GROUP);
@@ -41,11 +45,11 @@ public class RoomService {
     public void successMeeting(UserRequest userRequest, Meeting meeting) {
         userRequest.getRequest().changeStatus(SUCCESS);
         if (meeting.getSoloOrGroup() == SOLO) {
-            Room room = Room.createSoloRoom(userRequest.getSendUser().getName(), userRequest.getReceiveUser().getName());
+            Room room = Room.createSoloRoom(userRequest.getSendUser().getName(), userRequest.getReceiveUser().getName(), userRequest, SOLO);
             room.enterUser(userRequest.getSendUser(), userRequest.getReceiveUser());
             log.info("{},{}의 미팅이 성사되었습니다", userRequest.getSendUser().getName(),userRequest.getReceiveUser().getName());
         } else {
-            Room room = Room.createGroupRoom(userRequest.getSendUser().getName(), userRequest.getReceiveUser().getName());
+            Room room = Room.createGroupRoom(userRequest.getSendUser().getName(), userRequest.getReceiveUser().getName(), userRequest, GROUP);
             room.enterGroup(userRequest.getSendUser().getGroup().getUserList()
                     ,userRequest.getReceiveUser().getGroup().getUserList());
             log.info("{}님의 그룹,{}님의 그룹의 미팅이 성사되었습니다", userRequest.getSendUser().getName(),userRequest.getReceiveUser().getName());
@@ -59,6 +63,20 @@ public class RoomService {
     }
 
     public void exitRoom(User sessionUser) {
-        sessionUser.exitRoom();
+        Room room = sessionUser.getRoom();
+        User partner = (room.getUserRequest().getSendUser() == sessionUser)
+                ? room.getUserRequest().getReceiveUser():room.getUserRequest().getSendUser();
+        log.info("상대이름 : {}", partner.getName());
+        if(room.getSoloOrGroup()==SOLO) sessionUser.getReceiversSolo().remove(partner.getId());
+        else if(room.getSoloOrGroup()==GROUP) sessionUser.getReceiversGroup().remove(partner.getGroup().getId());
+        if (room.getUserList().size() == 1) {
+            sessionUser.exitRoom();
+//            log.info(" 전 : {}", webSocketChatHandler.getRoomSessions());
+            roomRepository.delete(room);
+            webSocketChatHandler.removeSession(room.getId()); // room이 없어지면 웹소켓 세션도 없어지게 함
+//            log.info(" 후 : {}", webSocketChatHandler.getRoomSessions());
+        } else {
+            sessionUser.exitRoom();
+        }
     }
 }

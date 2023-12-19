@@ -140,15 +140,10 @@ public class UserController {
     public String checkIdleState(HttpServletRequest request) {
         User sessionUser = userService.getSessionUser(request);
 
-        if (sessionUser.getGroup()!=null && sessionUser.getGroup().getIdle() == true) {
-            log.info("이미 그룹 미팅에 참여중입니다. 퇴장 후 다시 시도하십시오");
-            throw new IllegalStateException();
-        }
-
-        if (sessionUser.getIdle() == false) {
-            return "/meeting/soloTingStart";
-        } else {
+        if (sessionUser.getIdle() == true) {
             return "redirect:/user/list";
+        } else {
+            return "/meeting/soloTingStart";
         }
     }
 

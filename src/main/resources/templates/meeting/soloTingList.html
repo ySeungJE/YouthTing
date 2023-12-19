@@ -47,7 +47,7 @@
                     <td th:text="${user.univName}"></td>
                     <td th:text="${user.intro}">
                     <td>
-                        <form th:action="|/meeting/request/${user.email}|" method="post">
+                        <form th:action="|/meeting/requestSoloTing/${user.email}|" method="post">
                             <button th:if="${user.requested == false}" class="btn btn-outline-primary" type="submit">
                                 신청
                             </button>

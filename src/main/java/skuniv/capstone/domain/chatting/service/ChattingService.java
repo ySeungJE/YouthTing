@@ -49,7 +49,7 @@ public class ChattingService {
 
     // 채팅룸 속 모든 유저에게 sendMessage 날리는 함수
     public <T> void sendMessage(T message, Long roomId) {
-        System.out.println("roomSessions.get(roomId) = " + roomSessions.get(roomId));
+        log.info("roomSessions.get(roomId) = {}", roomSessions.get(roomId));
         roomSessions.get(roomId).parallelStream().forEach(session -> sendMessage(session, message));
     }
 }

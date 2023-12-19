@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,13 +36,12 @@ public class GroupController {
     private final RequestService requestService;
 
     @GetMapping("/invite")
-    public String inviteGroup(HttpServletRequest request, Model model) {
+    public String inviteGroup(HttpServletRequest request, Model model, @RequestParam(required = false) String error) {
         User user = userService.getSessionUser(request); // session 주는건 되네 ㅋㅋㅋ
-
         List<UserDto> collect = user.getFriendShipList().stream()
                 .map(l -> new UserDto(l.getMe()))// 이거 진짜 왜이랰ㅋㅋㅋㅋㅋㅋㅋㅋㅋ getMe 를 해야 정상적으로 출력되는 현상... 어떻게 해도 고쳐지지가 않음
                 .collect(toList());
-
+        model.addAttribute("errorCode", error);
         model.addAttribute("friendList", collect);
         return "/group/invite";
     }
@@ -72,10 +72,10 @@ public class GroupController {
         }
         if (me.getGroup().getUserList().contains(friend)) {
             log.info("이미 내 그룹에 포함된 친구입니다.");
-            throw new IllegalStateException();
+            throw new IllegalStateException("이미 내 그룹에 포함된 친구입니다.");
         } else if (friend.getGroup()!=null) {
             log.info("이미 다른 그룹에 포함된 친구입니다.");
-            throw new IllegalStateException();
+            throw new IllegalStateException("이미 다른 그룹에 포함된 친구입니다.");
         }
 
         userService.requestGroup(me, friend, me.getGroup());
@@ -124,7 +124,6 @@ public class GroupController {
     @GetMapping("/member")
     public String groupMember(HttpServletRequest request, Model model) {
         User user = userService.getSessionUser(request);
-
         if(user.getGroup()==null)
             return "redirect:/group/invite";
 
@@ -138,15 +137,20 @@ public class GroupController {
         return "/group/member";
     }
     @GetMapping("/member/{email}")
-    public String otherGroupMember(@PathVariable String email) {
+    public String otherGroupMember(@PathVariable String email, Model model) {
         User user = userService.findByEmail(email);
-        List<User> groupUser = user.getGroup().getUserList();
 
-        groupUser.stream()
+        if(user.getGroup()==null)
+            return "redirect:/group/invite";
+
+        List<User> userList = user.getGroup().getUserList();
+
+        List<GroupMemberDto> groupMembers = userList.stream()
                 .map(u -> new GroupMemberDto(u))
                 .toList();
+        model.addAttribute("members",groupMembers);
 
-        return "/group/member";
+        return "/group/otherMember";
     }
 
     @GetMapping("/out")
@@ -159,16 +163,15 @@ public class GroupController {
     @GetMapping("/start")
     public String startGroupTing(HttpServletRequest request) {
         User sessionUser = userService.getSessionUser(request);
-        if (sessionUser.getIdle()) {
-            log.info("이미 개인 미팅에 참여중입니다. 퇴장 후 다시 시도하십시오");
-            throw new IllegalStateException();
+
+        if (sessionUser.getGroup() == null || sessionUser.getGroup().getUserList().size()<2) {
+            return "redirect:/group/invite?error=NoGroupOrShortMember";
         }
 
-        if (sessionUser.getGroup().getIdle() == false) {
-            log.info("이미 그룹 미팅이 진행중입니다");
-            return "/meeting/groupTingStart";
-        } else {
+        if (sessionUser.getGroup().getIdle()==true) {
             return "redirect:/group/list";
+        } else {
+            return "/meeting/groupTingStart";
         }
     }
 

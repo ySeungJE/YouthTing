@@ -83,6 +83,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
+                            <button class="btn nav-link" type="submit" aria-expanded="false"
+                             onclick="window.open('/meeting/member','','width=300px, height=500px, left=800px, top=300px')">대화상대</button>
+                    </li>
+                    <li class="nav-item dropdown">
                         <form th:action="@{/meeting/showMap}" method="get">
                             <button class="btn nav-link" type="submit" aria-expanded="false">
                                 미팅장소 검색
@@ -133,6 +137,7 @@ var talk = getId('talk');
 var msg = getId('msg');
 
 window.onload = function () {
+
     ws = new WebSocket("ws://" + location.host + "/ws/chat");
     talk.scrollTop=talk.scrollHeight;
 
