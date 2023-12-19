@@ -28,9 +28,11 @@
         <table class="table">
             <tbody>
             <tr>
+                <th></th>
                 <th>받은 사람</th>
                 <th>Email</th>
                 <th>요청 상태</th>
+                <th></th>
             </tr>
             <tr th:each="request : ${requestList}">
                 <td><img th:src="|/user/profile/${request.storeProFileName}|" width="50" height="50" role="button" id="getProfile" class="profile"/></td>
