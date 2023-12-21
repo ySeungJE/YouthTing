@@ -126,7 +126,7 @@ public class UserService {
     }
 
     @Transactional
-//    @EventListener(ApplicationReadyEvent.class)
+    @EventListener(ApplicationReadyEvent.class)
     public void initData() {
         User join = join(User.createUser(new UserJoinDto("2017301050@skuniv.ac.kr", "123", "user_man1", MAN, 26, "서울 성북구 서경로 124", "서경대학교",
                 178, ISTP, "안녕하세요"), "user_man1Init.jpg"));

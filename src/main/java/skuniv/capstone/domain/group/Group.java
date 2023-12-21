@@ -16,7 +16,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor @Builder
-@Table(name = "groups")
+@Table(name = "groupList")
 public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
