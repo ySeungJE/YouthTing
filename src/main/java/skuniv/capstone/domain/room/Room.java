@@ -4,7 +4,6 @@ package skuniv.capstone.domain.room;
 import jakarta.persistence.*;
 import lombok.*;
 import skuniv.capstone.domain.chatting.Chatting;
-import skuniv.capstone.domain.group.Group;
 import skuniv.capstone.domain.request.SoloOrGroup;
 import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.userrequest.UserRequest;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.*;
-import static jakarta.persistence.FetchType.LAZY;
 import static skuniv.capstone.domain.request.SoloOrGroup.*;
 
 @Getter

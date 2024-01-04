@@ -45,7 +45,7 @@
                     <td th:text="${user.height}"></td>
                     <td th:text="${user.mbti}"></td>
                     <td th:text="${user.univName}"></td>
-                    <td th:text="${user.intro}">
+                    <td th:text="${user.intro}" style="width: 400px"></td>
                     <td>
                         <form th:action="|/meeting/requestSoloTing/${user.email}|" method="post">
                             <button th:if="${user.requested == false}" class="btn btn-outline-primary" type="submit">

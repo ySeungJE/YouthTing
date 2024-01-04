@@ -19,7 +19,7 @@ import static skuniv.capstone.domain.user.Gender.*;
 @RequiredArgsConstructor
 public class UserQueryRepository {
     private final EntityManager em;
-    public List<User> findAll(Gender userGender,UserSearch userSearch) { // 키와 mbti를 설정해서 동적 검색
+    public List<User> findAll(Gender userGender,UserSearch userSearch) { // 키와 나이, mbti를 설정해서 동적 검색
         JPAQueryFactory query = new JPAQueryFactory(em);
         QUser user = QUser.user;
 

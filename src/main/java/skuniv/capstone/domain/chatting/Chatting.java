@@ -3,12 +3,12 @@ package skuniv.capstone.domain.chatting;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.redis.core.RedisHash;
 import skuniv.capstone.domain.friendship.Friendship;
 import skuniv.capstone.domain.room.Room;
 import skuniv.capstone.domain.user.User;
 
 import java.time.LocalDateTime;
-
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

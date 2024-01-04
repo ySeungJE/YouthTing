@@ -5,7 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import skuniv.capstone.domain.chatting.Chatting;
+import skuniv.capstone.domain.chatting.RedisChatting;
 import skuniv.capstone.domain.chatting.WebSocketChatHandler;
+import skuniv.capstone.domain.chatting.repository.ChattingRedisRepository;
+import skuniv.capstone.domain.chatting.repository.ChattingRepository;
 import skuniv.capstone.domain.request.*;
 import skuniv.capstone.domain.room.Room;
 import skuniv.capstone.domain.room.repository.RoomRepository;
@@ -13,6 +16,10 @@ import skuniv.capstone.domain.user.User;
 import skuniv.capstone.domain.user.repository.UserRepository;
 import skuniv.capstone.domain.userrequest.UserRequest;
 import skuniv.capstone.web.request.group.controller.GroupController;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static skuniv.capstone.domain.chatting.WebSocketChatHandler.*;
 import static skuniv.capstone.domain.request.RequestStatus.*;
@@ -25,6 +32,8 @@ import static skuniv.capstone.domain.request.SoloOrGroup.*;
 @Transactional
 public class RoomService {
 
+    private final ChattingRepository chattingRepository;
+    private final ChattingRedisRepository chattingRedisRepository;
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private final WebSocketChatHandler webSocketChatHandler;
@@ -57,6 +66,19 @@ public class RoomService {
     }
     public Chatting createChatting(Long userId, Room room,String sender ,String content, String time) {
         return Chatting.createChatting(content, sender,userId,room,time);
+    }
+
+    public List<RedisChatting> getRoomChatting(Long roomId) { // redis에 해당 방 채팅정보가 없으면 DB에서 load 해주는 코드
+        List<RedisChatting> chattings = chattingRedisRepository.findByRoomNum(roomId);
+        if (chattings.isEmpty()) {
+            List<Chatting> chattingsDB = chattingRepository.findByRoomNum(roomId);
+            for (Chatting chatting : chattingsDB) {
+                RedisChatting redisChatting = new RedisChatting(chatting);
+                chattingRedisRepository.save(redisChatting);
+                chattings.add(redisChatting);
+            }
+        }
+        return chattings;
     }
     public Room findRoomById(Long id) {
         return roomRepository.findById(id).orElse(null);

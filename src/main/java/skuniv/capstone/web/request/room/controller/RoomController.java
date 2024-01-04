@@ -157,9 +157,10 @@ public class RoomController {
             return "redirect:/?error=noRoom";
         }
 
-        List<Chatting> chattingList = sessionUser.getRoom().getChattingList(); // 이게 지금 다 lazy 초기화하는 거지
+
+//        List<Chatting> chattingList = sessionUser.getRoom().getChattingList(); // 이게 지금 다 lazy 초기화하는 거지
         model.addAttribute("roomName", sessionUser.getRoom().getName());
-        model.addAttribute("chatList", chattingList);
+        model.addAttribute("chatList", roomService.getRoomChatting(sessionUser.getRoom().getId()));
         model.addAttribute("myId", sessionUser.getId());
         model.addAttribute("sender", sessionUser.getName());
         return "chatting";
