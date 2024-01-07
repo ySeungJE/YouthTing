@@ -1,5 +1,7 @@
 package skuniv.capstone.web.user.dto;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
@@ -11,6 +13,7 @@ import skuniv.capstone.domain.user.Univ;
 
 @Data
 @AllArgsConstructor
+@Schema(title = "회원가입 DTO")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserJoinDto {
     @Email(message = "이메일 형식에 맞지 않습니다")
@@ -34,5 +37,7 @@ public class UserJoinDto {
     private MBTI mbti;
     @NotEmpty
     private String intro;
-
+    @NonNull
+    @Schema(title = "User Profile file", description = "유저 프로필사진 파일")
+    private MultipartFile profilePicture;
 }
