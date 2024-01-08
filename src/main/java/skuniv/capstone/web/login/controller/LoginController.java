@@ -1,6 +1,7 @@
 package skuniv.capstone.web.login.controller;
 
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -22,6 +23,7 @@ public class LoginController {
     public static final String LOGIN_USER = "loginUser";
     private final LoginService loginService;
     @PostMapping("/login")
+    @Operation(summary = "로그인 API")
     public LoginReturnDto login(@Valid @RequestBody LoginForm form,
                         HttpServletRequest request) throws IOException {
 
