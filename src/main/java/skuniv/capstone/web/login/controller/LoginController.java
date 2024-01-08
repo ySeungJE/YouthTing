@@ -29,10 +29,11 @@ public class LoginController {
         return "user/loginForm";
     }
 
+    @CrossOrigin
     @PostMapping("/login")
     public String login(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult ,
                         @RequestParam(defaultValue = "/") String redirectURL,
-                        HttpServletRequest request) throws IOException {
+                        HttpSession httpSession) throws IOException {
 
         if (bindingResult.hasErrors()) {
             return "login/loginForm";
@@ -47,9 +48,8 @@ public class LoginController {
 
         System.out.println("redirectURL = " + redirectURL);
 
-        HttpSession session = request.getSession();
 
-        session.setAttribute(LOGIN_USER, loginUser);
+        httpSession.setAttribute(LOGIN_USER, loginUser);
         return "redirect:"+redirectURL;
     }
 
