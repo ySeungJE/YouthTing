@@ -78,7 +78,7 @@ public class RoomController {
 
         model.addAttribute("errorCode", error);
         model.addAttribute("requestList", collect);
-        return "/meeting/soloTingReceive";
+        return "meeting/soloTingReceive";
     }
 
     @GetMapping("/soloTingSend")
@@ -93,7 +93,7 @@ public class RoomController {
                 .collect(toList());
 
         model.addAttribute("requestList", collect);
-        return "/meeting/soloTingSend";
+        return "meeting/soloTingSend";
     }
     @GetMapping("/groupTingReceive")
     public String groupTingReceiveList(HttpServletRequest request, Model model, @RequestParam(required = false) String error) {
@@ -108,7 +108,7 @@ public class RoomController {
 
         model.addAttribute("errorCode", error);
         model.addAttribute("requestList", collect);
-        return "/meeting/groupTingReceive";
+        return "meeting/groupTingReceive";
     }
 
     @GetMapping("/groupTingSend")
@@ -123,7 +123,7 @@ public class RoomController {
                 .collect(toList());
 
         model.addAttribute("requestList", collect);
-        return "/meeting/groupTingSend";
+        return "meeting/groupTingSend";
     }
 
     @PostMapping("/success/{requestId}") // 룸 객체가 만들어지고 유저와 양방향 매핑됨
@@ -174,7 +174,7 @@ public class RoomController {
         List<ChattingMemberDto> memberList = userList.stream().map(u -> new ChattingMemberDto(u)).toList();
 
         model.addAttribute("memberList", memberList);
-        return "/meeting/member";
+        return "meeting/member";
     }
 
     @PostMapping("/exit")
@@ -188,6 +188,6 @@ public class RoomController {
     public String showMap(HttpServletRequest request) {
 //        User sessionUser = userService.getSessionUser(request);
 //        roomService.exitRoom(sessionUser);
-        return "/meeting/showMap";
+        return "meeting/showMap";
     }
 }

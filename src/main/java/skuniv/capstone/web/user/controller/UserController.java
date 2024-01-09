@@ -102,7 +102,7 @@ public class UserController {
 
         model.addAttribute("userList", collect);
 
-        return "/meeting/soloTingList";
+        return "meeting/soloTingList";
     }
 
     @GetMapping("/{email}")
@@ -124,7 +124,7 @@ public class UserController {
         User sessionUser = userService.getSessionUser(request);
 
         model.addAttribute("myData", new MyPageDto(sessionUser));
-        return "/user/myPage";
+        return "user/myPage";
     }
     @PostMapping("update")  // myPage 를 update 페이지로 재활용할 건데 프로필사진 -> 업로드 칸으로
     public void updateUser(@RequestPart(required = false) MultipartFile proFilePicture,
@@ -143,7 +143,7 @@ public class UserController {
         if (sessionUser.getIdle() == true) {
             return "redirect:/user/list";
         } else {
-            return "/meeting/soloTingStart";
+            return "meeting/soloTingStart";
         }
     }
 
@@ -153,7 +153,7 @@ public class UserController {
 
         if (sessionUser.getAuthorized() != true) {
             model.addAttribute("authorized", false);
-            return "/meeting/soloTingStart";
+            return "meeting/soloTingStart";
         }
 
         userService.startSoloting(sessionUser);
@@ -182,7 +182,7 @@ public class UserController {
         String confirm = emailService.sendSimpleMessage(sessionUser.getEmail());
         model.addAttribute("uniqueCode", sessionUser.getUniqueCode());
         model.addAttribute("authorized", sessionUser.getAuthorized());
-        return "/user/confirmForm";
+        return "user/confirmForm";
     }
     @GetMapping("confirm")
     public String userConfirmForm(HttpServletRequest request, Model model) {

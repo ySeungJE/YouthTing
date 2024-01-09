@@ -34,7 +34,7 @@ public class FriendController {
 
     @GetMapping("/inputEmail")
     public String inputEmailPage() {
-        return "/friend/inputEmail";
+        return "friend/inputEmail";
     }
 
     @ResponseBody
@@ -68,7 +68,7 @@ public class FriendController {
                 .collect(toList());
 
         model.addAttribute("requestList", collect);
-        return "/friend/receive";
+        return "friend/receive";
     }
 
     @GetMapping("/send")
@@ -81,7 +81,7 @@ public class FriendController {
                 .map(u -> new SendRequestDto(u))
                 .collect(toList());
         model.addAttribute("requestList", collect);
-        return "/friend/send";
+        return "friend/send";
     }
     @PostMapping("/success/{requestId}") // request 상태가 SUCCESS 로 변경되고 양측이 친구로 추가됨
     public String successFriend(@PathVariable Long requestId) {

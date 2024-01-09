@@ -43,7 +43,7 @@ public class GroupController {
                 .collect(toList());
         model.addAttribute("errorCode", error);
         model.addAttribute("friendList", collect);
-        return "/group/invite";
+        return "group/invite";
     }
 
     @PostMapping
@@ -94,7 +94,7 @@ public class GroupController {
 
         model.addAttribute("requestList", collect);
 
-        return "/group/receive";
+        return "group/receive";
     }
     @GetMapping("/send")
     public String sendList(HttpServletRequest request, Model model) {
@@ -107,7 +107,7 @@ public class GroupController {
                 .collect(toList());
 
         model.addAttribute("requestList", collect);
-        return "/group/send";
+        return "group/send";
     }
     @PostMapping("/success/{requestId}") // request 상태가 SUCCESS 로 변경되고 마스터의 그룹에 게스트가 추가됨
     public String successInvite(@PathVariable Long requestId, HttpServletRequest request) {
@@ -134,7 +134,7 @@ public class GroupController {
                 .toList();
         model.addAttribute("members",groupMembers);
 
-        return "/group/member";
+        return "group/member";
     }
     @GetMapping("/member/{email}")
     public String otherGroupMember(@PathVariable String email, Model model) {
@@ -150,7 +150,7 @@ public class GroupController {
                 .toList();
         model.addAttribute("members",groupMembers);
 
-        return "/group/otherMember";
+        return "group/otherMember";
     }
 
     @GetMapping("/out")
@@ -171,7 +171,7 @@ public class GroupController {
         if (sessionUser.getGroup().getIdle()==true) {
             return "redirect:/group/list";
         } else {
-            return "/meeting/groupTingStart";
+            return "meeting/groupTingStart";
         }
     }
 
@@ -181,7 +181,7 @@ public class GroupController {
 
         if (sessionUser.getAuthorized() != true) {
             model.addAttribute("authorized", false);
-            return "/meeting/groupTingStart";
+            return "meeting/groupTingStart";
         }
 
         groupService.startGroupting(sessionUser);
@@ -208,6 +208,6 @@ public class GroupController {
 
         model.addAttribute("groupList", groupList);
 
-        return "/meeting/groupTingList";
+        return "meeting/groupTingList";
     }
 }

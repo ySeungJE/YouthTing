@@ -53,10 +53,13 @@ public class User {
     private String uniqueCode;
     private Boolean authorized;
     @ElementCollection
+    @JsonIgnore
     private List<String> friendsEmail;
     @ElementCollection
+    @JsonIgnore
     private List<Long> receiversSolo;
     @ElementCollection
+    @JsonIgnore
     private List<Long> receiversGroup;
     @OneToMany(mappedBy = "friend", cascade = ALL) // 복함 매핑
     @JsonIgnore
