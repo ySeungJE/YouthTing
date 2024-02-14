@@ -64,6 +64,7 @@ public class GroupController {
 
         if (me.getGroup() == null) {
             Group created = groupService.saveGroup(Group.createGroup(me)); //객체 save와 toMany 배열 사용은 같은 트랜잭션에서 안되는건가...? @Builder.default 를 사용해야만 null 이 안뜸
+            log.info("{} {}", created, groupService.findById(created.getId()));
             groupService.connectMaster(me,created);
         }
         if (!me.getFriendsEmail().contains(email)) {

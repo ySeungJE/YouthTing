@@ -27,7 +27,7 @@ public class Chatting {
     private String storeProfileUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id") // 그냥 이거는.. 음 room 에서 chatting 배열이 꼭 필요하므로 좀 불편하지만 해야 하는..? 느낌으로 인식해야 할듯
+    @JoinColumn(name = "room_id") // 이게 있어야 cascade 전파 가능
     @JsonIgnore
     private Room room;
 

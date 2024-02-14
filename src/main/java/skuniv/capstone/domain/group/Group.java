@@ -28,7 +28,7 @@ public class Group {
     @JoinColumn(name = "master_id")
     private User master;
     @OneToMany(mappedBy = "group") // 얘는 user 가 양방향 매핑해줌
-    @Builder.Default // 뭐야 시발 이래야 되네? 그럼 야 시발 User 에 그 수많은 List 들은 왜 그냥 만들어주고 얘는 안만들어주고 쥐랄임?
+    @Builder.Default // 뭐야 이래야 되네? 그럼 야 User 에 그 수많은 List 들은 왜 그냥 만들어주고 얘는 안만들어줌?
     private List<User> userList = new ArrayList<>();
     @OneToMany(mappedBy = "group", cascade = ALL) // 얘는 user 가 양방향 매핑해줌
     @Builder.Default // 여기에도 invite 정보가 있어야 cascade로 지울수가 있는가?

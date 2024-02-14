@@ -85,7 +85,7 @@ public class FriendController {
     }
     @PostMapping("/success/{requestId}") // request 상태가 SUCCESS 로 변경되고 양측이 친구로 추가됨
     public String successFriend(@PathVariable Long requestId) {
-        requestService.successFriend(requestId);  // 이래서 시발 귀찮게 String으로 확인 안하는 구나 log 가 훨씬 낫다
+        requestService.successFriend(requestId);  // 이래서 귀찮게 String으로 확인 안하는 구나 log 가 훨씬 낫다
         return "redirect:/friend/receive";
     }
     @PostMapping("/fail/{userRequestId}")
